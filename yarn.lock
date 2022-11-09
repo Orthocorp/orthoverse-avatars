@@ -7906,6 +7906,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/offscreencanvas@npm:^2019.6.4":
+  version: 2019.7.0
+  resolution: "@types/offscreencanvas@npm:2019.7.0"
+  checksum: f10647cf8abf5c5313ac39a688866e824f04207b18fd03c2fa986a2d856f1c26dd11b04b3692fe64e6f1467b0d52579e8f4d0e532377d5c9065214bff4ebc0e7
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.0
   resolution: "@types/parse-json@npm:4.0.0"
@@ -8103,6 +8110,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/three@npm:^0.142.0":
+  version: 0.142.0
+  resolution: "@types/three@npm:0.142.0"
+  dependencies:
+    "@types/webxr": "*"
+  checksum: 7616a571ed8df10265caca723f686f52a2a43d34412682547f6e4737763c14a1f975b1c56a903c14d27f2b76d47f28693ba6725dfe86f9e6fcb2c7e4352d2b63
+  languageName: node
+  linkType: hard
+
 "@types/tough-cookie@npm:*":
   version: 4.0.2
   resolution: "@types/tough-cookie@npm:4.0.2"
@@ -8173,6 +8189,13 @@ __metadata:
     anymatch: ^3.0.0
     source-map: ^0.6.0
   checksum: dc6db66fa84664d8fab7ea79bd2482ea1c4500b09ed6939258e205548501b8d29c06b0fe5e869c4b59f74acf884c61a391875dadb9f7a91c8cd10c3841143729
+  languageName: node
+  linkType: hard
+
+"@types/webxr@npm:*":
+  version: 0.5.0
+  resolution: "@types/webxr@npm:0.5.0"
+  checksum: 6eecea994ac0b851302db06829a75ed183886e862c097aaefbe7ded5e6fc69c9034469a01611e07a9f89dc6e633bf6f4057106d1fc8ba9a7309e3898b6a7da7d
   languageName: node
   linkType: hard
 
@@ -22742,6 +22765,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-skinview3d@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "react-skinview3d@npm:5.0.0"
+  dependencies:
+    skinview3d: ^3.0.0-alpha.1
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 965ef2a7f410ee66a2dfd6d127ba3a04976189a2f1424f60ee388982811d5ced57b16aa8f8f7edd051814b21cb23d60d9597d407c7475439a85c98e4a4c5c989
+  languageName: node
+  linkType: hard
+
 "react-style-singleton@npm:^2.1.0, react-style-singleton@npm:^2.2.1":
   version: 2.2.1
   resolution: "react-style-singleton@npm:2.2.1"
@@ -23482,6 +23517,7 @@ __metadata:
     "@redwoodjs/core": 3.3.1
     connectkit: ^1.0.0
     ethers: ^5.7.2
+    react-skinview3d: ^5.0.0
     wagmi: ^0.7.13
   languageName: unknown
   linkType: soft
@@ -24115,6 +24151,26 @@ __metadata:
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
   checksum: 230ac975cca485b7f6fe2b96a711aa62a6a26ead3e6fb8ba17c5a00d61b8bed0d7adc21f5626b70d7c33c62ff4e63933017a6462942c719d1980bb0b1207ad46
+  languageName: node
+  linkType: hard
+
+"skinview-utils@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "skinview-utils@npm:0.7.0"
+  dependencies:
+    "@types/offscreencanvas": ^2019.6.4
+  checksum: f1ccf62847b173e52e1951d0e0818843244152630a5171cd222b514113e0168b7a38d16a1908aee096558a30d4c72ef60e1e4177b3229fb97000ee3440a04a72
+  languageName: node
+  linkType: hard
+
+"skinview3d@npm:^3.0.0-alpha.1":
+  version: 3.0.0-alpha.1
+  resolution: "skinview3d@npm:3.0.0-alpha.1"
+  dependencies:
+    "@types/three": ^0.142.0
+    skinview-utils: ^0.7.0
+    three: ^0.142.0
+  checksum: b711c75d53768a2e99729324d46d192a38da9b35097b52d9977d56226da06a6820738046a71913e0a57f0567770d1a74af9e973481bd1c44251fbd2f98ce7db7
   languageName: node
   linkType: hard
 
@@ -25310,6 +25366,13 @@ __metadata:
   dependencies:
     real-require: ^0.2.0
   checksum: e17db52f218be6efec781953b004c32b1b7781183fdfcc5ca9572ee82ea1f7a8e81024e0ef1bf3c092282842db21b3b1c6a8b9d8e0d7d81d0c43fd207e365612
+  languageName: node
+  linkType: hard
+
+"three@npm:^0.142.0":
+  version: 0.142.0
+  resolution: "three@npm:0.142.0"
+  checksum: 4a2010d52392c48786f677c499a89fd76886a52a83a5e2d79f0b49bd001193864d9157feea67ba42d258af1344f7f7ce57ce2aac486ddbe1b7cb9309190a739a
   languageName: node
   linkType: hard
 

@@ -25,6 +25,7 @@
   "dependencies": {
     "connectkit": "^1.0.0",
     "ethers": "^5.7.2",
+    "react-skinview3d": "^5.0.0",
     "wagmi": "^0.7.13"
   }
 }
