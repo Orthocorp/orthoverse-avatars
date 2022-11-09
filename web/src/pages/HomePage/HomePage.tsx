@@ -9,7 +9,6 @@ import { MetaTags } from '@redwoodjs/web'
 
 const HomePage = () => {
 
-/*
   const [jimpImage, setJimpImage] = useState(undefined);
   const [image, setImage] = useState(undefined);
   const [transformedImage, setTransformedImage] = useState(undefined);
@@ -28,7 +27,7 @@ const HomePage = () => {
     };
     
     loadImage();
-  }, []); */
+  }, []);
 
   return (
     <>
