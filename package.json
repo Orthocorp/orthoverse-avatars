@@ -30,6 +30,7 @@
     "jimp": "^0.16.2",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "path-browserify": "^1.0.1",
+    "react-color": "^2.19.3",
     "react-skinview3d": "^5.0.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
