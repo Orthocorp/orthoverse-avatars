@@ -12,6 +12,9 @@ import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Radio, RadioGroup } from '@chakra-ui/react'
 import { Stack, HStack, VStack } from '@chakra-ui/react'
 import { Checkbox } from '@chakra-ui/react'
+import { Carousel } from '@trendyol-js/react-carousel'
+
+import { Box } from '@chakra-ui/react'
 
 import { initBase64 } from './base'
 
@@ -165,42 +168,60 @@ const HomePage = () => {
           animation={ animation }
         />
 
-        <h2>Skin Tone</h2>
-        <TonePicker
-          hexColor="#ff0000"
-          colors={skinTonePalette}
-          setColor={setSkintone}
-        />
-        <h2>Eye Color</h2>
-        <TonePicker
-          hexColor="#ff0000"
-          colors={eyeColorPalette}
-          setColor={setEyecolor}
-        />
-
-        <Checkbox
-         isChecked={(eyes === 'small' ? false : true)}
-         onChange={(e) => setEyeSize(e.target.checked)}
+        <Carousel
+           show={1.5}
+           slide={1}
+           swiping={true}
+           infinite={false}
+           transition={0.5}
         >
-          Large Eyes
-        </Checkbox>
 
-         <h2>Beard Color</h2>
-        <TonePicker
-          hexColor="#ff0000"
-          colors={beardColorPalette}
-          setColor={setBeardcolor}
-        />
-        <RadioGroup onChange={ setBeard } value={ beard }>
-          <Stack direction='row'>
-            <Radio value='0'>None</Radio>
-            <Radio value='1'>Moustache</Radio>
-            <Radio value='2'>Handlebar</Radio>
-            <Radio value='3'>Short</Radio>
-            <Radio value='4'>Medium</Radio>
-            <Radio value='5'>Long</Radio>
-          </Stack>
-        </RadioGroup>
+          <Box id="1">
+            <h2>Skin Tone</h2>
+            <TonePicker
+              hexColor="#ff0000"
+              colors={skinTonePalette}
+              setColor={setSkintone}
+            />
+          </Box>
+
+          <Box id="2">
+            <h2>Eye Color</h2>
+            <TonePicker
+              hexColor="#ff0000"
+              colors={eyeColorPalette}
+              setColor={setEyecolor}
+            />
+            <Checkbox
+             isChecked={(eyes === 'small' ? false : true)}
+             onChange={(e) => setEyeSize(e.target.checked)}
+            >
+              Large Eyes
+            </Checkbox>
+          </Box>
+
+          <Box id="3">
+            <h2>Beard Color</h2>
+            <TonePicker
+              hexColor="#ff0000"
+              colors={beardColorPalette}
+              setColor={setBeardcolor}
+            />
+            <RadioGroup onChange={ setBeard } value={ beard }>
+              <Stack direction='row'>
+                <Radio value='0'>None</Radio>
+                <Radio value='1'>Moustache</Radio>
+                <Radio value='2'>Handlebar</Radio>
+              </Stack>
+              <Stack direction='row'>              
+                <Radio value='3'>Short</Radio>
+                <Radio value='4'>Medium</Radio>
+                <Radio value='5'>Long</Radio>
+              </Stack>
+            </RadioGroup>
+          </Box>
+
+        </Carousel>
 
       </Container>
     </>
