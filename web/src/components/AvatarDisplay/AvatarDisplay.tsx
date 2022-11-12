@@ -33,7 +33,6 @@ const AvatarDisplay = ({skinUrl, animation}) => {
 
   return (
     <div>
-      {animation}
       <ReactSkinview3d
         className="viewer"
         skinUrl={skinUrl}

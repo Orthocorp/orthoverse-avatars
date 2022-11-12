@@ -11,6 +11,7 @@ import { MetaTags } from '@redwoodjs/web'
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Radio, RadioGroup } from '@chakra-ui/react'
 import { Stack, HStack, VStack } from '@chakra-ui/react'
+import { Checkbox } from '@chakra-ui/react'
 
 import { initBase64 } from './base'
 
@@ -30,27 +31,40 @@ const HomePage = () => {
     "#392C2C", "#53212F", "#2B246D", "#30221B", "#22201A", "#1F0E46"
   ]
 
-  const [animation, setAnimation] = useState('none');
+  const beardColorPalette = [
+    "#030303", "#343434", "#686a69", "#b1b5b8", "#dde3e7",
+    "#bc3b15", "#ba6025", "#fe5f35", "#fbcf2b", "#fef87e",
+    "#1c0a19", "#92593b", "#553118", "#c98359", "#dfbdb2",
+    "#bd3d46", "#eb9fb3", "#579ec8", "#008c48", "#e14674", "#421479"
+  ]
 
-  const [jimpImage, setJimpImage] = useState(undefined);
-  const [transformedImage, setTransformedImage] = useState(initBase64);
+  const [animation, setAnimation] = useState('none')
+
+  const [jimpImage, setJimpImage] = useState(undefined)
+  const [transformedImage, setTransformedImage] = useState(initBase64)
   const [features, setFeatures] = useState(undefined)
   const [scleraImg, setScleraImg] = useState(undefined)
   const [irisImg, setIrisImg] = useState(undefined)
+  const [beardImg, setBeardImg] = useState(undefined)
 
   const [skintone, setSkintone] = useState({
     "hex": skinTonePalette[Math.floor(Math.random()*skinTonePalette.length)]
-  });
+  })
   const [eyecolor, setEyecolor] = useState({
-    "hex": eyeColorPalette[Math.floor(Math.random()*skinTonePalette.length)]
-  });
+    "hex": eyeColorPalette[Math.floor(Math.random()*eyeColorPalette.length)]
+  })
+  const [beardcolor, setBeardcolor] = useState({
+    "hex": beardColorPalette[Math.floor(Math.random()*beardColorPalette.length)]
+  })
+
   const [eyes, setEyes] = useState('small')
+  const [beard, setBeard] = useState('0')
 
   useEffect(() => {
     const loadImage = async () => {
 
       // loading underlying skin
-      const jimpImage = await Jimp.read("./img/base.png");
+      const jimpImage = await Jimp.read("./img/base.png")
       const features = await Jimp.read("./img/features.png")
       setJimpImage(jimpImage)
       setFeatures(features)
@@ -61,23 +75,35 @@ const HomePage = () => {
       setScleraImg(scleraImg)
       setIrisImg(irisImg)
 
+      // set base for beard
+      console.log("./img/beards/beard-" + beard.toString() + ".png")
+      const beardImg = await Jimp.read("./img/beards/beard-" + beard.toString() + ".png")
+      setBeardImg(beardImg)
+
       const ovrA = await jimpImage.clone()
         .color([{apply:'mix', params: [skintone.hex, 75]}]).composite(features
         .clone().color([{apply:'mix', params: [skintone.hex, 55]}]), 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrB = await ovrA.composite(scleraImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrC = await ovrB.composite(irisImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrD = await ovrC.composite(beardImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrC.getBase64Async(Jimp.MIME_PNG);
-      setTransformedImage(transformedImage);
-    };
+      const transformedImage = await ovrD.getBase64Async(Jimp.MIME_PNG)
+      setTransformedImage(transformedImage)
+    }
     
     loadImage()
-  }, []);
+  }, [])
 
-  // skintone select
-  const skinToneChange = async () => { 
-    if (jimpImage && eyecolor) {         
+  const applyChanges = async () => { 
+    if (jimpImage) {         
       // set overlays
+      const scleraImg = await Jimp.read("./img/eyes/sclera-" + eyes + ".png")
+      const irisImg = await Jimp.read("./img/eyes/iris-" + eyes + ".png")
+      setScleraImg(scleraImg)
+      setIrisImg(irisImg)
+      const beardImg = await Jimp.read("./img/beards/beard-" + beard + ".png")
+      setBeardImg(beardImg)
+
       const ovrA = await jimpImage
         .clone()
         .color([{apply:'mix', params: [skintone.hex, 75]}])
@@ -88,43 +114,31 @@ const HomePage = () => {
         .clone()
         .color([{apply:'mix', params: [eyecolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      
-      const transformedImage = await ovrC.getBase64Async(Jimp.MIME_PNG);      
-      setTransformedImage(transformedImage);
-    }
-  };
-
-  useEffect(() => {
-    if (jimpImage && skintone) {
-      skinToneChange();
-    }
-  }, [skintone]);
-
-  // eye color select
-  const eyeColorChange = async () => { 
-    if (jimpImage && skintone) {         
-      // set overlays
-      const ovrA = await jimpImage
+      const ovrD = await ovrC.composite(beardImg
         .clone()
-        .color([{apply:'mix', params: [skintone.hex, 75]}])
-        .composite(features
-          .color([{apply:'mix', params: [skintone.hex, 55]}]), 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrB = await ovrA.composite(scleraImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrC = await ovrB.composite(irisImg
-        .clone()
-        .color([{apply:'mix', params: [eyecolor.hex, 75]}])
+        .color([{apply:'mix', params: [beardcolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrC.getBase64Async(Jimp.MIME_PNG);      
-      setTransformedImage(transformedImage);
+      const transformedImage = await ovrD.getBase64Async(Jimp.MIME_PNG)    
+      setTransformedImage(transformedImage)
     }
-  };
+  }
 
   useEffect(() => {
-    if (jimpImage && eyecolor) {
-      eyeColorChange();
+    if (jimpImage) {
+      applyChanges()
     }
-  }, [eyecolor]);
+  }, [skintone, eyecolor, eyes, beard, beardcolor])
+
+  // eye size set
+  const setEyeSize = (value) => {
+    if (value == true) {
+      setEyes('large')
+    } else {
+      setEyes('small')
+    }
+    console.log("Set eyes to " + eyes)
+  }
 
   return (
     <>
@@ -163,6 +177,30 @@ const HomePage = () => {
           colors={eyeColorPalette}
           setColor={setEyecolor}
         />
+
+        <Checkbox
+         isChecked={(eyes === 'small' ? false : true)}
+         onChange={(e) => setEyeSize(e.target.checked)}
+        >
+          Large Eyes
+        </Checkbox>
+
+         <h2>Beard Color</h2>
+        <TonePicker
+          hexColor="#ff0000"
+          colors={beardColorPalette}
+          setColor={setBeardcolor}
+        />
+        <RadioGroup onChange={ setBeard } value={ beard }>
+          <Stack direction='row'>
+            <Radio value='0'>None</Radio>
+            <Radio value='1'>Moustache</Radio>
+            <Radio value='2'>Handlebar</Radio>
+            <Radio value='3'>Short</Radio>
+            <Radio value='4'>Medium</Radio>
+            <Radio value='5'>Long</Radio>
+          </Stack>
+        </RadioGroup>
 
       </Container>
     </>
