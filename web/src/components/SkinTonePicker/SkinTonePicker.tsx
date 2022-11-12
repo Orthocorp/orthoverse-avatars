@@ -1,11 +1,11 @@
 import { GithubPicker } from 'react-color'
 
-const SkinTonePicker = ({ hexColor, colors, setSkintone }) => {
+const SkinTonePicker = ({ hexColor, colors, setColor }) => {
   return (
     <div>
       <GithubPicker
         color={hexColor}
-        onChange={setSkintone}
+        onChange={setColor}
         colors={colors}
       />
     </div>
