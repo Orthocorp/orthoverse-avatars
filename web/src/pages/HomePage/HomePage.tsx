@@ -9,6 +9,8 @@ import { Link } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Radio, RadioGroup } from '@chakra-ui/react'
+import { Stack, HStack, VStack } from '@chakra-ui/react'
 
 import { initBase64 } from './base'
 
@@ -27,6 +29,8 @@ const HomePage = () => {
     "#9C713E", "#614023", "#83240F", "#4D311F", "#403321",
     "#392C2C", "#53212F", "#2B246D", "#30221B", "#22201A", "#1F0E46"
   ]
+
+  const [animation, setAnimation] = useState('none');
 
   const [jimpImage, setJimpImage] = useState(undefined);
   const [transformedImage, setTransformedImage] = useState(initBase64);
@@ -129,9 +133,24 @@ const HomePage = () => {
         <h1>Orthoverse Avatars</h1>
 
         <ConnectKitButton />
+
+        <h2>Animation</h2>
+        <RadioGroup onChange={ setAnimation } value={ animation }>
+          <Stack direction='row'>
+            <Radio value='none'>None</Radio>
+            <Radio value='idle'>Idle</Radio>
+            <Radio value='walk'>Walk</Radio>
+            <Radio value='run'>Run</Radio>
+            <Radio value='fly'>Fly</Radio>
+          </Stack>
+        </RadioGroup>
+
         <AvatarDisplay
+          className="viewer"
           skinUrl={ transformedImage }
+          animation={ animation }
         />
+
         <h2>Skin Tone</h2>
         <TonePicker
           hexColor="#ff0000"
