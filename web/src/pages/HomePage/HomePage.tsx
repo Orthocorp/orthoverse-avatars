@@ -80,7 +80,7 @@ const HomePage = () => {
     const loadImage = async () => {
 
       // loading underlying skin
-      const jimpImage = await Jimp.read("./img/base.png")
+      const jimpImage = await Jimp.read("./img/test.png")
       const features = await Jimp.read("./img/features.png")
       setJimpImage(jimpImage)
       setFeatures(features)
