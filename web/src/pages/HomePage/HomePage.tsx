@@ -2,6 +2,7 @@ import { Container } from '@chakra-ui/react'
 import { ConnectKitButton } from 'connectkit'
 import AvatarDisplay from 'src/components/AvatarDisplay'
 import TonePicker from 'src/components/SkinTonePicker'
+import Download from 'src/components/Download'
 import Jimp from 'jimp'
 import { useEffect, useState } from 'react'
 
@@ -12,7 +13,7 @@ import { Button, ButtonGroup } from '@chakra-ui/react'
 import { Radio, RadioGroup } from '@chakra-ui/react'
 import { Stack, HStack, VStack } from '@chakra-ui/react'
 import { Checkbox } from '@chakra-ui/react'
-import { Carousel } from '@trendyol-js/react-carousel'
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
 import { Box } from '@chakra-ui/react'
 
@@ -41,6 +42,13 @@ const HomePage = () => {
     "#bd3d46", "#eb9fb3", "#579ec8", "#008c48", "#e14674", "#421479"
   ]
 
+  const hairColorPalette = [
+    "#030303", "#343434", "#686a69", "#b1b5b8", "#dde3e7",
+    "#bc3b15", "#ba6025", "#fe5f35", "#fbcf2b", "#fef87e",
+    "#1c0a19", "#92593b", "#553118", "#c98359", "#dfbdb2",
+    "#bd3d46", "#eb9fb3", "#579ec8", "#008c48", "#e14674", "#421479"
+  ]
+
   const [animation, setAnimation] = useState('none')
 
   const [jimpImage, setJimpImage] = useState(undefined)
@@ -49,6 +57,7 @@ const HomePage = () => {
   const [scleraImg, setScleraImg] = useState(undefined)
   const [irisImg, setIrisImg] = useState(undefined)
   const [beardImg, setBeardImg] = useState(undefined)
+  const [hairImg, setHairImg] = useState(undefined)
 
   const [skintone, setSkintone] = useState({
     "hex": skinTonePalette[Math.floor(Math.random()*skinTonePalette.length)]
@@ -59,9 +68,13 @@ const HomePage = () => {
   const [beardcolor, setBeardcolor] = useState({
     "hex": beardColorPalette[Math.floor(Math.random()*beardColorPalette.length)]
   })
+  const [haircolor, setHaircolor] = useState({
+    "hex": hairColorPalette[Math.floor(Math.random()*hairColorPalette.length)]
+  })
 
   const [eyes, setEyes] = useState('small')
   const [beard, setBeard] = useState('0')
+  const [hair, setHair] = useState('0')
 
   useEffect(() => {
     const loadImage = async () => {
@@ -79,18 +92,23 @@ const HomePage = () => {
       setIrisImg(irisImg)
 
       // set base for beard
-      console.log("./img/beards/beard-" + beard.toString() + ".png")
       const beardImg = await Jimp.read("./img/beards/beard-" + beard.toString() + ".png")
       setBeardImg(beardImg)
 
+      // set base for hair
+      const hairImg = await Jimp.read("./img/hair/hair-" + hair.toString() + ".png")
+      setHairImg(hairImg)
+
       const ovrA = await jimpImage.clone()
-        .color([{apply:'mix', params: [skintone.hex, 75]}]).composite(features
-        .clone().color([{apply:'mix', params: [skintone.hex, 55]}]), 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+        .color([{apply:'mix', params: [skintone.hex, 75]}])
+        .composite(features
+          .clone().color([{apply:'mix', params: [skintone.hex, 55]}]), 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrB = await ovrA.composite(scleraImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrC = await ovrB.composite(irisImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrD = await ovrC.composite(beardImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrE = await ovrC.composite(hairImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrD.getBase64Async(Jimp.MIME_PNG)
+      const transformedImage = await ovrE.getBase64Async(Jimp.MIME_PNG)
       setTransformedImage(transformedImage)
     }
     
@@ -106,12 +124,14 @@ const HomePage = () => {
       setIrisImg(irisImg)
       const beardImg = await Jimp.read("./img/beards/beard-" + beard + ".png")
       setBeardImg(beardImg)
+      const hairImg = await Jimp.read("./img/hair/hair-" + hair.toString() + ".png")
+      setHairImg(hairImg)
 
       const ovrA = await jimpImage
         .clone()
         .color([{apply:'mix', params: [skintone.hex, 75]}])
         .composite(features
-          .color([{apply:'mix', params: [skintone.hex, 55]}]), 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+          .clone().color([{apply:'mix', params: [skintone.hex, 55]}]), 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrB = await ovrA.composite(scleraImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrC = await ovrB.composite(irisImg
         .clone()
@@ -121,8 +141,13 @@ const HomePage = () => {
         .clone()
         .color([{apply:'mix', params: [beardcolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrE = await ovrC.composite(hairImg
+        .clone()
+        .color([{apply:'mix', params: [haircolor.hex, 75]}])
+        , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrD.getBase64Async(Jimp.MIME_PNG)    
+      const transformedImage = await ovrE.getBase64Async(Jimp.MIME_PNG)    
+      console.log('Setting transformed image string')
       setTransformedImage(transformedImage)
     }
   }
@@ -131,7 +156,7 @@ const HomePage = () => {
     if (jimpImage) {
       applyChanges()
     }
-  }, [skintone, eyecolor, eyes, beard, beardcolor])
+  }, [skintone, eyecolor, eyes, beard, beardcolor, hair, haircolor])
 
   // eye size set
   const setEyeSize = (value) => {
@@ -168,60 +193,105 @@ const HomePage = () => {
           animation={ animation }
         />
 
-        <Carousel
-           show={1.5}
-           slide={1}
-           swiping={true}
-           infinite={false}
-           transition={0.5}
-        >
+        <Tabs variant='enclosed'>
+          <TabList>
+            <Tab>Skin</Tab>
+            <Tab>Eyes</Tab>
+            <Tab>Hair</Tab>
+            <Tab>Face</Tab>
+            <Tab>Tops</Tab>
+            <Tab>Pants</Tab>
+            <Tab>Extras</Tab>
+            <Tab>Save</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <h2>Skin Tone</h2>
+              <TonePicker
+                hexColor="#ff0000"
+                colors={skinTonePalette}
+                setColor={setSkintone}
+              />
+            </TabPanel>
 
-          <Box id="1">
-            <h2>Skin Tone</h2>
-            <TonePicker
-              hexColor="#ff0000"
-              colors={skinTonePalette}
-              setColor={setSkintone}
-            />
-          </Box>
+            <TabPanel>
+              <h2>Eye Color</h2>
+              <TonePicker
+                hexColor="#ff0000"
+                colors={eyeColorPalette}
+                setColor={setEyecolor}
+              />
+              <Checkbox
+               isChecked={(eyes === 'small' ? false : true)}
+               onChange={(e) => setEyeSize(e.target.checked)}
+              >
+                Large Eyes
+              </Checkbox>
+            </TabPanel>
 
-          <Box id="2">
-            <h2>Eye Color</h2>
-            <TonePicker
-              hexColor="#ff0000"
-              colors={eyeColorPalette}
-              setColor={setEyecolor}
-            />
-            <Checkbox
-             isChecked={(eyes === 'small' ? false : true)}
-             onChange={(e) => setEyeSize(e.target.checked)}
-            >
-              Large Eyes
-            </Checkbox>
-          </Box>
+            <TabPanel>
+              <h2>Hair Color</h2>
+              <TonePicker
+                hexColor="#ff0000"
+                colors={hairColorPalette}
+                setColor={setHaircolor}
+              />
+              <RadioGroup onChange={ setHair } value={ hair }>
+                <Stack direction='row'>
+                  <Radio value='0'>None</Radio>
+                  <Radio value='1'>One</Radio>
+                  <Radio value='2'>Two</Radio>
+                </Stack>
+                <Stack direction='row'>              
+                  <Radio value='3'>Three</Radio>
+                  <Radio value='4'>Four</Radio>
+                  <Radio value='5'>Five</Radio>
+                </Stack>
+              </RadioGroup>
+            </TabPanel>
 
-          <Box id="3">
-            <h2>Beard Color</h2>
-            <TonePicker
-              hexColor="#ff0000"
-              colors={beardColorPalette}
-              setColor={setBeardcolor}
-            />
-            <RadioGroup onChange={ setBeard } value={ beard }>
-              <Stack direction='row'>
-                <Radio value='0'>None</Radio>
-                <Radio value='1'>Moustache</Radio>
-                <Radio value='2'>Handlebar</Radio>
-              </Stack>
-              <Stack direction='row'>              
-                <Radio value='3'>Short</Radio>
-                <Radio value='4'>Medium</Radio>
-                <Radio value='5'>Long</Radio>
-              </Stack>
-            </RadioGroup>
-          </Box>
+            <TabPanel>
+              <h2>Beard Color</h2>
+              <TonePicker
+                hexColor="#ff0000"
+                colors={beardColorPalette}
+                setColor={setBeardcolor}
+              />
+              <RadioGroup onChange={ setBeard } value={ beard }>
+                <Stack direction='row'>
+                  <Radio value='0'>None</Radio>
+                  <Radio value='1'>Moustache</Radio>
+                  <Radio value='2'>Handlebar</Radio>
+                </Stack>
+                <Stack direction='row'>              
+                  <Radio value='3'>Short</Radio>
+                  <Radio value='4'>Medium</Radio>
+                  <Radio value='5'>Long</Radio>
+                </Stack>
+              </RadioGroup>
+            </TabPanel>
 
-        </Carousel>
+            <TabPanel>
+              <h2>Upper Clothing</h2>
+            </TabPanel>
+
+            <TabPanel>
+              <h2>Lower Clothing</h2>
+            </TabPanel>
+
+            <TabPanel>
+              <h2>Accessories</h2>
+            </TabPanel>
+
+            <TabPanel>
+            <h2>Save</h2>
+             <Download
+               img={transformedImage} 
+             />
+            </TabPanel>
+          </TabPanels>
+
+        </Tabs>
 
       </Container>
     </>

@@ -7743,17 +7743,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trendyol-js/react-carousel@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@trendyol-js/react-carousel@npm:3.0.0"
-  dependencies:
-    react: ^16.13.1
-  peerDependencies:
-    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 9333eff2e6fb51558670185b0eb9b3ec1bd90bc25fe052d1152002270c819af486c529f4477f50a69785b21ab09df678620d16c7d97964001cde9d38936282d1
-  languageName: node
-  linkType: hard
-
 "@trysound/sax@npm:0.2.0":
   version: 0.2.0
   resolution: "@trysound/sax@npm:0.2.0"
@@ -12009,13 +11998,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.5":
-  version: 2.3.2
-  resolution: "classnames@npm:2.3.2"
-  checksum: cd50ead57b4f97436aaa9f9885c6926323efc7c2bea8e3d4eb10e4e972aa6a1cfca1c7a0e06f8a199ca7498d4339e30bb6002e589e61c9f21248cbf3e8b0b18d
-  languageName: node
-  linkType: hard
-
 "clean-css@npm:^4.2.3":
   version: 4.2.4
   resolution: "clean-css@npm:4.2.4"
@@ -14126,13 +14108,6 @@ __metadata:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
   checksum: 697c066552dadde9ea8ec7068677711dd5d6c49434b5ff96b2de2068a65060ffca32629abb899a86cca5fcb6b067d88119d1a69c7c2082e3a09c1165f760ad87
-  languageName: node
-  linkType: hard
-
-"enquire.js@npm:^2.1.6":
-  version: 2.1.6
-  resolution: "enquire.js@npm:2.1.6"
-  checksum: 3ab739ed0885b5dda973de3fe610d2e3ce261a3ee77321ee4c0c876294c1c37f87f6cccead3ee1de8ead24b31f730586847f89118f083e776677f7c3cd71abaa
   languageName: node
   linkType: hard
 
@@ -19002,6 +18977,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-file-download@npm:^0.4.12":
+  version: 0.4.12
+  resolution: "js-file-download@npm:0.4.12"
+  checksum: 3caec1491fa744214409e0bcb1fb18d76e3d56715c477ee033cb7d8becb5cf777803409dc1995c913bf1a2270dac98d78f07d83bba319b8e800bc7bf2a7266a7
+  languageName: node
+  linkType: hard
+
 "js-levenshtein@npm:^1.1.6":
   version: 1.1.6
   resolution: "js-levenshtein@npm:1.1.6"
@@ -19209,15 +19191,6 @@ __metadata:
     remedial: ^1.0.7
     remove-trailing-spaces: ^1.0.6
   checksum: d28891860a7ae034873ac8ec5f69f5493106afed9a86295f1642a40b27a48df717c63966439a1dec5b8a4b30e99b86cd1b4ca7d979bb8048ffd7f7c67bfd88a3
-  languageName: node
-  linkType: hard
-
-"json2mq@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "json2mq@npm:0.2.0"
-  dependencies:
-    string-convert: ^0.2.0
-  checksum: fc9e2f2306572522d3e61d246afdf70b56ca9ea32f4ad5924c30949867851ab59c926bd0ffc821ebb54d32f3e82e95225f3906eacdb3e54c1ad49acdadf7e0c7
   languageName: node
   linkType: hard
 
@@ -22918,7 +22891,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.5.10, prop-types@npm:^15.5.8, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.5.10, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -23303,15 +23276,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-easy-swipe@npm:^0.0.21":
-  version: 0.0.21
-  resolution: "react-easy-swipe@npm:0.0.21"
-  dependencies:
-    prop-types: ^15.5.8
-  checksum: f1831df379dfb5074b546de48f42db270bc1e97367342d07bb3fce07f4799a8d33d5e5a605b1b12243087d0eb0ab0fecc1fa0ade49c487b8504217824f3f2ad0
-  languageName: node
-  linkType: hard
-
 "react-element-to-jsx-string@npm:^14.3.4":
   version: 14.3.4
   resolution: "react-element-to-jsx-string@npm:14.3.4"
@@ -23491,17 +23455,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-responsive-carousel@npm:^3.2.23":
-  version: 3.2.23
-  resolution: "react-responsive-carousel@npm:3.2.23"
-  dependencies:
-    classnames: ^2.2.5
-    prop-types: ^15.5.8
-    react-easy-swipe: ^0.0.21
-  checksum: 47957d48898f550cfc7e3517ad755a4dd94ce78630480310db58ec5896de6d6f3c1ed253347432bee889860036a15e32b508cb19b121c4cdd634e78e6fe83064
-  languageName: node
-  linkType: hard
-
 "react-sizeme@npm:^3.0.1":
   version: 3.0.2
   resolution: "react-sizeme@npm:3.0.2"
@@ -23523,22 +23476,6 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 965ef2a7f410ee66a2dfd6d127ba3a04976189a2f1424f60ee388982811d5ced57b16aa8f8f7edd051814b21cb23d60d9597d407c7475439a85c98e4a4c5c989
-  languageName: node
-  linkType: hard
-
-"react-slick@npm:^0.29.0":
-  version: 0.29.0
-  resolution: "react-slick@npm:0.29.0"
-  dependencies:
-    classnames: ^2.2.5
-    enquire.js: ^2.1.6
-    json2mq: ^0.2.0
-    lodash.debounce: ^4.0.8
-    resize-observer-polyfill: ^1.5.0
-  peerDependencies:
-    react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 965e2957b7d72435397adfa062911e62310e181c14b8667b528f9fe88bda490b86fd94d685c186a4b7704b77e10ef3d6c7be24541652a9787baa80b98000190f
   languageName: node
   linkType: hard
 
@@ -23588,17 +23525,6 @@ __metadata:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: 07ae8959acf1596f0550685102fd6097d461a54a4fd46a50f88a0cd7daaa97fdd6415de1dcb4bfe0da6aa43221a6746ce380410fa848acc60f8ac41f6649c148
-  languageName: node
-  linkType: hard
-
-"react@npm:^16.13.1":
-  version: 16.14.0
-  resolution: "react@npm:16.14.0"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    prop-types: ^15.6.2
-  checksum: df8faae43e01387013900e8f8fb3c4ce9935b7edbcbaa77e12999c913eb958000a0a8750bf9a0886dae0ad768dd4a4ee983752d5bade8d840adbe0ce890a2438
   languageName: node
   linkType: hard
 
@@ -24085,13 +24011,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resize-observer-polyfill@npm:^1.5.0":
-  version: 1.5.1
-  resolution: "resize-observer-polyfill@npm:1.5.1"
-  checksum: 5e882475067f0b97dc07e0f37c3e335ac5bc3520d463f777cec7e894bb273eddbfecb857ae668e6fb6881fd6f6bb7148246967172139302da50fa12ea3a15d95
-  languageName: node
-  linkType: hard
-
 "resolve-cwd@npm:^3.0.0":
   version: 3.0.0
   resolution: "resolve-cwd@npm:3.0.0"
@@ -24307,18 +24226,16 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@redwoodjs/core": 3.3.1
-    "@trendyol-js/react-carousel": ^3.0.0
     browserify-zlib: ^0.2.0
     connectkit: ^1.0.0
     ethers: ^5.7.2
     https-browserify: ^1.0.0
     jimp: ^0.16.2
+    js-file-download: ^0.4.12
     node-polyfill-webpack-plugin: ^2.0.1
     path-browserify: ^1.0.1
     react-color: ^2.19.3
-    react-responsive-carousel: ^3.2.23
     react-skinview3d: ^5.0.0
-    react-slick: ^0.29.0
     skinview3d: ^3.0.0-alpha.1
     stream-browserify: ^3.0.0
     stream-http: ^3.2.0
@@ -25484,13 +25401,6 @@ __metadata:
   version: 2.0.0
   resolution: "strict-uri-encode@npm:2.0.0"
   checksum: 010cbc78da0e2cf833b0f5dc769e21ae74cdc5d5f5bd555f14a4a4876c8ad2c85ab8b5bdf9a722dc71a11dcd3184085e1c3c0bd50ec6bb85fffc0f28cf82597d
-  languageName: node
-  linkType: hard
-
-"string-convert@npm:^0.2.0":
-  version: 0.2.1
-  resolution: "string-convert@npm:0.2.1"
-  checksum: 00673ed8a3106137395436537ace7d3672c91a3290da73466055daa0134331dc84bc58c54ba2d2ea40711adc5744426d3c8239dbfc30290438fa3e9ff65db528
   languageName: node
   linkType: hard
 
