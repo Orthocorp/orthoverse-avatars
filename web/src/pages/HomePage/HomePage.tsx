@@ -42,6 +42,13 @@ const HomePage = () => {
     "#bd3d46", "#eb9fb3", "#579ec8", "#008c48", "#e14674", "#421479"
   ]
 
+  const topColorPalette = [
+    "#030303", "#343434", "#686a69", "#b1b5b8", "#dde3e7",
+    "#bc3b15", "#ba6025", "#fe5f35", "#fbcf2b", "#fef87e",
+    "#1c0a19", "#92593b", "#553118", "#c98359", "#dfbdb2",
+    "#bd3d46", "#eb9fb3", "#579ec8", "#008c48", "#e14674", "#421479"
+  ]
+
   const hairColorPalette = [
     "#030303", "#343434", "#686a69", "#b1b5b8", "#dde3e7",
     "#bc3b15", "#ba6025", "#fe5f35", "#fbcf2b", "#fef87e",
@@ -57,6 +64,7 @@ const HomePage = () => {
   const [scleraImg, setScleraImg] = useState(undefined)
   const [irisImg, setIrisImg] = useState(undefined)
   const [beardImg, setBeardImg] = useState(undefined)
+  const [topImg, setTopImg] = useState(undefined)
   const [hairImg, setHairImg] = useState(undefined)
 
   const [skintone, setSkintone] = useState({
@@ -68,19 +76,23 @@ const HomePage = () => {
   const [beardcolor, setBeardcolor] = useState({
     "hex": beardColorPalette[Math.floor(Math.random()*beardColorPalette.length)]
   })
+  const [topcolor, setTopcolor] = useState({
+    "hex": beardColorPalette[Math.floor(Math.random()*beardColorPalette.length)]
+  })
   const [haircolor, setHaircolor] = useState({
     "hex": hairColorPalette[Math.floor(Math.random()*hairColorPalette.length)]
   })
 
   const [eyes, setEyes] = useState('small')
   const [beard, setBeard] = useState('0')
+  const [top, setTop] = useState('0')
   const [hair, setHair] = useState('0')
 
   useEffect(() => {
     const loadImage = async () => {
 
       // loading underlying skin
-      const jimpImage = await Jimp.read("./img/test.png")
+      const jimpImage = await Jimp.read("./img/base.png")
       const features = await Jimp.read("./img/features.png")
       setJimpImage(jimpImage)
       setFeatures(features)
@@ -90,6 +102,10 @@ const HomePage = () => {
       const irisImg = await Jimp.read("./img/eyes/iris-" + eyes + ".png")
       setScleraImg(scleraImg)
       setIrisImg(irisImg)
+
+      // set base for top
+      const topImg = await Jimp.read("./img/tops/tunic-" + top.toString() + ".png")
+      setTopImg(topImg)
 
       // set base for beard
       const beardImg = await Jimp.read("./img/beards/beard-" + beard.toString() + ".png")
@@ -105,10 +121,11 @@ const HomePage = () => {
           .clone().color([{apply:'mix', params: [skintone.hex, 55]}]), 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrB = await ovrA.composite(scleraImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrC = await ovrB.composite(irisImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrD = await ovrC.composite(beardImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrE = await ovrC.composite(hairImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrD = await ovrC.composite(topImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrE = await ovrC.composite(beardImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrF = await ovrC.composite(hairImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrE.getBase64Async(Jimp.MIME_PNG)
+      const transformedImage = await ovrF.getBase64Async(Jimp.MIME_PNG)
       setTransformedImage(transformedImage)
     }
     
@@ -124,6 +141,8 @@ const HomePage = () => {
       setIrisImg(irisImg)
       const beardImg = await Jimp.read("./img/beards/beard-" + beard + ".png")
       setBeardImg(beardImg)
+      const topImg = await Jimp.read("./img/tops/tunic-" + top + ".png")
+      setBeardImg(beardImg)
       const hairImg = await Jimp.read("./img/hair/hair-" + hair.toString() + ".png")
       setHairImg(hairImg)
 
@@ -137,16 +156,20 @@ const HomePage = () => {
         .clone()
         .color([{apply:'mix', params: [eyecolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrD = await ovrC.composite(beardImg
+      const ovrD = await ovrC.composite(topImg
+        .clone()
+        .color([{apply:'mix', params: [topcolor.hex, 75]}])
+        , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrE = await ovrC.composite(beardImg
         .clone()
         .color([{apply:'mix', params: [beardcolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrE = await ovrC.composite(hairImg
+      const ovrF = await ovrC.composite(hairImg
         .clone()
         .color([{apply:'mix', params: [haircolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrE.getBase64Async(Jimp.MIME_PNG)    
+      const transformedImage = await ovrF.getBase64Async(Jimp.MIME_PNG)    
       console.log('Setting transformed image string')
       setTransformedImage(transformedImage)
     }
@@ -156,7 +179,7 @@ const HomePage = () => {
     if (jimpImage) {
       applyChanges()
     }
-  }, [skintone, eyecolor, eyes, beard, beardcolor, hair, haircolor])
+  }, [skintone, eyecolor, eyes, beard, beardcolor, hair, haircolor, top, topcolor])
 
   // eye size set
   const setEyeSize = (value) => {
@@ -273,6 +296,28 @@ const HomePage = () => {
 
             <TabPanel>
               <h2>Upper Clothing</h2>
+              <TonePicker
+                hexColor="#ff0000"
+                colors={topColorPalette}
+                setColor={setTopcolor}
+              />
+              <RadioGroup onChange={ setTop } value={ top }>
+                <Stack direction='row'>
+                  <Radio value='0'>None</Radio>
+                  <Radio value='1'>Tunic A</Radio>
+                  <Radio value='2'>Tunic B</Radio>
+                </Stack>
+                <Stack direction='row'>              
+                  <Radio value='3'>Tunic C</Radio>
+                  <Radio value='4'>Tunic D</Radio>
+                  <Radio value='5'>T-shirt</Radio>
+                </Stack>
+                <Stack direction='row'>              
+                  <Radio value='6'>Crop-top</Radio>
+                  <Radio value='7'>Blazer</Radio>
+                  <Radio value='8'>Waistcoat</Radio>
+                </Stack>
+              </RadioGroup>
             </TabPanel>
 
             <TabPanel>

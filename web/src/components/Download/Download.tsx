@@ -13,6 +13,7 @@ const Download = ({ img }) => {
 
   const saveOrth = async (downloadImg) => { 
     // Orthoverse skins have mirrored arms and legs
+    // I'm sure this could be done with a loop instead...
     const jimpImage = await Jimp.read(Buffer.from(downloadImg.split(',')[1], 'base64'))
     const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
     const ila2 = await jimpImage.clone().crop(8, 20, 4, 12)
