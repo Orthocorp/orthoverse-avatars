@@ -56,6 +56,20 @@ const HomePage = () => {
     "#bd3d46", "#eb9fb3", "#579ec8", "#008c48", "#e14674", "#421479"
   ]
 
+  const pantsColorPalette = [
+    "#fe0000", "#0232dc", "#208d10", "#b1b5b8", "#dde3e7",
+    "#623412", "#ecefff", "#fee101", "#dd8b1b", "#bdbdbd",
+    "#ffd08d", "#d07870", "#974c5b", "#90ac64", "#abc587",
+    "#663399", "#4066e0", "#b9bfff", "#bbbbbb", "#f74b00", "#222222"
+  ]
+
+  const bootsColorPalette = [
+    "#fe0000", "#0232dc", "#208d10", "#b1b5b8", "#dde3e7",
+    "#623412", "#ecefff", "#fee101", "#dd8b1b", "#bdbdbd",
+    "#ffd08d", "#d07870", "#974c5b", "#90ac64", "#abc587",
+    "#663399", "#4066e0", "#b9bfff", "#bbbbbb", "#f74b00", "#222222"
+  ]
+
   const [animation, setAnimation] = useState('none')
 
   const [jimpImage, setJimpImage] = useState(undefined)
@@ -66,6 +80,8 @@ const HomePage = () => {
   const [beardImg, setBeardImg] = useState(undefined)
   const [topImg, setTopImg] = useState(undefined)
   const [hairImg, setHairImg] = useState(undefined)
+  const [pantsImg, setPantsImg] = useState(undefined)
+  const [bootsImg, setBootsImg] = useState(undefined)
 
   const [skintone, setSkintone] = useState({
     "hex": skinTonePalette[Math.floor(Math.random()*skinTonePalette.length)]
@@ -82,14 +98,24 @@ const HomePage = () => {
   const [haircolor, setHaircolor] = useState({
     "hex": hairColorPalette[Math.floor(Math.random()*hairColorPalette.length)]
   })
+  const [pantscolor, setPantscolor] = useState({
+    "hex": pantsColorPalette[Math.floor(Math.random()*pantsColorPalette.length)]
+  })
+  const [bootscolor, setBootscolor] = useState({
+    "hex": pantsColorPalette[Math.floor(Math.random()*bootsColorPalette.length)]
+  })
 
   const [eyes, setEyes] = useState('small')
   const [beard, setBeard] = useState('0')
   const [top, setTop] = useState('0')
   const [hair, setHair] = useState('0')
+  const [pants, setPants] = useState('0')
+  const [boots, setBoots] = useState('0')
 
   useEffect(() => {
     const loadImage = async () => {
+
+      // const sneakers = await Jimp.read("./img/accessories/sneakers.png")
 
       // loading underlying skin
       const jimpImage = await Jimp.read("./img/base.png")
@@ -115,6 +141,15 @@ const HomePage = () => {
       const hairImg = await Jimp.read("./img/hair/hair-" + hair.toString() + ".png")
       setHairImg(hairImg)
 
+      // set base for pants
+      const pantsImg = await Jimp.read("./img/pants/pants-" + pants.toString() + ".png")
+      setPantsImg(pantsImg)
+
+      // set base for boots
+      const bootsImg = await Jimp.read("./img/boots/boots-" + boots.toString() + ".png")
+      setBootsImg(bootsImg)
+
+
       const ovrA = await jimpImage.clone()
         .color([{apply:'mix', params: [skintone.hex, 75]}])
         .composite(features
@@ -122,10 +157,12 @@ const HomePage = () => {
       const ovrB = await ovrA.composite(scleraImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrC = await ovrB.composite(irisImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       const ovrD = await ovrC.composite(topImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrE = await ovrC.composite(beardImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrF = await ovrC.composite(hairImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrE = await ovrD.composite(beardImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrF = await ovrE.composite(hairImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrG = await ovrF.composite(pantsImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrH = await ovrG.composite(bootsImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrF.getBase64Async(Jimp.MIME_PNG)
+      const transformedImage = await ovrH.getBase64Async(Jimp.MIME_PNG)
       setTransformedImage(transformedImage)
     }
     
@@ -133,7 +170,10 @@ const HomePage = () => {
   }, [])
 
   const applyChanges = async () => { 
-    if (jimpImage) {         
+    if (jimpImage) {     
+
+      // const sneakers = await Jimp.read("./img/accessories/sneakers.png")
+    
       // set overlays
       const scleraImg = await Jimp.read("./img/eyes/sclera-" + eyes + ".png")
       const irisImg = await Jimp.read("./img/eyes/iris-" + eyes + ".png")
@@ -145,6 +185,10 @@ const HomePage = () => {
       setBeardImg(beardImg)
       const hairImg = await Jimp.read("./img/hair/hair-" + hair.toString() + ".png")
       setHairImg(hairImg)
+      const pantsImg = await Jimp.read("./img/pants/pants-" + pants.toString() + ".png")
+      setPantsImg(pantsImg)
+      const bootsImg = await Jimp.read("./img/boots/boots-" + boots.toString() + ".png")
+      setBootsImg(bootsImg)
 
       const ovrA = await jimpImage
         .clone()
@@ -160,16 +204,24 @@ const HomePage = () => {
         .clone()
         .color([{apply:'mix', params: [topcolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrE = await ovrC.composite(beardImg
+      const ovrE = await ovrD.composite(beardImg
         .clone()
         .color([{apply:'mix', params: [beardcolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
-      const ovrF = await ovrC.composite(hairImg
+      const ovrF = await ovrE.composite(hairImg
         .clone()
         .color([{apply:'mix', params: [haircolor.hex, 75]}])
         , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrG = await ovrF.composite(pantsImg
+        .clone()
+        .color([{apply:'mix', params: [pantscolor.hex, 75]}])
+        , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
+      const ovrH = await ovrG.composite(bootsImg
+        .clone()
+        .color([{apply:'mix', params: [bootscolor.hex, 75]}])
+        , 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
       
-      const transformedImage = await ovrF.getBase64Async(Jimp.MIME_PNG)    
+      const transformedImage = await ovrH.getBase64Async(Jimp.MIME_PNG)    
       console.log('Setting transformed image string')
       setTransformedImage(transformedImage)
     }
@@ -179,7 +231,7 @@ const HomePage = () => {
     if (jimpImage) {
       applyChanges()
     }
-  }, [skintone, eyecolor, eyes, beard, beardcolor, hair, haircolor, top, topcolor])
+  }, [skintone, eyecolor, eyes, beard, beardcolor, hair, haircolor, top, topcolor, pants, pantscolor, boots, bootscolor])
 
   // eye size set
   const setEyeSize = (value) => {
@@ -224,6 +276,7 @@ const HomePage = () => {
             <Tab>Face</Tab>
             <Tab>Tops</Tab>
             <Tab>Pants</Tab>
+            <Tab>Boots</Tab>
             <Tab>Extras</Tab>
             <Tab>Save</Tab>
           </TabList>
@@ -322,6 +375,44 @@ const HomePage = () => {
 
             <TabPanel>
               <h2>Lower Clothing</h2>
+              <TonePicker
+                hexColor="#ff0000"
+                colors={pantsColorPalette}
+                setColor={setPantscolor}
+              />
+              <RadioGroup onChange={ setPants } value={ pants }>
+                <Stack direction='row'>
+                  <Radio value='0'>None</Radio>
+                  <Radio value='1'>Robe</Radio>
+                  <Radio value='2'>Gown</Radio>
+                </Stack>
+                <Stack direction='row'>              
+                  <Radio value='3'>Trousers</Radio>
+                  <Radio value='4'>Shorts</Radio>
+                  <Radio value='5'>Swimwear</Radio>
+                </Stack>
+              </RadioGroup>
+            </TabPanel>
+
+            <TabPanel>
+              <h2>Boots</h2>
+              <TonePicker
+                hexColor="#ff0000"
+                colors={bootsColorPalette}
+                setColor={setBootscolor}
+              />
+              <RadioGroup onChange={ setBoots } value={ boots }>
+                <Stack direction='row'>
+                  <Radio value='0'>None</Radio>
+                  <Radio value='1'>Heels</Radio>
+                  <Radio value='2'>High</Radio>
+                </Stack>
+                <Stack direction='row'>              
+                  <Radio value='3'>Shoes</Radio>
+                  <Radio value='4'>Tops</Radio>
+                  <Radio value='5'>Slippers</Radio>
+                </Stack>
+              </RadioGroup>
             </TabPanel>
 
             <TabPanel>
