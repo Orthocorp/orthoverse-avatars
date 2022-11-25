@@ -82,6 +82,7 @@ const HomePage = () => {
   const [hairImg, setHairImg] = useState(undefined)
   const [pantsImg, setPantsImg] = useState(undefined)
   const [bootsImg, setBootsImg] = useState(undefined)
+  const [accsImg, setAccsImg] = useState(undefined)
 
   const [skintone, setSkintone] = useState({
     "hex": skinTonePalette[Math.floor(Math.random()*skinTonePalette.length)]
@@ -111,6 +112,21 @@ const HomePage = () => {
   const [hair, setHair] = useState('0')
   const [pants, setPants] = useState('0')
   const [boots, setBoots] = useState('0')
+  const [accessories, setAccessories] = useState([0, 0, 0, 0])
+
+  function flipN(N) {
+    const tmp = [...accessories]
+    if (tmp[N] === 0) { tmp[N] = 1} else { tmp[N] = 0}
+    console.log(tmp)
+    setAccessories(tmp)
+  }
+
+  const accsObj = [
+    "crown",
+    "armbands",
+    "circlet",
+    "rope-belt"
+  ]
 
   useEffect(() => {
     const loadImage = async () => {
@@ -231,7 +247,7 @@ const HomePage = () => {
     if (jimpImage) {
       applyChanges()
     }
-  }, [skintone, eyecolor, eyes, beard, beardcolor, hair, haircolor, top, topcolor, pants, pantscolor, boots, bootscolor])
+  }, [skintone, eyecolor, eyes, beard, beardcolor, hair, haircolor, top, topcolor, pants, pantscolor, boots, bootscolor, accessories])
 
   // eye size set
   const setEyeSize = (value) => {
@@ -242,6 +258,8 @@ const HomePage = () => {
     }
     console.log("Set eyes to " + eyes)
   }
+
+
 
   return (
     <>
@@ -417,6 +435,14 @@ const HomePage = () => {
 
             <TabPanel>
               <h2>Accessories</h2>
+              { accsObj.map((el, i) => <div key={i}><Checkbox
+                    key={i}
+                    isChecked={accessories[i]}
+                    onChange={(e) => flipN(i)}
+                  >
+                    {el}
+                  </Checkbox></div>)
+              }
             </TabPanel>
 
             <TabPanel>
