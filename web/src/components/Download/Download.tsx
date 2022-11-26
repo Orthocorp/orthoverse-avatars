@@ -1,5 +1,5 @@
 import Jimp from 'jimp'
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Box, Stack, Button, ButtonGroup } from '@chakra-ui/react'
 import fileDownload from 'js-file-download'
 
 const Download = ({ img }) => {
@@ -57,18 +57,19 @@ const Download = ({ img }) => {
   }
 
   return (
-    <div>
-      <div>
+    <Box>
+      <Stack direction='column'> 
+        <Button onClick={(e) => writeAvatar(img)}>
+          Write to database
+        </Button>
         <Button onClick={(e) => saveMC(img)}>
           Download Minecraft PNG
         </Button>
-      </div>
-      <div>
         <Button onClick={(e) => saveOrth(img)}>
           Download Orthoverse PNG
         </Button>
-      </div>
-    </div>
+      </Stack>
+    </Box>
   )
 }
 
