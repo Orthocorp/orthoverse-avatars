@@ -58,15 +58,12 @@ const Download = ({ img }) => {
 
   return (
     <Box>
-      <Stack direction='column'> 
-        <Button onClick={(e) => writeAvatar(img)}>
-          Write to database
+      <Stack direction='row'> 
+        <Button onClick={(e) => saveOrth(img)}>
+          Write to Orthoverse
         </Button>
         <Button onClick={(e) => saveMC(img)}>
-          Download Minecraft PNG
-        </Button>
-        <Button onClick={(e) => saveOrth(img)}>
-          Download Orthoverse PNG
+          Download Minecraft Skin
         </Button>
       </Stack>
     </Box>
