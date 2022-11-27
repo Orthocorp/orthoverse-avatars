@@ -1,9 +1,10 @@
-import { GithubPicker } from 'react-color'
+import { CirclePicker } from 'react-color'
 
 const SkinTonePicker = ({ hexColor, colors, setColor }) => {
   return (
     <div>
-      <GithubPicker
+      <CirclePicker
+        width='200'
         color={hexColor}
         onChange={setColor}
         colors={colors}
