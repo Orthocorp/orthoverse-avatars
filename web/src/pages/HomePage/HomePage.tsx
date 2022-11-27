@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import {
   Box,
   Flex,
+  Divider,
   useDisclosure,
   useColorModeValue,
   useColorMode,
@@ -36,24 +37,7 @@ import {skinTonePalette, eyeColorPalette, beardColorPalette, topColorPalette, ha
 import { initBase64 } from 'src/values/base'
 import { accsObj } from 'src/values/accessories'
 
-import { extendTheme } from "@chakra-ui/react";
-
 const HomePage = () => {
-
-  const theme = extendTheme({
-    components: {
-      Drawer: {
-        parts: ['dialog', 'header', 'body'],
-        variants: {
-          design: {
-            dialog: {
-              maxW: "100px",   
-            }
-          }
-        } 
-      }
-    }
-  })
 
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -210,7 +194,7 @@ const HomePage = () => {
       <MetaTags title="Orthoverse Avatars" description="Orthoverse Avatars" />
 
       <Box bg={useColorModeValue('gray.200', 'gray.900')} px={4}>
-        <Flex h={20} alignItems={'center'} justifyContent={'space-between'}>
+        <Flex h={'82px'} alignItems={'center'} justifyContent={'space-between'}>
           <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
@@ -229,14 +213,18 @@ const HomePage = () => {
       </Button>
       </Box>
 
-      <Drawer variant='design'
+      <Drawer
         isOpen={isOpen}
         placement='left'
         onClose={onClose}
         finalFocusRef={btnRef}
       >    
-      <DrawerOverlay />
         <DrawerContent>
+          <DrawerHeader p={0} bg={useColorModeValue('gray.200', 'gray.900')}>
+            <Flex h={'82px'} alignItems={'center'} justifyContent={'space-between'}>
+              <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
+            </Flex>
+          </DrawerHeader>
           <DrawerBody p={0}>
             <DesignPane
             skintone={skintone}
@@ -259,6 +247,8 @@ const HomePage = () => {
             setTop={setTop}
             pantscolor={pantscolor}
             setPantscolor={setPantscolor}
+            setPants={setPants}
+            pants={pants}
             boots={boots}
             setBoots={setBoots}
             bootscolor={bootscolor}
@@ -271,7 +261,7 @@ const HomePage = () => {
         </DrawerContent>
       </Drawer>
 
-      <Box>
+      <Container maxW='550px'>
          <Box><Center>
            <AvatarDisplay
              className="viewer"
@@ -297,7 +287,7 @@ const HomePage = () => {
              img={transformedImage} 
            />
          </Center></Box>
-      </Box>
+      </Container>
     </>
   )
 }

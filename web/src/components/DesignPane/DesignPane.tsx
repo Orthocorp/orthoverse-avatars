@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import {
   Box,
+  useColorModeValue,
+  useColorMode,
   Flex,
   Stack, HStack, VStack,
   useDisclosure,
@@ -33,8 +35,8 @@ const DesignPane = (
   return (
   
   <Box>
-          <Tabs variant='line' orientation='vertical'>
-            <TabList>
+          <Tabs variant='solid-rounded' colorScheme='purple' orientation='vertical'>
+            <TabList bg={useColorModeValue('gray.200', 'gray.900')} >
               <Tab>Skin</Tab>
               <Tab>Eyes</Tab>
               <Tab>Hair</Tab>
@@ -45,13 +47,14 @@ const DesignPane = (
               <Tab>Extras</Tab>
             </TabList>
 
+            <Flex h="calc(100vh - 82px)">
             <TabPanels>
               <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={skinTonePalette}
-                  setColor={setSkintone}
-                />
+                  <TonePicker
+                    hexColor="#ff0000"
+                    colors={skinTonePalette}
+                    setColor={setSkintone}
+                  />
               </TabPanel>
 
               <TabPanel>
@@ -174,8 +177,8 @@ const DesignPane = (
                     </Checkbox></div>)
                 }
               </TabPanel>
-
             </TabPanels>
+            </Flex>
           </Tabs>
   </Box>
 
