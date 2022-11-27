@@ -12,27 +12,48 @@ import {
   Stack, HStack, VStack,
   Checkbox,
   Select,
-  Tabs, TabList, TabPanels, Tab, TabPanel,
-  Grid, GridItem
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton
 } from '@chakra-ui/react';
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { MoonIcon, SunIcon, ArrowRightIcon } from '@chakra-ui/icons';
 
 import { ConnectKitButton } from 'connectkit'
 import AvatarDisplay from 'src/components/AvatarDisplay'
-import TonePicker from 'src/components/SkinTonePicker'
-import ClothesTonePicker from 'src/components/ClothesTonePicker'
+import DesignPane from 'src/components/DesignPane'
 import Download from 'src/components/Download'
+
 import Jimp from 'jimp'
 import { useEffect, useState } from 'react'
-
 import { Link } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-import { initBase64 } from './base'
-import {skinTonePalette, eyeColorPalette, beardColorPalette, topColorPalette, hairColorPalette, pantsColorPalette, bootsColorPalette} from './palettes'
-import { accsObj } from './accessories'
+import {skinTonePalette, eyeColorPalette, beardColorPalette, topColorPalette, hairColorPalette, pantsColorPalette, bootsColorPalette} from 'src/values/palettes'
+import { initBase64 } from 'src/values/base'
+import { accsObj } from 'src/values/accessories'
+
+import { extendTheme } from "@chakra-ui/react";
 
 const HomePage = () => {
+
+  const theme = extendTheme({
+    components: {
+      Drawer: {
+        parts: ['dialog', 'header', 'body'],
+        variants: {
+          design: {
+            dialog: {
+              maxW: "100px",   
+            }
+          }
+        } 
+      }
+    }
+  })
 
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -181,23 +202,14 @@ const HomePage = () => {
     console.log("Set eyes to " + eyes)
   }
 
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef()
 
   return (
     <>
       <MetaTags title="Orthoverse Avatars" description="Orthoverse Avatars" />
 
-      <Grid
-        templateAreas={`"header header"
-          "nav main"
-          "nav footer"`}
-        gridTemplateRows={'88px 1fr 30px'}
-        gridTemplateColumns={'268px 1fr'}
-        h='200px'
-        gap='1'
-      >
-
-      <GridItem area={'header'} bg={useColorModeValue('gray.200', 'gray.900')} px={4}>
+      <Box bg={useColorModeValue('gray.200', 'gray.900')} px={4}>
         <Flex h={20} alignItems={'center'} justifyContent={'space-between'}>
           <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
           <Flex alignItems={'center'}>
@@ -209,165 +221,57 @@ const HomePage = () => {
             </Stack>
           </Flex>
         </Flex>
-      </GridItem>
+      </Box>
 
-      <GridItem area={'nav'}>
-        <Box>
-          <Tabs variant='line' orientation='vertical'>
-            <TabList>
-              <Tab>Skin</Tab>
-              <Tab>Eyes</Tab>
-              <Tab>Hair</Tab>
-              <Tab>Face</Tab>
-              <Tab>Tops</Tab>
-              <Tab>Pants</Tab>
-              <Tab>Boots</Tab>
-              <Tab>Extras</Tab>
-              <Tab>Save</Tab>
-            </TabList>
+      <Box position="absolute" left="0" top="50%">
+      <Button ref={btnRef} colorScheme='purple' onClick={onOpen}>
+        <ArrowRightIcon />
+      </Button>
+      </Box>
 
-            <TabPanels>
-              <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={skinTonePalette}
-                  setColor={setSkintone}
-                />
-              </TabPanel>
+      <Drawer variant='design'
+        isOpen={isOpen}
+        placement='left'
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >    
+      <DrawerOverlay />
+        <DrawerContent>
+          <DrawerBody p={0}>
+            <DesignPane
+            skintone={skintone}
+            setSkintone={setSkintone}
+            eyecolor={eyecolor}
+            setEyecolor={setEyecolor}
+            eyes={eyes}
+            setEyeSize={setEyeSize}
+            haircolor={haircolor}
+            setHaircolor={setHaircolor}
+            hair={hair}
+            setHair={setHair}
+            beardcolor={beardcolor}
+            setBeardcolor={setBeardcolor}
+            beard={beard}
+            setBeard={setBeard}
+            topcolor={topcolor}
+            setTopcolor={setTopcolor}
+            top={top}
+            setTop={setTop}
+            pantscolor={pantscolor}
+            setPantscolor={setPantscolor}
+            boots={boots}
+            setBoots={setBoots}
+            bootscolor={bootscolor}
+            setBootscolor={setBootscolor}
+            accessories={accessories}
+            setAccessories={setAccessories}
+            flipN={flipN}
+            />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
-              <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={eyeColorPalette}
-                  setColor={setEyecolor}
-                />
-                <Checkbox marginTop='16px'
-                 isChecked={(eyes === 'small' ? false : true)}
-                 onChange={(e) => setEyeSize(e.target.checked)}
-                >
-                  Large Eyes
-                </Checkbox>
-              </TabPanel>
-
-              <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={hairColorPalette}
-                  setColor={setHaircolor}
-                />
-                <RadioGroup marginTop='16px' onChange={ setHair } value={ hair }>
-                  <Stack direction='column'>
-                    <Radio value='0'>None</Radio>
-                    <Radio value='1'>Xena</Radio>
-                    <Radio value='2'>Brigitte</Radio>            
-                    <Radio value='3'>Thor</Radio>
-                    <Radio value='4'>Gandalf</Radio>
-                    <Radio value='5'>Vizzini</Radio>             
-                    <Radio value='6'>Anthony</Radio>
-                  </Stack>
-                </RadioGroup>
-              </TabPanel>
-
-              <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={beardColorPalette}
-                  setColor={setBeardcolor}
-                />
-                <RadioGroup marginTop='16px' onChange={ setBeard } value={ beard }>
-                  <Stack direction='column'>
-                    <Radio value='0'>None</Radio>
-                    <Radio value='1'>Moustache</Radio>
-                    <Radio value='2'>Handlebar</Radio>        
-                    <Radio value='3'>Short</Radio>
-                    <Radio value='4'>Medium</Radio>
-                    <Radio value='5'>Long</Radio>             
-                    <Radio value='6'>Mauricio</Radio>
-                    <Radio value='7'>Anthony</Radio>
-                  </Stack>
-                </RadioGroup>
-              </TabPanel>
-
-              <TabPanel>
-                <ClothesTonePicker
-                  hexColor="#ff0000"
-                  colors={topColorPalette}
-                  setColor={setTopcolor}
-                />
-                <RadioGroup marginTop='16px' onChange={ setTop } value={ top }>
-                  <Stack direction='column'>
-                    <Radio value='0'>None</Radio>
-                    <Radio value='1'>Tunic A</Radio>
-                    <Radio value='2'>Tunic B</Radio>             
-                    <Radio value='3'>Tunic C</Radio>
-                    <Radio value='4'>Tunic D</Radio>
-                    <Radio value='5'>T-shirt</Radio>
-                    <Radio value='6'>Crop-top</Radio>
-                    <Radio value='7'>Blazer</Radio>
-                    <Radio value='8'>Waistcoat</Radio>
-                  </Stack>
-                </RadioGroup>
-              </TabPanel>
-
-              <TabPanel>
-                <ClothesTonePicker
-                  hexColor="#ff0000"
-                  colors={pantsColorPalette}
-                  setColor={setPantscolor}
-                />
-                <RadioGroup marginTop='16px' onChange={ setPants } value={ pants }>
-                  <Stack direction='column'>
-                    <Radio value='0'>None</Radio>
-                    <Radio value='1'>Robe</Radio>
-                    <Radio value='2'>Gown</Radio>            
-                    <Radio value='3'>Trousers</Radio>
-                    <Radio value='4'>Shorts</Radio>
-                    <Radio value='5'>Swimwear</Radio>
-                  </Stack>
-                </RadioGroup>
-              </TabPanel>
-
-              <TabPanel>
-                <ClothesTonePicker
-                  hexColor="#ff0000"
-                  colors={bootsColorPalette}
-                  setColor={setBootscolor}
-                />
-                <RadioGroup marginTop='16px' onChange={ setBoots } value={ boots }>
-                  <Stack direction='column'>
-                    <Radio value='0'>None</Radio>
-                    <Radio value='1'>Heels</Radio>
-                    <Radio value='2'>High</Radio>            
-                    <Radio value='3'>Shoes</Radio>
-                    <Radio value='4'>Tops</Radio>
-                    <Radio value='5'>Slippers</Radio>
-                  </Stack>
-                </RadioGroup>
-              </TabPanel>
-  
-              <TabPanel>
-                { accsObj.map((el, i) => <div key={i}><Checkbox
-                      key={i}
-                      isChecked={accessories[i]}
-                     onChange={(e) => flipN(i)}
-                    >
-                      {el}
-                    </Checkbox></div>)
-                }
-              </TabPanel>
-
-              <TabPanel>
-               <Download
-                 img={transformedImage} 
-               />
-              </TabPanel>
-
-            </TabPanels>
-          </Tabs>
-         </Box>
-       </GridItem>
-
-       <GridItem area={'main'}>
+      <Box>
          <Box><Center>
            <AvatarDisplay
              className="viewer"
@@ -375,7 +279,8 @@ const HomePage = () => {
              animation={ animation }
            />
          </Center></Box>
-         <Box><Center>
+         <Box>
+           <Center>
            <RadioGroup onChange={ setAnimation } value={ animation }>
              <Stack direction='row'>
               <Radio value='none'>Still</Radio>
@@ -385,10 +290,14 @@ const HomePage = () => {
               <Radio value='fly'>Fly</Radio>
              </Stack>
            </RadioGroup>
+           </Center>
+         </Box>
+         <Box><Center>
+           <Download
+             img={transformedImage} 
+           />
          </Center></Box>
-       </GridItem>
-
-      </Grid>
+      </Box>
     </>
   )
 }
