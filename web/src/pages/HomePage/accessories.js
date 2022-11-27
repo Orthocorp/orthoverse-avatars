@@ -1,11 +1,12 @@
   const accsObj = [
-    "crown",
-    "coronet",
-    "diadem",
-    "armbands",
-    "tiara",
-    "borgo-hat",
-    "rope-belt"
+    "Crown",
+    "Coronet",
+    "Diadem",
+    "Armbands",
+    "Tiara",
+    "Borgo hat",
+    "Rope belt",
+    "Simple belt"
   ]
 
 module.exports = { accsObj }
