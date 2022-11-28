@@ -51,9 +51,11 @@ const Download = ({ img }) => {
     await jimpImage.composite(orl1, 56, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
     await jimpImage.composite(orl2, 48, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
 
-    jimpImage.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
-      fileDownload(buffer, 'orthoverse-avatar.png')
-    })
+    //jimpImage.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
+    //  fileDownload(buffer, 'orthoverse-avatar.png')
+    //})
+
+    console.log(jimpImage.getBase64Async(Jimp.MIME_PNG))
   }
 
   return (
