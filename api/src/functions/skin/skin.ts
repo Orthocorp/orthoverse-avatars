@@ -35,7 +35,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       }
     }
 
-    const dummyB64 = serfSkins[address]
+    const dummyB64 = serfSkins[address.toLowerCase()]
 
     const img = Buffer.from(dummyB64.split(",")[1], "base64")
 
