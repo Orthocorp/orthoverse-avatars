@@ -198,9 +198,6 @@ const HomePage = () => {
           <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
-              <Button onClick={toggleColorMode}>
-                {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-              </Button>
               <ConnectKitButton />
             </Stack>
           </Flex>
