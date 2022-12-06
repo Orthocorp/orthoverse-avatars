@@ -15,7 +15,7 @@ const Download = ({ img }) => {
     // Orthoverse skins have mirrored arms and legs
     // I'm sure this could be done with a loop instead...
     const jimpImage = await Jimp.read(Buffer.from(downloadImg.split(',')[1], 'base64'))
-    const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
+    /*const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
     const ila2 = await jimpImage.clone().crop(8, 20, 4, 12)
     const ira1 = await jimpImage.clone().crop(40, 20, 4, 12)
     const ira2 = await jimpImage.clone().crop(48, 20, 4, 12)
@@ -51,6 +51,7 @@ const Download = ({ img }) => {
     await jimpImage.composite(orl1, 56, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
     await jimpImage.composite(orl2, 48, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
 
+    */
     //jimpImage.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
     //  fileDownload(buffer, 'orthoverse-avatar.png')
     //})
