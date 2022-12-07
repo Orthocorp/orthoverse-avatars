@@ -19,6 +19,12 @@ module.exports = (config, { mode }) => {
           "zlib": require.resolve("browserify-zlib"),
           "stream": require.resolve("stream-browserify"),
           // "process/browser": require.resolve("process/browser")
+          // ethereum-auth requirements
+          "util": require.resolve(`util/`),
+          "url": require.resolve(`url/`),
+          "assert": require.resolve(`assert/`),
+          "os": require.resolve(`os-browserify/browser`),
+          "crypto": require.resolve(`crypto-browserify`)
         }
       }
     }
@@ -30,6 +36,7 @@ module.exports = (config, { mode }) => {
     // (do "npm install process" before running the build)
     new webpack.ProvidePlugin({
       process: 'process/browser.js',
+      Buffer: ["buffer", "Buffer"]
     }),
   );
 
