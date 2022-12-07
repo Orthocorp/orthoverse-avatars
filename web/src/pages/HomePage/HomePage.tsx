@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon, ArrowRightIcon } from '@chakra-ui/icons';
 
-import { ConnectKitButton } from 'connectkit'
+import LoginButton from 'src/components/LoginButton'
 import AvatarDisplay from 'src/components/AvatarDisplay'
 import DesignPane from 'src/components/DesignPane'
 import Download from 'src/components/Download'
@@ -198,7 +198,7 @@ const HomePage = () => {
           <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
-              <ConnectKitButton />
+              <LoginButton />
             </Stack>
           </Flex>
         </Flex>
