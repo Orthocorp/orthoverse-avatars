@@ -207,7 +207,7 @@ const HomePage = () => {
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
               { isAuthenticated 
-                ? <Stack direction={'row'}>
+                ? <Stack direction={'row'} spacing={7}>
                     <Flex>
                       <Center>Name:</Center>
                     </Flex>
@@ -216,6 +216,7 @@ const HomePage = () => {
                     </Flex>
                   <Flex><Center>Level:</Center></Flex>
                   <Flex><Center><Text as="b">{ level }</Text></Center></Flex>
+                  <Flex><Button colorScheme='teal'>Show Land</Button></Flex>
                   </Stack>
                 : '' }
               <LoginButton />

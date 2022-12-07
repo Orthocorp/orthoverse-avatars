@@ -64,11 +64,11 @@ const LoginButton = () => {
   if (!error) {
     if (isAuthenticated) {
       return (
-        <Box><Button onClick={onLogout}>{truncateAddress(currentUser.address)}</Button></Box>
+        <Box><Button colorScheme='pink' onClick={onLogout}>{truncateAddress(currentUser.address)}</Button></Box>
       )
     } else {
       return (
-        <Box><Button onClick={onLogin}>Log In</Button></Box>
+        <Box><Button colorScheme='teal' onClick={onLogin}>Log In</Button></Box>
       )
     }
   } else {
