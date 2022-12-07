@@ -32,6 +32,7 @@
     "node-polyfill-webpack-plugin": "^2.0.1",
     "path-browserify": "^1.0.1",
     "react-color": "^2.19.3",
+    "react-html-parser": "^2.0.2",
     "react-skinview3d": "^5.0.0",
     "skinview3d": "^3.0.0-alpha.1",
     "stream-browserify": "^3.0.0",

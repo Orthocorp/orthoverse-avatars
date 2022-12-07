@@ -79,6 +79,9 @@ const Download = ({ img }) => {
     return (
         <Box>
           <Stack direction='row'> 
+            <Button colorScheme='gray'>
+              Write to Orthoverse
+            </Button>
             <Button colorScheme='teal'  onClick={(e) => saveMC(img)}>
               Download Minecraft Skin
             </Button>

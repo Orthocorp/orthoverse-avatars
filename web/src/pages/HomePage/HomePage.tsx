@@ -205,7 +205,7 @@ const HomePage = () => {
       </Box>
 
       <Box position="absolute" left="0" top="50%">
-      <Button ref={btnRef} colorScheme='purple' onClick={onOpen}>
+      <Button size="lg" ref={btnRef} colorScheme='teal' onClick={onOpen}>
         <ArrowRightIcon />
       </Button>
       </Box>
