@@ -18,6 +18,8 @@ model User {
   authDetailId String
   image String
   name String
+  level Int @default(0)
+  attributes String @default("{}")
 }
 
 model AuthDetail {

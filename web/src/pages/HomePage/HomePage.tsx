@@ -21,7 +21,8 @@ import {
   DrawerContent,
   DrawerCloseButton
 } from '@chakra-ui/react';
-import { MoonIcon, SunIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import { Input, Text } from '@chakra-ui/react'
+import { ArrowRightIcon } from '@chakra-ui/icons';
 
 import LoginButton from 'src/components/LoginButton'
 import AvatarDisplay from 'src/components/AvatarDisplay'
@@ -37,7 +38,14 @@ import {skinTonePalette, eyeColorPalette, beardColorPalette, topColorPalette, ha
 import { initBase64 } from 'src/values/base'
 import { accsObj } from 'src/values/accessories'
 
+import { useAuth } from "@redwoodjs/auth";
+
 const HomePage = () => {
+
+  const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
+
+  const [level, setLevel] = useState('0')
+  const [name, setName] = useState('None')
 
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -198,6 +206,18 @@ const HomePage = () => {
           <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
+              { isAuthenticated 
+                ? <Stack direction={'row'}>
+                    <Flex>
+                      <Center>Name:</Center>
+                    </Flex>
+                    <Flex>
+                      <Input value={ name } />
+                    </Flex>
+                  <Flex><Center>Level:</Center></Flex>
+                  <Flex><Center><Text as="b">{ level }</Text></Center></Flex>
+                  </Stack>
+                : '' }
               <LoginButton />
             </Stack>
           </Flex>
@@ -266,6 +286,7 @@ const HomePage = () => {
              animation={ animation }
            />
          </Center></Box>
+         <Box p='3px' border='1px' borderRadius='8'>
          <Box>
            <Center>
            <RadioGroup onChange={ setAnimation } value={ animation }>
@@ -284,6 +305,7 @@ const HomePage = () => {
              img={transformedImage} 
            />
          </Center></Box>
+        </Box>
       </Container>
     </>
   )

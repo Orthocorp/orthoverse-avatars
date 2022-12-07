@@ -1,7 +1,8 @@
 import Jimp from 'jimp'
-import { Box, Stack, Button, ButtonGroup } from '@chakra-ui/react'
+import { Box, Flex, Stack, Button, ButtonGroup, Center } from '@chakra-ui/react'
 import fileDownload from 'js-file-download'
 import { useAuth } from "@redwoodjs/auth";
+import { useState } from 'react'
 
 const Download = ({ img }) => {
 
@@ -64,7 +65,8 @@ const Download = ({ img }) => {
 
   if (isAuthenticated) {
     return (
-        <Box>
+      <Box>
+        <Box p='2'>
           <Stack direction='row'> 
             <Button colorScheme='teal' onClick={(e) => saveOrth(img)}>
               Write to Orthoverse
@@ -74,10 +76,11 @@ const Download = ({ img }) => {
             </Button>
           </Stack>
         </Box>
-      )
+      </Box>  
+    )
   } else {
     return (
-        <Box>
+        <Box p='2'>
           <Stack direction='row'> 
             <Button colorScheme='gray'>
               Write to Orthoverse
