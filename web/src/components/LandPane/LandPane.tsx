@@ -1,8 +1,9 @@
 import { useAuth } from "@redwoodjs/auth"
-import { Box, Center, Button, Link, Image, Text } from '@chakra-ui/react'
+import { Box, Center, Button, Link, Image, Text, Stack, Checkbox } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { ArrowRightIcon, ArrowLeftIcon } from '@chakra-ui/icons';
-import { Grid, GridItem } from '@chakra-ui/react'
+import { Grid, GridItem, IconButton } from '@chakra-ui/react'
+import { BsFillShieldFill, BsFillShieldSlashFill} from 'react-icons/bs'
 
 import { useEffect, useState } from 'react'
 import ReactHtmlParser from 'react-html-parser'
@@ -21,7 +22,8 @@ import {
 const LandPane = () => {
 
    // test values
-   const test1 = {
+   let testA = {
+        "cape": "0x2830b5a3b5242bc2c64c390594ed971e7ded47d2",
         "highest_level": 7,
         "land_name": "Pencanlia",
         "lands": [
@@ -100,12 +102,30 @@ const LandPane = () => {
         ]
     }
 
-  const test2 = {}
+  const testB = {}
+
+  const testC = {
+        "highest_level": 7,
+        "land_name": "Pencanlia",
+        "lands": [
+            [
+                "Telastala",
+                "0x2ccc96b3690f88f05b1b99319c4ecfce033dddd5",
+                9,
+                -29,
+                31,
+                "The Prefecture of Telastala"
+            ]
+         ]
+  }
+
+  let test1 = testA
 
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [paneItem, setPaneItem] = useState(-1)
+  const [usedCape, setUsedCape] = useState('')
 
   const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
 
@@ -117,8 +137,9 @@ const LandPane = () => {
       // for testing the display I will initially use test1 or test2
       //if (currentUser.lands === {}) {
    
-      if (test2 !== {}) {
+      if (test1 !== {}) {
         setPaneItem(0)
+        setUsedCape(test1.cape)
       }
     }
   }, [])
@@ -127,7 +148,7 @@ const LandPane = () => {
     if (paneItem !== -1) {
      
     }
-  }, [paneItem] )
+  }, [paneItem, usedCape] )
 
   function goLeft() {
     console.log("Clicked left")
@@ -151,6 +172,17 @@ const LandPane = () => {
     console.log(pos)
     setPaneItem(pos)
   }
+
+  function blankCape() {
+    test1.cape = ''
+    setUsedCape(test1.cape)
+  }
+
+  function setCape() {
+    test1.cape = test1.lands[paneItem][1]
+    setUsedCape(test1.cape)
+  }
+  
 
   if (isAuthenticated && (typeof currentUser !== 'undefined')) {
     if (paneItem === -1) {
@@ -187,8 +219,34 @@ const LandPane = () => {
                 </Center></Box>
                 <Grid p="4px" templateColumns='repeat(4, 1fr)' gap="4px">
                   <GridItem w='100%' h='16' bg='gray.600' p="1">
-                    <Box><Text as='b' fontSize='sm' color="teal.300">Level</Text></Box>
-                    <Box><Text as='em'>{ test1.lands[paneItem][2] % 8 }</Text></Box>
+                    <Box>
+                      <Stack direction={'row'} spacing={7}>
+                        <Text as='b' fontSize='sm' color="teal.300">Level</Text>
+                        { ((test1.lands[paneItem][2] % 8 !== 0 ) && (usedCape !== test1.lands[paneItem][1]))
+                          ? <Box>
+                              <IconButton
+                                size="xs"
+                                icon={<BsFillShieldSlashFill />}
+                                color='red.600'
+                                onClick={ (e) => setCape() }
+                              />
+                            </Box>
+                          : ''
+                        }
+                        { ((test1.lands[paneItem][2] % 8 !== 0 ) && (usedCape === test1.lands[paneItem][1]))
+                          ? <Box>
+                              <IconButton
+                                size="xs"
+                                icon={<BsFillShieldFill />}
+                                color='green.400'
+                                onClick={ (e) => blankCape() }
+                              />
+                            </Box>
+                          : ''
+                        }
+                      </Stack>
+                    </Box>
+                    <Box><Text as='em'>{ test1.lands[paneItem][2] % 8 } </Text></Box>
                   </GridItem>
                   <GridItem w='100%' h='16' bg='gray.600' p="1">
                     <Box><Text as='b' fontSize='sm' color="teal.300">Lattitude</Text></Box>
@@ -203,8 +261,8 @@ const LandPane = () => {
                     <Box><Text as='em'>{ (test1.lands[paneItem][2] > 7) ? 'Futuristic' : 'Fantasy' }</Text></Box>
                   </GridItem>
                 </Grid>
-                <Box><Center>
-                
+                { (test1.lands.length > 1) &&
+                  <Box><Center>
                   <Box p='2'>
                     <Button size="md" colorScheme='teal' onClick={ (e) => { goLeft() } }>
                       <ArrowLeftIcon />
@@ -215,8 +273,8 @@ const LandPane = () => {
                       <ArrowRightIcon />
                     </Button>
                   </Box>
-
-                </Center></Box>
+                  </Center></Box>
+                }
 
               </ModalBody>
             </ModalContent>
