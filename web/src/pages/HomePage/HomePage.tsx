@@ -25,6 +25,7 @@ import { Input, Text } from '@chakra-ui/react'
 import { ArrowRightIcon } from '@chakra-ui/icons';
 
 import LoginButton from 'src/components/LoginButton'
+import LandPane from 'src/components/LandPane'
 import AvatarDisplay from 'src/components/AvatarDisplay'
 import DesignPane from 'src/components/DesignPane'
 import Download from 'src/components/Download'
@@ -194,7 +195,7 @@ const HomePage = () => {
     console.log("Set eyes to " + eyes)
   }
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isDesignOpen, onOpen: onDesignOpen, onClose: onDesignClose } = useDisclosure();
   const btnRef = React.useRef()
 
   return (
@@ -206,17 +207,17 @@ const HomePage = () => {
           <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
-              { isAuthenticated 
+              { isAuthenticated  && (typeof currentUser !== 'undefined' )
                 ? <Stack direction={'row'} spacing={7}>
                     <Flex>
                       <Center>Name:</Center>
                     </Flex>
                     <Flex>
-                      <Input value={ name } />
+                      <Input value={ name } readOnly />
                     </Flex>
                   <Flex><Center>Level:</Center></Flex>
                   <Flex><Center><Text as="b">{ level }</Text></Center></Flex>
-                  <Flex><Button colorScheme='teal'>Show Land</Button></Flex>
+                  <Flex><LandPane /></Flex>
                   </Stack>
                 : '' }
               <LoginButton />
@@ -226,15 +227,15 @@ const HomePage = () => {
       </Box>
 
       <Box position="absolute" left="0" top="50%">
-      <Button size="lg" ref={btnRef} colorScheme='teal' onClick={onOpen}>
+      <Button size="lg" ref={btnRef} colorScheme='teal' onClick={onDesignOpen}>
         <ArrowRightIcon />
       </Button>
       </Box>
 
       <Drawer
-        isOpen={isOpen}
+        isOpen={isDesignOpen}
         placement='left'
-        onClose={onClose}
+        onClose={onDesignClose}
         finalFocusRef={btnRef}
       >    
         <DrawerContent>

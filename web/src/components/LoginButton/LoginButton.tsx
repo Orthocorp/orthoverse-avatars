@@ -62,7 +62,7 @@ const LoginButton = () => {
 
   
   if (!error) {
-    if (isAuthenticated) {
+    if (isAuthenticated && (typeof currentUser !== 'undefined' )) {
       return (
         <Box><Button colorScheme='pink' onClick={onLogout}>{truncateAddress(currentUser.address)}</Button></Box>
       )
