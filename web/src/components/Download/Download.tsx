@@ -1,8 +1,23 @@
 import Jimp from 'jimp'
-import { Box, Stack, Button, ButtonGroup } from '@chakra-ui/react'
+import { Box, Flex, Stack, Button, ButtonGroup, Center } from '@chakra-ui/react'
 import fileDownload from 'js-file-download'
+import { useAuth } from "@redwoodjs/auth";
+import { useState } from 'react'
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 const Download = ({ img }) => {
+
+  const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
 
   const saveMC = async (downloadImg) => { 
     const jimpImage = await Jimp.read(Buffer.from(downloadImg.split(',')[1], 'base64'))
@@ -14,8 +29,9 @@ const Download = ({ img }) => {
   const saveOrth = async (downloadImg) => { 
     // Orthoverse skins have mirrored arms and legs
     // I'm sure this could be done with a loop instead...
+
     const jimpImage = await Jimp.read(Buffer.from(downloadImg.split(',')[1], 'base64'))
-    /*const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
+/*    const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
     const ila2 = await jimpImage.clone().crop(8, 20, 4, 12)
     const ira1 = await jimpImage.clone().crop(40, 20, 4, 12)
     const ira2 = await jimpImage.clone().crop(48, 20, 4, 12)
@@ -50,27 +66,67 @@ const Download = ({ img }) => {
     await jimpImage.composite(oll2, 0, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
     await jimpImage.composite(orl1, 56, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
     await jimpImage.composite(orl2, 48, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-
-    */
+*/
     //jimpImage.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
     //  fileDownload(buffer, 'orthoverse-avatar.png')
     //})
 
+    console.log(downloadImg)
     console.log(jimpImage.getBase64Async(Jimp.MIME_PNG))
   }
 
-  return (
-    <Box>
-      <Stack direction='row'> 
-        <Button onClick={(e) => saveOrth(img)}>
-          Write to Orthoverse
-        </Button>
-        <Button onClick={(e) => saveMC(img)}>
-          Download Minecraft Skin
-        </Button>
-      </Stack>
-    </Box>
-  )
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const openModal = () => { 
+    onOpen()
+  }
+
+  if (isAuthenticated  && (typeof currentUser !== 'undefined' )) {
+    return (
+      <Box>
+        <Box p='2'>
+          <Stack direction='row'> 
+            <Button colorScheme='teal' onClick={(e) => saveOrth(img)}>
+              Write to Orthoverse
+            </Button>
+            <Button colorScheme='teal' onClick={(e) => saveMC(img)}>
+              Download Minecraft Skin
+            </Button>
+          </Stack>
+        </Box>
+      </Box>  
+    )
+  } else {
+    return (
+    <>
+      <Box p='2'>
+        <Stack direction='row'> 
+          <Button colorScheme='gray' onClick={ (e) => openModal() }>
+            Write to Orthoverse
+          </Button>
+          <Button colorScheme='teal' onClick={(e) => saveMC(img)}>
+            Download Minecraft Skin
+          </Button>
+        </Stack>
+      </Box>
+      <Box>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              Log in for Orthoverse functionality
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              To save your avatar to the Orthoverse, you must first log in using the button in the top right corner.
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </Box>
+    </>
+    )
+  }
+
 }
 
 export default Download

@@ -1,25 +1,33 @@
+import { AuthenticationError } from '@redwoodjs/graphql-server'
+
+import { db } from './db'
+
+// See https://redwoodjs.com/how-to/role-based-access-control-rbac
+// for how to add Role-based Access Control (RBAC) here.
+//
+// !! BEWARE !! Anything returned from this function will be available to the
+// client--it becomes the content of `currentUser` on the web side (as well as
+// `context.currentUser` on the api side). You should carefully add additional
+// fields to the returned object once you've decided they are safe to be
+// seen if someone were to open the Web Inspector in their browser.
+export const getCurrentUser = async (decoded) => {
+  return db.user.findUnique({ where: { address: decoded.address } })
+}
+
 /**
- * Once you are ready to add authentication to your application
- * you'll build out requireAuth() with real functionality. For
- * now we just return `true` so that the calls in services
- * have something to check against, simulating a logged
- * in user that is allowed to access that service.
+ * The user is authenticated if there is a currentUser in the context
  *
- * See https://redwoodjs.com/docs/authentication for more info.
+ * @returns {boolean} - If the currentUser is authenticated
  */
-export const isAuthenticated = () => {
-  return true
+export const isAuthenticated = (): boolean => {
+  return !!context.currentUser
 }
 
-export const hasRole = ({ roles }) => {
-  return roles !== undefined
-}
+// Use this function in your services to check that a user is logged in, and
+// optionally raise an error if they're not.
 
-// This is used by the redwood directive
-// in ./api/src/directives/requireAuth
-
-// Roles are passed in by the requireAuth directive if you have auth setup
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-export const requireAuth = ({ roles }) => {
-  return isAuthenticated()
+export const requireAuth = () => {
+  if (!context.currentUser) {
+    throw new AuthenticationError("You don't have permission to do that.")
+  }
 }

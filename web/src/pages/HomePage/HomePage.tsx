@@ -11,7 +11,6 @@ import {
   Button, ButtonGroup,
   Radio, RadioGroup,
   Stack, HStack, VStack,
-  Checkbox,
   Select,
   Drawer,
   DrawerBody,
@@ -21,9 +20,11 @@ import {
   DrawerContent,
   DrawerCloseButton
 } from '@chakra-ui/react';
-import { MoonIcon, SunIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import { Input, Text } from '@chakra-ui/react'
+import { ArrowRightIcon } from '@chakra-ui/icons';
 
-import { ConnectKitButton } from 'connectkit'
+import LoginButton from 'src/components/LoginButton'
+import LandPane from 'src/components/LandPane'
 import AvatarDisplay from 'src/components/AvatarDisplay'
 import DesignPane from 'src/components/DesignPane'
 import Download from 'src/components/Download'
@@ -37,7 +38,14 @@ import {skinTonePalette, eyeColorPalette, beardColorPalette, topColorPalette, ha
 import { initBase64 } from 'src/values/base'
 import { accsObj } from 'src/values/accessories'
 
+import { useAuth } from "@redwoodjs/auth";
+
 const HomePage = () => {
+
+  const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
+
+  const [level, setLevel] = useState('0')
+  const [name, setName] = useState('None')
 
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -186,7 +194,7 @@ const HomePage = () => {
     console.log("Set eyes to " + eyes)
   }
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isDesignOpen, onOpen: onDesignOpen, onClose: onDesignClose } = useDisclosure();
   const btnRef = React.useRef()
 
   return (
@@ -198,22 +206,35 @@ const HomePage = () => {
           <Box><img src="logos/readyplayerdoomed.png" alt="Logo" /></Box>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
-              <ConnectKitButton />
+              { isAuthenticated  && (typeof currentUser !== 'undefined' )
+                ? <Stack direction={'row'} spacing={7}>
+                    <Flex>
+                      <Center>Name:</Center>
+                    </Flex>
+                    <Flex>
+                      <Input value={ name } readOnly />
+                    </Flex>
+                  <Flex><Center>Level:</Center></Flex>
+                  <Flex><Center><Text as="b">{ level }</Text></Center></Flex>
+                  <Flex><LandPane /></Flex>
+                  </Stack>
+                : '' }
+              <LoginButton />
             </Stack>
           </Flex>
         </Flex>
       </Box>
 
       <Box position="absolute" left="0" top="50%">
-      <Button ref={btnRef} colorScheme='purple' onClick={onOpen}>
+      <Button size="lg" ref={btnRef} colorScheme='teal' onClick={onDesignOpen}>
         <ArrowRightIcon />
       </Button>
       </Box>
 
       <Drawer
-        isOpen={isOpen}
+        isOpen={isDesignOpen}
         placement='left'
-        onClose={onClose}
+        onClose={onDesignClose}
         finalFocusRef={btnRef}
       >    
         <DrawerContent>
@@ -266,6 +287,7 @@ const HomePage = () => {
              animation={ animation }
            />
          </Center></Box>
+         <Box p='3px' border='1px' borderRadius='8'>
          <Box>
            <Center>
            <RadioGroup onChange={ setAnimation } value={ animation }>
@@ -284,6 +306,7 @@ const HomePage = () => {
              img={transformedImage} 
            />
          </Center></Box>
+        </Box>
       </Container>
     </>
   )
