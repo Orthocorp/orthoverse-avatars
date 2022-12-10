@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@redwoodjs/api": "3.3.1",
-    "@redwoodjs/graphql-server": "3.3.1",
+    "@redwoodjs/api": "^3.6.1",
+    "@redwoodjs/graphql-server": "^3.6.1",
+    "@redwoodjs/record": "^3.6.1",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.1.5",
     "jsonwebtoken": "^8.5.1"
