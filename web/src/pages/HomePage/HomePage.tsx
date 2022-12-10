@@ -42,6 +42,109 @@ import { useAuth } from "@redwoodjs/auth";
 
 const HomePage = () => {
 
+   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
+   let testA = {
+        "cape": "0x2830b5a3b5242bc2c64c390594ed971e7ded47d2",
+        "highest_level": 7,
+        "land_name": "Pencanlia",
+        "lands": [
+            [
+                "Telastala",
+                "0x2ccc96b3690f88f05b1b99319c4ecfce033dddd5",
+                9,
+                -29,
+                31,
+                "The Prefecture of Telastala"
+            ],
+            [
+                "Dundallia",
+                "0x2830b5a3b5242bc2c64c390594ed971e7ded47d2",
+                4,
+                -30,
+                31,
+                "The Croft of Dundallia"
+            ],
+            [
+                "Fangwanina",
+                "0x60515c2da6c76ef0b092534fa5be84b07e4da689",
+                1,
+                0,
+                -1,
+                "The County of Fangwania"
+            ],
+            [
+                "Hathforsmia",
+                "0x766c94a76f3652b85358da0d5c039635e20c27d7",
+                5,
+                -31,
+                -1,
+                "The Duchy of Hathforsmia"
+            ],
+            [
+                "Unarbsia",
+                "0x72d0474ea276e628072624116caea7f05e2b33f9",
+                0,
+                2,
+                -34,
+                "The Croft of Unarbsia"
+            ],
+            [
+                "Pencanlia",
+                "0x4747477222244233277233244222277474740000",
+                7,
+                0,
+                31,
+                "The Kingdom of Pencanlia" 
+            ],
+            [
+                "Pendasdor",
+                "0xcd2081c2e433120cdaa70f4af01fe0b8c53a791c",
+                0,
+                5,
+                -4,
+                "The Croft of Pensador"
+            ],
+            [
+                "Clandiburium",
+                "0x2c36dd7bb3e95e7a0219e70737ee8041f22d2081",
+                0,
+                -35,
+                -33,
+                "The Croft of Clandiburium"
+            ],
+            [
+                "Urvoefia",
+                "0x98fa77ec842acd58298e719dd50fefcab9caad1a",
+                0,
+                23,
+                -6,
+                "The Croft of Urvoefia"
+            ]
+        ]
+    }
+
+  const testB = {}
+
+  const testC = {
+        "highest_level": 4,
+        "land_name": "Pencanlia",
+        "cape": "0x2830b5a3b5242bc2c64c390594ed971e7ded47d2",
+        "lands": [
+            [
+                "Telastala",
+                "0x2ccc96b3690f88f05b1b99319c4ecfce033dddd5",
+                9,
+                -29,
+                31,
+                "The Prefecture of Telastala"
+            ]
+         ]
+  }
+
+  let test1 = testC
+
+   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
+
   const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
 
   const [level, setLevel] = useState('0')
@@ -81,7 +184,7 @@ const HomePage = () => {
   const [hair, setHair] = useState('0')
   const [pants, setPants] = useState('0')
   const [boots, setBoots] = useState('0')
-  const [accessories, setAccessories] = useState([0, 0, 0, 0, 0, 0, 0])
+  const [accessories, setAccessories] = useState([])
 
   function flipN(N) {
     const tmp = [...accessories]
@@ -106,7 +209,7 @@ const HomePage = () => {
       const accsImg = await Jimp.read("./img/blank-skin.png")
       for (let i = 0; i < accsObj.length; i++) {
         if (accessories[i] == 1) {
-          const tmpImg = await Jimp.read("./img/accessories/" + accsObj[i] + ".png")
+          const tmpImg = await Jimp.read("./img/accessories/" + accsObj[i][0] + ".png")
           await accsImg.composite(tmpImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
         }
       }
@@ -130,6 +233,13 @@ const HomePage = () => {
     }
     
     loadImage()
+
+    // set player level from database
+    setLevel(test1.highest_level)
+
+    // populate accessories
+    setAccessories(new Array(accsObj.length).fill(0))
+
   }, [])
 
   const applyChanges = async () => { 
@@ -147,7 +257,7 @@ const HomePage = () => {
       const accsImg = await Jimp.read("./img/blank-skin.png")
       for (let i = 0; i < accsObj.length; i++) {
         if (accessories[i] == 1) {
-          const tmpImg = await Jimp.read("./img/accessories/" + accsObj[i] + ".png")
+          const tmpImg = await Jimp.read("./img/accessories/" + accsObj[i][0] + ".png")
           await accsImg.composite(tmpImg, 0,0, {mode: Jimp.BLEND_SOURCE_OVER})
         }
       }
@@ -274,6 +384,7 @@ const HomePage = () => {
             accessories={accessories}
             setAccessories={setAccessories}
             flipN={flipN}
+            level={level}
             />
           </DrawerBody>
         </DrawerContent>

@@ -21,7 +21,7 @@ import {
 
 const LandPane = () => {
 
-   // test values
+   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
    let testA = {
         "cape": "0x2830b5a3b5242bc2c64c390594ed971e7ded47d2",
         "highest_level": 7,
@@ -107,6 +107,7 @@ const LandPane = () => {
   const testC = {
         "highest_level": 7,
         "land_name": "Pencanlia",
+        "cape": "0x2830b5a3b5242bc2c64c390594ed971e7ded47d2",
         "lands": [
             [
                 "Telastala",
@@ -121,6 +122,7 @@ const LandPane = () => {
 
   let test1 = testA
 
+   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 

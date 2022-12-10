@@ -15,7 +15,7 @@ import {
   DrawerCloseButton,
   Checkbox,
   Tabs, TabList, TabPanels, Tab, TabPanel,
-  Radio, RadioGroup,
+  Radio, RadioGroup, Text
 } from '@chakra-ui/react';
 
 import TonePicker from 'src/components/SkinTonePicker'
@@ -24,14 +24,17 @@ import ClothesTonePicker from 'src/components/ClothesTonePicker'
 import {skinTonePalette, eyeColorPalette, beardColorPalette, topColorPalette, hairColorPalette, pantsColorPalette, bootsColorPalette} from 'src/values/palettes'
 import { accsObj } from 'src/values/accessories'
 
+import { useAuth } from "@redwoodjs/auth"
+
 const DesignPane = (
     {
       skintone, setSkintone, eyecolor, setEyecolor,
       eyes, haircolor, setHaircolor, hair, setHair, beardcolor, setBeardcolor, beard, setBeard,
       setTopcolor, topcolor, top, setTop, setPantscolor, pantscolor, pants, setPants,
-      boots, setBoots, bootscolor, setBootscolor, accessories, setAccessories, flipN, setEyeSize
+      boots, setBoots, bootscolor, setBootscolor, accessories, setAccessories, flipN, level, setEyeSize
     } 
   ) => {
+
   return (
   
   <Box>
@@ -168,13 +171,18 @@ const DesignPane = (
               </TabPanel>
   
               <TabPanel>
-                { accsObj.map((el, i) => <div key={i}><Checkbox
-                      key={i}
-                      isChecked={accessories[i]}
-                     onChange={(e) => flipN(i)}
-                    >
-                      {el}
-                    </Checkbox></div>)
+                { accsObj.map((el, i) => 
+                    <div key={i}>
+                      { (( i === 0) || (el[1] > accsObj[i - 1][1]))
+                          ? <Box mt='1'><Text as='b' fontSize='sm' color="teal.300">Level { el[1] }</Text></Box>  
+                          : ''               
+                      }
+                      { ( el[1] <= level )
+                          ? <Checkbox isChecked={ accessories[i] } onChange={ (e) => flipN(i) }><Text color='white'>{ el[0] }</Text></Checkbox>
+                          : <Checkbox isDisabled><Text color='gray'>{ el[0] }</Text></Checkbox>
+                      }
+                    </div>
+                    )
                 }
               </TabPanel>
             </TabPanels>
