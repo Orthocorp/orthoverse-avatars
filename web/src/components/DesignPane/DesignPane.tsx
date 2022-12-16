@@ -53,19 +53,34 @@ const DesignPane = (
             <Flex h="calc(100vh - 82px)">
             <TabPanels>
               <TabPanel>
-                  <TonePicker
-                    hexColor="#ff0000"
-                    colors={skinTonePalette}
-                    setColor={setSkintone}
-                  />
+                { (level < 4)
+                  ?  <TonePicker
+                       hexColor="#ff0000"
+                       colors={skinTonePalette}
+                       setColor={setSkintone}
+                    />
+                  : <ClothesTonePicker
+                      hexColor="#967053"
+                      colors={skinTonePalette}
+                      setColor={setSkintone}
+                    />
+                }
               </TabPanel>
 
               <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={eyeColorPalette}
-                  setColor={setEyecolor}
-                />
+                { (level < 2)
+                  ? <TonePicker
+                      hexColor="#ff0000"
+                      colors={eyeColorPalette}
+                      setColor={setEyecolor}
+                    />
+                  : <ClothesTonePicker
+                      hexColor="#79BC5E"
+                      colors={eyeColorPalette}
+                      setColor={setEyecolor}
+                    />
+                }
+
                 <Checkbox marginTop='16px'
                  isChecked={(eyes === 'small' ? false : true)}
                  onChange={(e) => setEyeSize(e.target.checked)}
@@ -75,11 +90,18 @@ const DesignPane = (
               </TabPanel>
 
               <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={hairColorPalette}
-                  setColor={setHaircolor}
-                />
+                { (level < 3)
+                   ? <TonePicker
+                       hexColor="#ff0000"
+                       colors={hairColorPalette}
+                       setColor={setHaircolor}
+                     />
+                  : <ClothesTonePicker
+                      hexColor="#2D3748"
+                      colors={hairColorPalette}
+                      setColor={setHaircolor}
+                     />
+                }
                 <RadioGroup marginTop='16px' onChange={ setHair } value={ hair }>
                   <Stack direction='column'>
                     <Radio value='0'>None</Radio>
@@ -94,11 +116,18 @@ const DesignPane = (
               </TabPanel>
 
               <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={beardColorPalette}
-                  setColor={setBeardcolor}
-                />
+                { (level < 3)
+                   ? <TonePicker
+                       hexColor="#ff0000"
+                       colors={beardColorPalette}
+                       setColor={setBeardcolor}
+                     />
+                   : <ClothesTonePicker
+                       hexColor="#2D3748"
+                       colors={beardColorPalette}
+                       setColor={setBeardcolor}
+                      />
+                }
                 <RadioGroup marginTop='16px' onChange={ setBeard } value={ beard }>
                   <Stack direction='column'>
                     <Radio value='0'>None</Radio>

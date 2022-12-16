@@ -141,7 +141,7 @@ const HomePage = () => {
          ]
   }
 
-  let test1 = testC
+  let test1 = testA
 
    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
 
