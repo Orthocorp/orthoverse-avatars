@@ -19,23 +19,26 @@ import { serfSkins} from 'src/values/serfSkins'
  * function, and execution environment.
  */
 
+// 🌲 incoming request GET xxx /skin?eth=<ethereum address>
+// needs rewriting when authentication works
+
 export const handler = async (event: APIGatewayEvent, context: Context) => {
   logger.info('Invoked skin function')
  
   try {
-    const {address} = event.queryStringParameters
-    if (address === undefined) {
+    const {eth} = event.queryStringParameters
+    if (eth === undefined) {
       return {
         statusCode : 400,
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
-        body : { message: "No address provided"}
+        body : { message: "No ethereum address provided"}
       }
     }
 
-    const dummyB64 = serfSkins[address.toLowerCase()]
+    const dummyB64 = serfSkins[eth.toLowerCase()]
 
     const img = Buffer.from(dummyB64.split(",")[1], "base64")
 

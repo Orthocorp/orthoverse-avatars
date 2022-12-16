@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 import { db } from 'src/lib/db'
 
 const NONCE_MESSAGE =
-  'Please prove you control this wallet by signing this random text: '
+  "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bPlease prove you control this wallet by signing this random text: "
 
 const getNonceMessage = (nonce, options) => {
   let optionsText = ''

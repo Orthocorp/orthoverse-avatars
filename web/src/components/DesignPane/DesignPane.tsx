@@ -15,7 +15,7 @@ import {
   DrawerCloseButton,
   Checkbox,
   Tabs, TabList, TabPanels, Tab, TabPanel,
-  Radio, RadioGroup,
+  Radio, RadioGroup, Text
 } from '@chakra-ui/react';
 
 import TonePicker from 'src/components/SkinTonePicker'
@@ -24,14 +24,17 @@ import ClothesTonePicker from 'src/components/ClothesTonePicker'
 import {skinTonePalette, eyeColorPalette, beardColorPalette, topColorPalette, hairColorPalette, pantsColorPalette, bootsColorPalette} from 'src/values/palettes'
 import { accsObj } from 'src/values/accessories'
 
+import { useAuth } from "@redwoodjs/auth"
+
 const DesignPane = (
     {
       skintone, setSkintone, eyecolor, setEyecolor,
       eyes, haircolor, setHaircolor, hair, setHair, beardcolor, setBeardcolor, beard, setBeard,
       setTopcolor, topcolor, top, setTop, setPantscolor, pantscolor, pants, setPants,
-      boots, setBoots, bootscolor, setBootscolor, accessories, setAccessories, flipN, setEyeSize
+      boots, setBoots, bootscolor, setBootscolor, accessories, setAccessories, flipN, level, setEyeSize
     } 
   ) => {
+
   return (
   
   <Box>
@@ -50,19 +53,34 @@ const DesignPane = (
             <Flex h="calc(100vh - 82px)">
             <TabPanels>
               <TabPanel>
-                  <TonePicker
-                    hexColor="#ff0000"
-                    colors={skinTonePalette}
-                    setColor={setSkintone}
-                  />
+                { (level < 4)
+                  ?  <TonePicker
+                       hexColor="#ff0000"
+                       colors={skinTonePalette}
+                       setColor={setSkintone}
+                    />
+                  : <ClothesTonePicker
+                      hexColor="#967053"
+                      colors={skinTonePalette}
+                      setColor={setSkintone}
+                    />
+                }
               </TabPanel>
 
               <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={eyeColorPalette}
-                  setColor={setEyecolor}
-                />
+                { (level < 2)
+                  ? <TonePicker
+                      hexColor="#ff0000"
+                      colors={eyeColorPalette}
+                      setColor={setEyecolor}
+                    />
+                  : <ClothesTonePicker
+                      hexColor="#79BC5E"
+                      colors={eyeColorPalette}
+                      setColor={setEyecolor}
+                    />
+                }
+
                 <Checkbox marginTop='16px'
                  isChecked={(eyes === 'small' ? false : true)}
                  onChange={(e) => setEyeSize(e.target.checked)}
@@ -72,11 +90,18 @@ const DesignPane = (
               </TabPanel>
 
               <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={hairColorPalette}
-                  setColor={setHaircolor}
-                />
+                { (level < 3)
+                   ? <TonePicker
+                       hexColor="#ff0000"
+                       colors={hairColorPalette}
+                       setColor={setHaircolor}
+                     />
+                  : <ClothesTonePicker
+                      hexColor="#2D3748"
+                      colors={hairColorPalette}
+                      setColor={setHaircolor}
+                     />
+                }
                 <RadioGroup marginTop='16px' onChange={ setHair } value={ hair }>
                   <Stack direction='column'>
                     <Radio value='0'>None</Radio>
@@ -91,11 +116,18 @@ const DesignPane = (
               </TabPanel>
 
               <TabPanel>
-                <TonePicker
-                  hexColor="#ff0000"
-                  colors={beardColorPalette}
-                  setColor={setBeardcolor}
-                />
+                { (level < 3)
+                   ? <TonePicker
+                       hexColor="#ff0000"
+                       colors={beardColorPalette}
+                       setColor={setBeardcolor}
+                     />
+                   : <ClothesTonePicker
+                       hexColor="#2D3748"
+                       colors={beardColorPalette}
+                       setColor={setBeardcolor}
+                      />
+                }
                 <RadioGroup marginTop='16px' onChange={ setBeard } value={ beard }>
                   <Stack direction='column'>
                     <Radio value='0'>None</Radio>
@@ -168,13 +200,18 @@ const DesignPane = (
               </TabPanel>
   
               <TabPanel>
-                { accsObj.map((el, i) => <div key={i}><Checkbox
-                      key={i}
-                      isChecked={accessories[i]}
-                     onChange={(e) => flipN(i)}
-                    >
-                      {el}
-                    </Checkbox></div>)
+                { accsObj.map((el, i) => 
+                    <div key={i}>
+                      { (( i === 0) || (el[1] > accsObj[i - 1][1]))
+                          ? <Box mt='1'><Text as='b' fontSize='sm' color="teal.300">Level { el[1] }</Text></Box>  
+                          : ''               
+                      }
+                      { ( el[1] <= level )
+                          ? <Checkbox isChecked={ accessories[i] } onChange={ (e) => flipN(i) }><Text color='white'>{ el[0] }</Text></Checkbox>
+                          : <Checkbox isDisabled><Text color='gray'>{ el[0] }</Text></Checkbox>
+                      }
+                    </div>
+                    )
                 }
               </TabPanel>
             </TabPanels>

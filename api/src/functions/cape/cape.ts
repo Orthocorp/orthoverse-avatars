@@ -24,57 +24,48 @@ import Jimp from 'jimp'
 export const handler = async (event: APIGatewayEvent, context: Context) => {
   logger.info('Invoked cape function')
  
-// 🌲 incoming request GET xxx /skin?address=0x0000000000000000000000000000000000000002
+// 🌲 incoming request GET xxx /capes?id=[0..13188]
 // needs rewriting when authentication works
+
+  let result
 
   try {
     const {id} = event.queryStringParameters
     if ((id === undefined || isNaN(id)) || (parseInt(id) > 13188 || parseInt(id) < 0)) {
       logger.info('Tried to serve invisible cape')
       Jimp.read('http://localhost:8910/capes/cape_invisible.png').then( (jimpImg) => {
-        const dummyB64 = jimpImg.getBase64Async(Jimp.MIME_PNG)
-        const img = Buffer.from(dummyB64.split(",")[1], "base64")
-        return {
-          statusCode: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          },
-          body: img
-        }
+        jimpImg.getBase64Async(Jimp.MIME_PNG).then( (dummyB64) => {
+          const img = Buffer.from(dummyB64.split(",")[1], "base64")
+          logger.info("Trying to send page for no cape")
+          result = {
+            statusCode: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            },
+            body: img
+          }
+          console.log(result)
+        })
       })
     } else {
       logger.info('Tried to serve cape ' + id)
       jimpImg = await Jimp.read('http://localhost:8910/capes/' + parseInt(id).toString() + '-cape.png').then( jimpImg => {
-        const dummyB64 = jimpImg.getBase64Async(Jimp.MIME_PNG)
-
-        const img = Buffer.from(dummyB64.split(",")[1], "base64")
-
-        return {
-          statusCode: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          },
-          body: img
-        }
+        jimpImg.getBase64Async(Jimp.MIME_PNG).then( (dummyB64) => {
+          const img = Buffer.from(dummyB64.split(",")[1], "base64")
+          logger.info("Trying to send page for identified cape")
+          result  = {
+            statusCode: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            },
+            body: img
+          }
+          console.log(result)
+        })
       })
-    }
-
-    logger.info(jimpImg)
-
-    const dummyB64 = jimpImg.getBase64Async(Jimp.MIME_PNG)
-
-    const img = Buffer.from(dummyB64.split(",")[1], "base64")
-
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: img
-    }
+    } 
   } catch (error) {
     return {
       statusCode: 400,
@@ -87,4 +78,6 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       },
     }
   }
+
+  return result
 }
