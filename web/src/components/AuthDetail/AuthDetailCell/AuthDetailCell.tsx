@@ -22,6 +22,8 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ authDetail }: CellSuccessProps<FindAuthDetailById>) => {
+export const Success = ({
+  authDetail,
+}: CellSuccessProps<FindAuthDetailById>) => {
   return <AuthDetail authDetail={authDetail} />
 }

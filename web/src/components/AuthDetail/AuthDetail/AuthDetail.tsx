@@ -1,11 +1,13 @@
+import type {
+  DeleteAuthDetailMutationVariables,
+  FindAuthDetailById,
+} from 'types/graphql'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import { timeTag,  } from 'src/lib/formatters'
-
-import type { DeleteAuthDetailMutationVariables, FindAuthDetailById } from 'types/graphql'
+import { timeTag } from 'src/lib/formatters'
 
 const DELETE_AUTH_DETAIL_MUTATION = gql`
   mutation DeleteAuthDetailMutation($id: String!) {
@@ -49,10 +51,12 @@ const AuthDetail = ({ authDetail }: Props) => {
             <tr>
               <th>Id</th>
               <td>{authDetail.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Nonce</th>
               <td>{authDetail.nonce}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Timestamp</th>
               <td>{timeTag(authDetail.timestamp)}</td>
             </tr>

@@ -1,13 +1,13 @@
-import { AuthenticationError } from '@redwoodjs/api'
-
-import { bufferToHex } from 'ethereumjs-util'
 import { recoverPersonalSignature } from 'eth-sig-util'
+import { bufferToHex } from 'ethereumjs-util'
 import jwt from 'jsonwebtoken'
+
+import { AuthenticationError } from '@redwoodjs/api'
 
 import { db } from 'src/lib/db'
 
 const NONCE_MESSAGE =
-  "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bPlease prove you control this wallet by signing this random text: "
+  '\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bPlease prove you control this wallet by signing this random text: '
 
 const getNonceMessage = (nonce, options) => {
   let optionsText = ''
@@ -50,9 +50,9 @@ export const authChallenge = async ({
         },
       },
       // default image
-      image: "",
+      image: '',
       // name generator should do this
-      name: ""
+      name: '',
     },
   })
 

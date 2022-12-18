@@ -1,6 +1,7 @@
-import type { APIGatewayEvent, Context } from 'aws-lambda'
+import type { APIGatewayEvent } from 'aws-lambda'
+
 import { logger } from 'src/lib/logger'
-import { serfSkins} from 'src/values/serfSkins'
+import { serfSkins } from 'src/values/serfSkins'
 
 /**
  * The handler function is your code that processes http request events.
@@ -22,40 +23,40 @@ import { serfSkins} from 'src/values/serfSkins'
 // 🌲 incoming request GET xxx /skin?eth=<ethereum address>
 // needs rewriting when authentication works
 
-export const handler = async (event: APIGatewayEvent, context: Context) => {
+export const handler = async (event: APIGatewayEvent) => {
   logger.info('Invoked skin function')
- 
+
   try {
-    const {eth} = event.queryStringParameters
+    const { eth } = event.queryStringParameters
     if (eth === undefined) {
       return {
-        statusCode : 400,
+        statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': '*',
         },
-        body : { message: "No ethereum address provided"}
+        body: { message: 'No ethereum address provided' },
       }
     }
 
     const dummyB64 = serfSkins[eth.toLowerCase()]
 
-    const img = Buffer.from(dummyB64.split(",")[1], "base64")
+    const img = Buffer.from(dummyB64.split(',')[1], 'base64')
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
       },
-      body: img
+      body: img,
     }
   } catch (error) {
     return {
       statusCode: 400,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
       },
       body: {
         message: error.message,

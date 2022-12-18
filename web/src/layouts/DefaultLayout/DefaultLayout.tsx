@@ -1,8 +1,4 @@
-import {
-  ConnectKitProvider,
-  ConnectKitButton,
-  getDefaultClient,
-} from 'connectkit'
+import { ConnectKitProvider, getDefaultClient } from 'connectkit'
 import { WagmiConfig, createClient } from 'wagmi'
 import { chain } from 'wagmi'
 

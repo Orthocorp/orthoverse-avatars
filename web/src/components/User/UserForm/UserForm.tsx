@@ -1,3 +1,5 @@
+import type { EditUserById, UpdateUserInput } from 'types/graphql'
+
 import {
   Form,
   FormError,
@@ -6,12 +8,7 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-
-import type { EditUserById, UpdateUserInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
-
-
-
 
 type FormUser = NonNullable<EditUserById['user']>
 
@@ -24,13 +21,6 @@ interface UserFormProps {
 
 const UserForm = (props: UserFormProps) => {
   const onSubmit = (data: FormUser) => {
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data, props?.user?.id)
   }
 
@@ -43,7 +33,7 @@ const UserForm = (props: UserFormProps) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="address"
           className="rw-label"
@@ -51,15 +41,14 @@ const UserForm = (props: UserFormProps) => {
         >
           Address
         </Label>
-        
-          <TextField
-            name="address"
-            defaultValue={props.user?.address}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="address"
+          defaultValue={props.user?.address}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="address" className="rw-field-error" />
 
@@ -70,23 +59,19 @@ const UserForm = (props: UserFormProps) => {
         >
           Auth detail id
         </Label>
-        
-          <TextField
-            name="authDetailId"
-            defaultValue={props.user?.authDetailId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="authDetailId"
+          defaultValue={props.user?.authDetailId}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="authDetailId" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>
