@@ -33,19 +33,24 @@ model escutcheons {
 }
 
 model User {
-  id           String     @id @default(uuid())
+  id           Int       @id @default(autoincrement())
   address      String     @unique
   authDetail   AuthDetail @relation(fields: [authDetailId], references: [id])
-  authDetailId String
+  authDetailId Int @unique
   image String
-  name String
+  name String @unique
   level Int @default(0)
   attributes String @default("{}")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
 }
 
 model AuthDetail {
-  id        String   @id @default(uuid())
+  id        Int       @id @default(autoincrement())
   nonce     String
   timestamp DateTime @default(now())
   User      User[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+
 }

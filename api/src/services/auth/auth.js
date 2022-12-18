@@ -52,8 +52,7 @@ export const authChallenge = async ({
       // default image
       image: "",
       // name generator should do this
-      name: "",
-      id: address
+      name: ""
     },
   })
 
