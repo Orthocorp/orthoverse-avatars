@@ -24,8 +24,6 @@
   "packageManager": "yarn@3.2.4",
   "dependencies": {
     "browserify-zlib": "^0.2.0",
-    "connectkit": "^1.0.0",
-    "ethers": "^5.7.2",
     "https-browserify": "^1.0.0",
     "jimp": "^0.16.2",
     "js-file-download": "^0.4.12",
@@ -37,7 +35,6 @@
     "react-skinview3d": "^5.0.0",
     "skinview3d": "^3.0.0-alpha.1",
     "stream-browserify": "^3.0.0",
-    "stream-http": "^3.2.0",
-    "wagmi": "^0.7.13"
+    "stream-http": "^3.2.0"
   }
 }
