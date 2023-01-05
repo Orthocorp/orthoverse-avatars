@@ -2,7 +2,7 @@
 // See https://chakra-ui.com/docs/styled-system/theming/theme for theming options
 
 const config = {
-  initialColorMode: "dark",
+  initialColorMode: 'dark',
   useSystemColorMode: false,
 }
 

@@ -1,11 +1,14 @@
+import type {
+  DeleteAuthDetailMutationVariables,
+  FindAuthDetails,
+} from 'types/graphql'
+
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/AuthDetail/AuthDetailsCell'
 import { timeTag, truncate } from 'src/lib/formatters'
-
-import type { DeleteAuthDetailMutationVariables, FindAuthDetails } from 'types/graphql'
 
 const DELETE_AUTH_DETAIL_MUTATION = gql`
   mutation DeleteAuthDetailMutation($id: String!) {

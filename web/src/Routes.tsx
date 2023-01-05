@@ -9,9 +9,8 @@
 
 import { Router, Route, Set } from '@redwoodjs/router'
 
-import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
-
 import DefaultLayout from 'src/layouts/DefaultLayout'
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 
 const Routes = () => {
   return (

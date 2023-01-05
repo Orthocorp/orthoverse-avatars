@@ -1,37 +1,38 @@
-import Jimp from 'jimp'
-import { Box, Flex, Stack, Button, ButtonGroup, Center } from '@chakra-ui/react'
-import fileDownload from 'js-file-download'
-import { useAuth } from "@redwoodjs/auth";
-import { useState } from 'react'
-
+import { Box, Stack, Button } from '@chakra-ui/react'
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
+import Jimp from 'jimp'
+import fileDownload from 'js-file-download'
+
+import { useAuth } from '@redwoodjs/auth'
 
 const Download = ({ img }) => {
+  const { currentUser, isAuthenticated } = useAuth()
 
-  const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
-
-  const saveMC = async (downloadImg) => { 
-    const jimpImage = await Jimp.read(Buffer.from(downloadImg.split(',')[1], 'base64'))
+  const saveMC = async (downloadImg) => {
+    const jimpImage = await Jimp.read(
+      Buffer.from(downloadImg.split(',')[1], 'base64')
+    )
     jimpImage.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
       fileDownload(buffer, 'orthoverse-avatar.png')
     })
   }
 
-  const saveOrth = async (downloadImg) => { 
+  const saveOrth = async (downloadImg) => {
     // Orthoverse skins have mirrored arms and legs
     // I'm sure this could be done with a loop instead...
 
-    const jimpImage = await Jimp.read(Buffer.from(downloadImg.split(',')[1], 'base64'))
-/*    const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
+    const jimpImage = await Jimp.read(
+      Buffer.from(downloadImg.split(',')[1], 'base64')
+    )
+    /*    const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
     const ila2 = await jimpImage.clone().crop(8, 20, 4, 12)
     const ira1 = await jimpImage.clone().crop(40, 20, 4, 12)
     const ira2 = await jimpImage.clone().crop(48, 20, 4, 12)
@@ -77,56 +78,54 @@ const Download = ({ img }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const openModal = () => { 
+  const openModal = () => {
     onOpen()
   }
 
-  if (isAuthenticated  && (typeof currentUser !== 'undefined' )) {
+  if (isAuthenticated && typeof currentUser !== 'undefined') {
     return (
       <Box>
-        <Box p='2'>
-          <Stack direction='row'> 
-            <Button colorScheme='teal' onClick={(e) => saveOrth(img)}>
+        <Box p="2">
+          <Stack direction="row">
+            <Button colorScheme="teal" onClick={(e) => saveOrth(img)}>
               Write to Orthoverse
             </Button>
-            <Button colorScheme='teal' onClick={(e) => saveMC(img)}>
+            <Button colorScheme="teal" onClick={(e) => saveMC(img)}>
               Download Minecraft Skin
             </Button>
           </Stack>
         </Box>
-      </Box>  
+      </Box>
     )
   } else {
     return (
-    <>
-      <Box p='2'>
-        <Stack direction='row'> 
-          <Button colorScheme='gray' onClick={ (e) => openModal() }>
-            Write to Orthoverse
-          </Button>
-          <Button colorScheme='teal' onClick={(e) => saveMC(img)}>
-            Download Minecraft Skin
-          </Button>
-        </Stack>
-      </Box>
-      <Box>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              Log in for Orthoverse functionality
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              To save your avatar to the Orthoverse, you must first log in using the button in the top right corner.
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      </Box>
-    </>
+      <>
+        <Box p="2">
+          <Stack direction="row">
+            <Button colorScheme="gray" onClick={(e) => openModal()}>
+              Write to Orthoverse
+            </Button>
+            <Button colorScheme="teal" onClick={(e) => saveMC(img)}>
+              Download Minecraft Skin
+            </Button>
+          </Stack>
+        </Box>
+        <Box>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Log in for Orthoverse functionality</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                To save your avatar to the Orthoverse, you must first log in
+                using the button in the top right corner.
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </Box>
+      </>
     )
   }
-
 }
 
 export default Download

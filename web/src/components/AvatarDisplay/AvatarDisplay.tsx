@@ -1,35 +1,39 @@
+import { useRef, useEffect } from 'react'
+
 import ReactSkinview3d from 'react-skinview3d'
-import { useRef, useState, useEffect } from "react"
-import { IdleAnimation, WalkingAnimation, RunningAnimation, FlyingAnimation, SkinViewer} from 'skinview3d'
+import {
+  IdleAnimation,
+  WalkingAnimation,
+  RunningAnimation,
+  FlyingAnimation,
+  SkinViewer,
+} from 'skinview3d'
 
-const AvatarDisplay = ({skinUrl, animation}) => {
-
+const AvatarDisplay = ({ skinUrl, animation }) => {
   const viewerRef = useRef<SkinViewer>()
 
   useEffect(() => {
     if (viewerRef.current) {
-      if (animation === "none") {
+      if (animation === 'none') {
         viewerRef.current.animation = null
-        viewerRef.current.autoRotate = false;
+        viewerRef.current.autoRotate = false
       } else {
         // Add an animation
-        viewerRef.current.animation = availableAnimations[animation];
+        viewerRef.current.animation = availableAnimations[animation]
         // Enabled auto rotate
-        viewerRef.current.autoRotate = true;
+        viewerRef.current.autoRotate = true
       }
     }
-  }, [animation]);
+  }, [animation])
 
   const availableAnimations = {
     idle: new IdleAnimation(),
     walk: new WalkingAnimation(),
     run: new RunningAnimation(),
-    fly: new FlyingAnimation()
-  };
-
-  const changeAnimation = ( animation ) => {
-
+    fly: new FlyingAnimation(),
   }
+
+  // const changeAnimation = (animation) => {}
 
   return (
     <div>
@@ -39,7 +43,7 @@ const AvatarDisplay = ({skinUrl, animation}) => {
         height="500"
         width="500"
         onReady={({ viewer }) => {
-          viewerRef.current = viewer;
+          viewerRef.current = viewer
         }}
       />
     </div>

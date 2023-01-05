@@ -1,3 +1,5 @@
+import type { EditAuthDetailById, UpdateAuthDetailInput } from 'types/graphql'
+
 import {
   Form,
   FormError,
@@ -6,12 +8,7 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-
-import type { EditAuthDetailById, UpdateAuthDetailInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
-
-
-
 
 type FormAuthDetail = NonNullable<EditAuthDetailById['authDetail']>
 
@@ -24,10 +21,6 @@ interface AuthDetailFormProps {
 
 const AuthDetailForm = (props: AuthDetailFormProps) => {
   const onSubmit = (data: FormAuthDetail) => {
-  
-    
-    
-  
     props.onSave(data, props?.authDetail?.id)
   }
 
@@ -40,7 +33,7 @@ const AuthDetailForm = (props: AuthDetailFormProps) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="nonce"
           className="rw-label"
@@ -48,23 +41,19 @@ const AuthDetailForm = (props: AuthDetailFormProps) => {
         >
           Nonce
         </Label>
-        
-          <TextField
-            name="nonce"
-            defaultValue={props.authDetail?.nonce}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
+
+        <TextField
+          name="nonce"
+          defaultValue={props.authDetail?.nonce}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
 
         <FieldError name="nonce" className="rw-field-error" />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

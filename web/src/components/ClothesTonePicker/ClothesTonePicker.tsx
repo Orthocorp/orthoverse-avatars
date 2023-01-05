@@ -6,11 +6,11 @@ class ClothesTonePicker extends React.Component {
   }
 
   state = {
-    background: this.props.hexColor
+    background: this.props.hexColor,
   }
 
   handleChange = (color) => {
-    this.setState({ background: color.hex });
+    this.setState({ background: color.hex })
   }
 
   handleChangeComplete = (color) => {
@@ -19,15 +19,17 @@ class ClothesTonePicker extends React.Component {
   }
 
   render() {
-    return <div>
-      <ChromePicker
-        width='200'
-        color={ this.state.background }
-        onChange={ this.handleChange }
-        onChangeComplete={ this.handleChangeComplete }
-        disableAlpha={true}
-      />
-    </div>
+    return (
+      <div>
+        <ChromePicker
+          width="200"
+          color={this.state.background}
+          onChange={this.handleChange}
+          onChangeComplete={this.handleChangeComplete}
+          disableAlpha={true}
+        />
+      </div>
+    )
   }
 }
 

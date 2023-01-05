@@ -17,7 +17,10 @@ export const QUERY = gql`
   }
 `
 const UPDATE_AUTH_DETAIL_MUTATION = gql`
-  mutation UpdateAuthDetailMutation($id: String!, $input: UpdateAuthDetailInput!) {
+  mutation UpdateAuthDetailMutation(
+    $id: String!
+    $input: UpdateAuthDetailInput!
+  ) {
     updateAuthDetail(id: $id, input: $input) {
       id
       nonce
@@ -32,7 +35,9 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ authDetail }: CellSuccessProps<EditAuthDetailById>) => {
+export const Success = ({
+  authDetail,
+}: CellSuccessProps<EditAuthDetailById>) => {
   const [updateAuthDetail, { loading, error }] = useMutation(
     UPDATE_AUTH_DETAIL_MUTATION,
     {
@@ -56,10 +61,17 @@ export const Success = ({ authDetail }: CellSuccessProps<EditAuthDetailById>) =>
   return (
     <div className="rw-segment">
       <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit AuthDetail {authDetail?.id}</h2>
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit AuthDetail {authDetail?.id}
+        </h2>
       </header>
       <div className="rw-segment-main">
-        <AuthDetailForm authDetail={authDetail} onSave={onSave} error={error} loading={loading} />
+        <AuthDetailForm
+          authDetail={authDetail}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+        />
       </div>
     </div>
   )

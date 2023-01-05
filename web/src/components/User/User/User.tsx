@@ -1,9 +1,8 @@
-
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
-import {  } from 'src/lib/formatters'
+import {} from 'src/lib/formatters'
 
 import type { DeleteUserMutationVariables, FindUserById } from 'types/graphql'
 
@@ -49,10 +48,12 @@ const User = ({ user }: Props) => {
             <tr>
               <th>Id</th>
               <td>{user.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Address</th>
               <td>{user.address}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Auth detail id</th>
               <td>{user.authDetailId}</td>
             </tr>
