@@ -147,7 +147,7 @@ const HomePage = () => {
   const { currentUser, isAuthenticated } = useAuth()
 
   const [level, setLevel] = useState('0')
-  const [name, setName] = useState('None')
+  // const [name, setName] = useState('None')
 
   const [animation, setAnimation] = useState('none')
   const [jimpImage, setJimpImage] = useState(undefined)
@@ -406,7 +406,7 @@ const HomePage = () => {
                     <Center>Name:</Center>
                   </Flex>
                   <Flex>
-                    <Input value={name} readOnly />
+                    <Input value={currentUser.name} readOnly />
                   </Flex>
                   <Flex>
                     <Center>Level:</Center>
