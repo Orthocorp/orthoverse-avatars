@@ -4,6 +4,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { ArrowRightIcon, ArrowLeftIcon } from '@chakra-ui/icons'
 import { Box, Center, Button, Link, Image, Text, Stack } from '@chakra-ui/react'
 import { Grid, GridItem, IconButton } from '@chakra-ui/react'
+import { Icon } from '@chakra-ui/react'
 import {
   Modal,
   ModalOverlay,
@@ -13,7 +14,13 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
-import { BsFillShieldFill, BsFillShieldSlashFill } from 'react-icons/bs'
+import { 
+  BsFillShieldFill,
+  BsFillShieldSlashFill,
+  BsArrowUpRightSquareFill,
+  BsFillShieldLockFill,
+  BsArrowCounterclockwise
+} from 'react-icons/bs'
 
 import { useAuth } from '@redwoodjs/auth'
 
@@ -117,7 +124,7 @@ const LandPane = () => {
     ],
   }
 
-  const test1 = testB
+  const test1 = testA
 
   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
 
@@ -179,6 +186,23 @@ const LandPane = () => {
   function setCape() {
     test1.cape = test1.lands[paneItem][1]
     setUsedCape(test1.cape)
+  }
+
+  // currentUser.address is the ethereum address of the current user
+  function checkTokenIsOwned(landAddress) {
+
+  }
+
+  function levelUpTx(landAddress) {
+
+  }
+
+  function transferTx(landAddress) {
+
+  }
+
+  function flipTx(landAddress) {
+
   }
 
   if (isAuthenticated && typeof currentUser !== 'undefined') {
@@ -333,6 +357,49 @@ const LandPane = () => {
                     </Box>
                   </GridItem>
                 </Grid>
+
+                <Grid p="4px" templateColumns="repeat(3, 1fr)" gap="4px">
+                  <GridItem w="100%" p="1">
+                    <Box>
+                      <Button
+                        size="md"
+                        colorScheme="pink"
+                        onClick={(e) => {
+                          levelUpTx(test1.lands[paneItem][1])
+                        }}
+                      >
+                          Level Up &nbsp; <Icon as={BsFillShieldLockFill} />
+                      </Button>
+                    </Box>
+                  </GridItem>
+                  <GridItem w="100%" p="1">
+                    <Box>
+                      <Button
+                        size="md"
+                        colorScheme="pink"
+                        onClick={(e) => {
+                          flipTx(test1.lands[paneItem][1])
+                        }}
+                      >
+                        Flip Realm &nbsp; <Icon as={BsArrowCounterclockwise} />
+                      </Button>
+                    </Box>
+                  </GridItem>
+                  <GridItem w="100%" p="1">
+                    <Box>
+                      <Button
+                        size="md"
+                        colorScheme="pink"
+                        onClick={(e) => {
+                          transferTx(test1.lands[paneItem][1])
+                        }}
+                      >
+                        Send &nbsp; <Icon as={BsArrowUpRightSquareFill} />
+                      </Button>
+                    </Box>
+                  </GridItem>
+                </Grid>
+
                 {test1.lands.length > 1 && (
                   <Box>
                     <Center>

@@ -1,4 +1,3 @@
-
 type DefaultLayoutProps = {
   children?: React.ReactNode
 }
