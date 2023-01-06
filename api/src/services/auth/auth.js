@@ -1,6 +1,7 @@
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { bufferToHex } from 'ethereumjs-util'
 import jwt from 'jsonwebtoken'
+import { getName } from './generateNames.js'
 
 import { AuthenticationError } from '@redwoodjs/api'
 
@@ -32,29 +33,37 @@ export const authChallenge = async ({
 }) => {
   const nonce = Math.floor(Math.random() * 1000000).toString()
   const address = addressRaw.toLowerCase()
-  await db.user.upsert({
-    where: { address },
-    update: {
-      authDetail: {
-        update: {
-          nonce,
-          timestamp: new Date(),
+  console.log("Trying to write " + address + " challenge detail.")
+  let tries = 5
+  while (tries > 0) {
+    await db.user.upsert({
+      where: { address },
+      update: {
+        authDetail: {
+          update: {
+            nonce,
+            timestamp: new Date(),
+          },
         },
       },
-    },
-    create: {
-      address,
-      authDetail: {
-        create: {
-          nonce,
+      create: {
+        address,
+        authDetail: {
+          create: {
+            nonce,
+          },
         },
+        // default image
+        image: '',
+        name: getName(),
       },
-      // default image
-      image: '',
-      // name generator should do this
-      name: '',
-    },
-  })
+    })
+    .then(result => { tries = 0 })
+    .catch(err => {
+      console.log(tries.toString() + " tries left to find non-duplicate name")
+      tries = tries - 1
+    })
+  }
 
   return { message: getNonceMessage(nonce, options) }
 }

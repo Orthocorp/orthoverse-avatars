@@ -5,6 +5,7 @@ type DefaultLayoutProps = {
 const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   return (
     <>
+      <main>{children}</main>
     </>
   )
 }
