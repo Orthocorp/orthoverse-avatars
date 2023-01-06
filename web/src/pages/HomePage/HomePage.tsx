@@ -147,7 +147,6 @@ const HomePage = () => {
   const { currentUser, isAuthenticated } = useAuth()
 
   const [level, setLevel] = useState('0')
-  // const [name, setName] = useState('None')
 
   const [animation, setAnimation] = useState('none')
   const [jimpImage, setJimpImage] = useState(undefined)
