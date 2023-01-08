@@ -43,7 +43,11 @@ Install DBeaver so you can see what is going on. Download it from [their website
 
 Remember that a .deb package is installed with `sudo dpkg -i <package name>`
 
+Finally, perform the first migration to make sure the database has the right tables:
 
+```
+yarn rw prisma migrate dev
+```
 
 
 
