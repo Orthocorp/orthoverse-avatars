@@ -8,7 +8,11 @@ import { AuthenticationError } from '@redwoodjs/api'
 import { db } from 'src/lib/db'
 
 const NONCE_MESSAGE =
-  '\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bPlease prove you control this wallet by signing this random text: '
+  '*+-.__.-+*+-.__.-+*+-.__.-+*+-.__.-+*+-.__.-+*\n' +
+  '         Sign this message to log on\n' +
+  '       to the Ready Player Orthoverse\n' +
+  ' *+-.__.-+*+-.__.-+*+-.__.-+*+-.__.-+*+-.__.-+*\n' +
+  'Random number: '
 
 const getNonceMessage = (nonce, options) => {
   let optionsText = ''

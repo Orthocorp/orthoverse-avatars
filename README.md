@@ -39,7 +39,7 @@ createuser -P -s -e orthoverse
 createdb -O orthoverse orthoverse
 ```
 
-Install DBeaver so you can see what is going on. Download it from [their website](https://https://dbeaver.io/download)
+Install DBeaver so you can see what is going on. Download it from [their website](https://dbeaver.io/download)
 
 Remember that a .deb package is installed with `sudo dpkg -i <package name>`
 
