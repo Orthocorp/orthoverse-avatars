@@ -1,7 +1,10 @@
 import type { APIGatewayEvent } from 'aws-lambda'
 import Jimp from 'jimp'
-
 import { logger } from 'src/lib/logger'
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
 // import { serfSkins} from 'src/values/serfSkins'
 
 /**
@@ -24,7 +27,7 @@ import { logger } from 'src/lib/logger'
 export const handler = async (event: APIGatewayEvent) => {
   logger.info('Invoked cape function')
 
-  // 🌲 incoming request GET xxx /capes?id=[0..13188]
+  // 🌲 incoming request GET xxx /capes?id=<ethereum address>
   // needs rewriting when authentication works
 
   let result
@@ -32,10 +35,7 @@ export const handler = async (event: APIGatewayEvent) => {
   try {
     const { id } = event.queryStringParameters
     if (
-      id === undefined ||
-      isNaN(id) ||
-      parseInt(id) > 13188 ||
-      parseInt(id) < 0
+      id === undefined 
     ) {
       logger.info('Tried to serve invisible cape')
       Jimp.read('http://localhost:8910/capes/cape_invisible.png').then(
@@ -56,9 +56,24 @@ export const handler = async (event: APIGatewayEvent) => {
         }
       )
     } else {
-      logger.info('Tried to serve cape ' + id)
+      logger.info('Trying to serve cape for user ' + id)
+      // get cape ID from database
+      await prisma.$connect()
+      const record = await prisma.User.findFirst({
+        where: {
+          address: id
+        }
+      })
+      await prisma.$disconnect();
+      // extract cape
+      let cape_name
+      if (record) {
+        cape_name = record.cape
+      } else {
+        cape_name = 'cape_invisible.png'
+      }
       jimpImg = await Jimp.read(
-        'http://localhost:8910/capes/' + parseInt(id).toString() + '-cape.png'
+        'http://localhost:8910/capes/' + cape_name
       ).then((jimpImg) => {
         jimpImg.getBase64Async(Jimp.MIME_PNG).then((dummyB64) => {
           const img = Buffer.from(dummyB64.split(',')[1], 'base64')

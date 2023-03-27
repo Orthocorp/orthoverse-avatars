@@ -28,19 +28,22 @@ export const handler = async (event: APIGatewayEvent) => {
 
   try {
     const { eth } = event.queryStringParameters
-    if (eth === undefined) {
+    // if no account is provided, or zero address, serve random serf skin
+    if (eth === undefined ||
+        eth === '0x0000000000000000000000000000000000000000') {
+      const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
+      const img = Buffer.from(dummyB64.split(',')[1], 'base64')
       return {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
         },
-        body: { message: 'No ethereum address provided' },
+        body: img,
       }
     }
 
-    const dummyB64 = serfSkins[eth.toLowerCase()]
-
+    const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
     const img = Buffer.from(dummyB64.split(',')[1], 'base64')
 
     return {
