@@ -62,15 +62,17 @@ export const handler = async (event: APIGatewayEvent) => {
       await prisma.$connect()
       const record = await prisma.User.findFirst({
         where: {
-          address: id
+          address: id.toLowerCase()
         }
       })
       await prisma.$disconnect();
       // extract cape
       let cape_name
       if (record) {
+        logger.info("Found a cape record")
         cape_name = record.cape
       } else {
+        logger.info("No record found for " + id)
         cape_name = 'cape_invisible.png'
       }
       jimpImg = await Jimp.read(

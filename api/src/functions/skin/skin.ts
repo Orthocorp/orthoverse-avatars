@@ -37,7 +37,7 @@ export const handler = async (event: APIGatewayEvent) => {
       const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
       const img = Buffer.from(dummyB64.split(',')[1], 'base64')
       return {
-        statusCode: 400,
+        statusCode: 200,
         headers: {
           'Content-Type': 'image/png',
           'Access-Control-Allow-Origin': '*',
@@ -53,18 +53,19 @@ export const handler = async (event: APIGatewayEvent) => {
     await prisma.$connect()
     const record = await prisma.User.findFirst({
       where: {
-        address: eth
+        address: eth.toLowerCase()
         }
     })
     await prisma.$disconnect();
     // extract skin
-    let skin, img
-    if (record && record.skin !== '') {
-        skin = record.skin
-        const img = Buffer.from(skin.split(',')[1], 'base64')
+    let img
+    if (record && record.image !== '') {
+        logger.info('Skin is ' + record.image)
+        img = Buffer.from(record.image.split(',')[1], 'base64')
     } else {
+      logger.info('Did not find a skin for ' + eth)
       const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
-      const img = Buffer.from(dummyB64.split(',')[1], 'base64')
+      img = Buffer.from(dummyB64.split(',')[1], 'base64')
     }
 
     return {

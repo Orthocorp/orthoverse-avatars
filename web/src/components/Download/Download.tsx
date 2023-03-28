@@ -73,7 +73,7 @@ const Download = ({ img }) => {
     //})
 
     console.log(downloadImg)
-    console.log(jimpImage.getBase64Async(Jimp.MIME_PNG))
+    // need to write this to the database
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure()
