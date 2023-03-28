@@ -2,6 +2,9 @@ import type { APIGatewayEvent } from 'aws-lambda'
 
 import { logger } from 'src/lib/logger'
 import { serfSkins } from 'src/values/serfSkins'
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 /**
  * The handler function is your code that processes http request events.
@@ -36,23 +39,42 @@ export const handler = async (event: APIGatewayEvent) => {
       return {
         statusCode: 400,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'image/png',
           'Access-Control-Allow-Origin': '*',
         },
         body: img,
+        isBase64Encoded: true
       }
     }
 
-    const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
-    const img = Buffer.from(dummyB64.split(',')[1], 'base64')
+    // otherwise look for a saved skin in the database
+    logger.info('Trying to serve cape for user ' + eth)
+    // get cape ID from database
+    await prisma.$connect()
+    const record = await prisma.User.findFirst({
+      where: {
+        address: eth
+        }
+    })
+    await prisma.$disconnect();
+    // extract skin
+    let skin, img
+    if (record && record.skin !== '') {
+        skin = record.skin
+        const img = Buffer.from(skin.split(',')[1], 'base64')
+    } else {
+      const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
+      const img = Buffer.from(dummyB64.split(',')[1], 'base64')
+    }
 
     return {
       statusCode: 200,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'image/png',
         'Access-Control-Allow-Origin': '*',
       },
       body: img,
+      isBase64Encoded: true
     }
   } catch (error) {
     return {

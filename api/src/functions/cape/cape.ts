@@ -35,7 +35,7 @@ export const handler = async (event: APIGatewayEvent) => {
   try {
     const { id } = event.queryStringParameters
     if (
-      id === undefined 
+      id === undefined  || (id.slice(0,2) !== '0x'|| id.length !== 42)
     ) {
       logger.info('Tried to serve invisible cape')
       Jimp.read('http://localhost:8910/capes/cape_invisible.png').then(
@@ -46,10 +46,11 @@ export const handler = async (event: APIGatewayEvent) => {
             result = {
               statusCode: 200,
               headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'image/png',
                 'Access-Control-Allow-Origin': '*',
               },
               body: img,
+              isBase64Encoded: true
             }
             console.log(result)
           })
@@ -81,10 +82,11 @@ export const handler = async (event: APIGatewayEvent) => {
           result = {
             statusCode: 200,
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'image/png',
               'Access-Control-Allow-Origin': '*',
             },
             body: img,
+            isBase64Encoded: true
           }
           console.log(result)
         })
