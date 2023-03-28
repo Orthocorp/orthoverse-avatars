@@ -74,6 +74,8 @@ const Download = ({ img }) => {
 
     console.log(downloadImg)
     // need to write this to the database
+    
+
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure()
