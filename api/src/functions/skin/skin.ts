@@ -64,7 +64,7 @@ export const handler = async (event: APIGatewayEvent) => {
         img = Buffer.from(record.image.split(',')[1], 'base64')
     } else {
       logger.info('Did not find a skin for ' + eth)
-      const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
+      const dummyB64 = serfSkins[Number(eth.slice(0,16)) % serfSkins.length]
       img = Buffer.from(dummyB64.split(',')[1], 'base64')
     }
 

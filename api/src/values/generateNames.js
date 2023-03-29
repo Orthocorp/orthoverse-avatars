@@ -1,4 +1,4 @@
-export function getName (address = '') {
+export function getName (address = '', tries = 0) {
 
 const syllable1 = [
   // 'B','C','D','F','G','H','J','K','L','M','N', 'P', 'R', 'S', 'T', 'V',
@@ -64,8 +64,8 @@ const syllable3 = [
     b = syllable2[Math.floor(Math.random()*syllable2.length)]
     c = syllable3[Math.floor(Math.random()*syllable3.length)]
   } else {
-    a = syllable1[Number(address.slice(0,16)) % syllable1.length]
-    b = syllable2[Number(address.slice(0,16)) % syllable2.length]
+    a = syllable1[(Number(address.slice(0,16)) + tries) % syllable1.length]
+    b = syllable2[(Number(address.slice(0,16)) + tries) % syllable2.length]
     c = ''
     if (a.length === 1) {
       let i = 1
@@ -73,7 +73,7 @@ const syllable3 = [
         c = syllable3[Number((address.slice(0,16)) + i) % syllable3.length]
         i++
       }
-    } else { c = syllable3[Number(address.slice(0,16)) % syllable3.length] }
+    } else { c = syllable3[(Number(address.slice(0,16)) + tries) % syllable3.length] }
   }
   console.log(a,b,c)
   if (c !== '') {
