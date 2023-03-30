@@ -1,6 +1,6 @@
 export const schema = gql`
   type AuthDetail {
-    id: String!
+    id: Int!
     nonce: String!
     timestamp: DateTime!
     User: [User]!
@@ -8,7 +8,7 @@ export const schema = gql`
 
   type Query {
     authDetails: [AuthDetail!]! @requireAuth
-    authDetail(id: String!): AuthDetail @requireAuth
+    authDetail(id: Int!): AuthDetail @requireAuth
   }
 
   input CreateAuthDetailInput {
@@ -23,8 +23,8 @@ export const schema = gql`
 
   type Mutation {
     createAuthDetail(input: CreateAuthDetailInput!): AuthDetail! @requireAuth
-    updateAuthDetail(id: String!, input: UpdateAuthDetailInput!): AuthDetail!
+    updateAuthDetail(id: Int!, input: UpdateAuthDetailInput!): AuthDetail!
       @requireAuth
-    deleteAuthDetail(id: String!): AuthDetail! @requireAuth
+    deleteAuthDetail(id: Int!): AuthDetail! @requireAuth
   }
 `

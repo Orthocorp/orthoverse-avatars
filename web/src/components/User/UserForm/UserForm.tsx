@@ -14,7 +14,10 @@ type FormUser = NonNullable<EditUserById['user']>
 
 interface UserFormProps {
   user?: EditUserById['user']
-  onSave: (data: UpdateUserInput, id?: FormUser['id']) => void
+  onSave: (
+    data: UpdateUserInput,
+    id?: FormUser['id']
+  ) => void
   error: RWGqlError
   loading: boolean
 }

@@ -5,7 +5,7 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import AuthDetail from 'src/components/AuthDetail/AuthDetail'
 
 export const QUERY = gql`
-  query FindAuthDetailById($id: String!) {
+  query FindAuthDetailById($id: Int!) {
     authDetail: authDetail(id: $id) {
       id
       nonce

@@ -40,6 +40,8 @@ import {
   bootsColorPalette,
 } from 'src/values/palettes'
 
+import UserCell from 'src/components/User/UserCell'
+
 const HomePage = () => {
   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
   const testA = {
@@ -391,6 +393,12 @@ const HomePage = () => {
   return (
     <>
       <MetaTags title="Orthoverse Avatars" description="Orthoverse Avatars" />
+
+     {isAuthenticated && typeof currentUser !== 'undefined' ? (
+       <UserCell id={currentUser.id} />
+     ) : (
+       ''
+     )}
 
       <Box bg={useColorModeValue('gray.200', 'gray.900')} px={4}>
         <Flex h={'82px'} alignItems={'center'} justifyContent={'space-between'}>

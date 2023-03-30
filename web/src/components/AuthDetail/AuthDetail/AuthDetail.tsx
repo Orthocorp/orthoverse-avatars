@@ -10,7 +10,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { timeTag } from 'src/lib/formatters'
 
 const DELETE_AUTH_DETAIL_MUTATION = gql`
-  mutation DeleteAuthDetailMutation($id: String!) {
+  mutation DeleteAuthDetailMutation($id: Int!) {
     deleteAuthDetail(id: $id) {
       id
     }
