@@ -4,6 +4,7 @@ import { getName } from 'src/values/generateNames'
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+import { db } from 'src/lib/db'
 
 /**
  * The handler function is your code that processes http request events.
@@ -65,36 +66,29 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
       } else {
           // we didn't find a name, so create a record for this new ethereum address
           logger.info("No record found for " + id)
+          const nonce = Math.floor(Math.random() * 1000000).toString()
           // add new user to database for the given address
           let tries = 5
           while (tries > 0) {
-          await db.user.upsert({
-            where: { address: id.toLowerCase() },
-            update: {
-              authDetail: {
-                update: {
-                  nonce,
-                  timestamp: new Date(),
-                },
-              },
-            },
-            create: {
+          await db.user.create({
+            data: {
               address: id.toLowerCase(),
               authDetail: {
                 create: {
                   nonce,
                 },
               },
-            // default image
+              // default image
               image: '',
               name: getName(id, tries),
-            },
+            }
           })
           .then(result => { 
             name = getName(id, tries)
             tries = 0 
           })
           .catch(err => {
+            console.log(err)
             console.log(tries.toString() + " tries left to find non-duplicate name")
             tries = tries - 1
           })
