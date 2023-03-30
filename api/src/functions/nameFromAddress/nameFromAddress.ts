@@ -49,6 +49,7 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
           body: {"name": getName('')}
         }
     } else {
+      // try to get a name for an ethereum address
       await prisma.$connect()
       const record = await prisma.User.findFirst({
         where: {
@@ -56,14 +57,48 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
         }
       })
       await prisma.$disconnect();
-      // extract cape
       let name
       if (record) {
+        // we found a name
         logger.info("Found record", record)
         name = record.name
       } else {
-        logger.info("No record found")
-        name = getName(id.toLowerCase())
+          // we didn't find a name, so create a record for this new ethereum address
+          logger.info("No record found for " + id)
+          // add new user to database for the given address
+          let tries = 5
+          while (tries > 0) {
+          await db.user.upsert({
+            where: { address: id.toLowerCase() },
+            update: {
+              authDetail: {
+                update: {
+                  nonce,
+                  timestamp: new Date(),
+                },
+              },
+            },
+            create: {
+              address: id.toLowerCase(),
+              authDetail: {
+                create: {
+                  nonce,
+                },
+              },
+            // default image
+              image: '',
+              name: getName(id, tries),
+            },
+          })
+          .then(result => { 
+            name = getName(id, tries)
+            tries = 0 
+          })
+          .catch(err => {
+            console.log(tries.toString() + " tries left to find non-duplicate name")
+            tries = tries - 1
+          })
+        }
       }
       result = {
         statusCode: 200,
