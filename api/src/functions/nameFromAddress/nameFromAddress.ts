@@ -6,6 +6,17 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { db } from 'src/lib/db'
 
+/* This function returns a name given an ethereum address
+
+- if the ethereum address is not in the database, an entry is created for it
+- this does involve some risks: spammers could fill the database with address/name pairs
+- but it shouldn't matter if a third-party makes a query because naming is now
+- deterministic, based on the address
+
+- guests are given the zero address
+- this could have a problem: if tokens are burned then guest would become their owner
+
+
 /**
  * The handler function is your code that processes http request events.
  * You can use return and throw to send a response or error, respectively.
