@@ -27,11 +27,11 @@ import axios from 'axios'
 import { useAuth } from '@redwoodjs/auth'
 import { Spinner } from '@chakra-ui/react'
 
-const LandPane = () => {
+const LandPane = ({setLevel}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [paneItem, setPaneItem] = useState(-1)
-  const [usedCape, setUsedCape] = useState('')
+  const [usedCape, setUsedCape] = useState('cape_invisible.png')
 
   const { currentUser, isAuthenticated } = useAuth()
 
@@ -41,12 +41,13 @@ const LandPane = () => {
   const [test1, setTest1] = useState({})
 
   function parseLandReturn (data) {
-    if (data === {}) return data
+    console.log("Axios data: ", data)
+    if (data.length === 0) return {}
     let temp = {lands: []}
     let highest = 0
     let highestName = ''
     let lands = []
-    let cape = '0x00000000000000000000000000000000'
+    let cape = 'cape_invisible.png'
     data.forEach((land)  => {
       const processedLand = [
         land.name,
@@ -54,7 +55,8 @@ const LandPane = () => {
         land.level,
         land.x,
         land.y,
-        land.description
+        land.description,
+        land.crest
       ]
       if (land.level % 8 > highest) {
         highest = land.level
@@ -65,13 +67,14 @@ const LandPane = () => {
     temp.lands = lands
     temp.highest_level = highest
     temp.land_name = highestName
-    console.log(temp)
-    setPaneItem(0)
+    setLevel(highest)
+    console.log("Temp: ",temp)
     return temp
   }
 
   useEffect(() => {
     if (currentUser !== 'undefined') {
+      console.log("Current user: ", currentUser)
       // if the user owns no lands, currentUser.lands should be {}
       // otherwise it should be a standard owners.json entry
       // for testing the display I will initially use test1 or test2
@@ -80,11 +83,10 @@ const LandPane = () => {
       const fetchData = async () => {
         setLoading('loading')
         try {
-          console.log('https://orthoverse.io/api/land/owned?owner=' + currentUser.address)
           const { data: response} =
             await axios.get('https://orthoverse.io/api/land/owned?owner=' + currentUser.address)
-          console.log(response)
           setTest1(parseLandReturn(response))
+          console.log("Test1: ", test1)
         } catch (error) {
           console.log(error.message)
           setLoading('error')
@@ -95,18 +97,22 @@ const LandPane = () => {
       fetchData().then(result => {
         if (Object.keys(test1).length !== 0) {
           setPaneItem(0)
-          setUsedCape(test1.cape)
+          // setUsedCape(test1.cape)
         }
       })
     }
   }, [])
 
   useEffect(() => {
-    if (paneItem !== -1) {
-      // this is where the cape data should probably be written
+    if ((Object.keys(test1).length !== 0) && (paneItem === -1)) {
+       setPaneItem(0)
+       // setUsedCape(test1.cape)
     }
-    console.log("Loading status: " + loading)
-  }, [paneItem, usedCape, test1, loading])
+    console.log("Loading status: ", loading)
+    console.log("usedCape status: ", usedCape)
+    console.log("test1 status: ", test1)
+    console.log("paneItem status: ", paneItem)
+  }, [paneItem, usedCape, test1, loading, setLevel])
 
   function goLeft() {
     console.log('Clicked left')
@@ -116,7 +122,7 @@ const LandPane = () => {
     } else {
       pos = pos - 1
     }
-    console.log(pos)
+    console.log("New position: ", pos)
     setPaneItem(pos)
   }
 
@@ -127,17 +133,17 @@ const LandPane = () => {
     } else {
       pos = pos + 1
     }
-    console.log(pos)
+    console.log("New position: ", pos)
     setPaneItem(pos)
   }
 
   function blankCape() {
-    test1.cape = ''
+    test1.cape = 'cape_invisible.png'
     setUsedCape(test1.cape)
   }
 
   function setCape() {
-    test1.cape = test1.lands[paneItem][1]
+    test1.cape = test1.lands[paneItem][6]
     setUsedCape(test1.cape)
   }
 
@@ -201,7 +207,7 @@ const LandPane = () => {
           </Modal>
         </>
       )
-    } else if (test1 === {}) {
+    } else if (paneItem === -1) {
       return (
         <>
           <Box>
@@ -286,7 +292,7 @@ const LandPane = () => {
                           Level
                         </Text>
                         {test1.lands[paneItem][2] % 8 !== 0 &&
-                        usedCape !== test1.lands[paneItem][1] ? (
+                        usedCape !== test1.lands[paneItem][6] ? (
                           <Box>
                             <IconButton
                               size="xs"
@@ -299,7 +305,7 @@ const LandPane = () => {
                           ''
                         )}
                         {test1.lands[paneItem][2] % 8 !== 0 &&
-                        usedCape === test1.lands[paneItem][1] ? (
+                        usedCape === test1.lands[paneItem][6] ? (
                           <Box>
                             <IconButton
                               size="xs"
