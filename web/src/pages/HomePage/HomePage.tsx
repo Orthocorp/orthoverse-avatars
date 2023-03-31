@@ -16,8 +16,9 @@ import {
   DrawerBody,
   DrawerHeader,
   DrawerContent,
+  Tooltip
 } from '@chakra-ui/react'
-import { Input, Text } from '@chakra-ui/react'
+import { Input, Text, InputGroup, InputRightAddon } from '@chakra-ui/react'
 import Jimp from 'jimp'
 
 import { useAuth } from '@redwoodjs/auth'
@@ -91,6 +92,7 @@ const HomePage = () => {
   const [usedCape, setUsedCape] = useState('cape_invisible.png')
   const [nameInvalid, setNameInvalid] = useState(false)
   const [userName, setUserName] = useState('')
+  const [userDesign, setUserDesign] = useState('')
 
   function flipN(N) {
     const tmp = [...accessories]
@@ -353,14 +355,16 @@ const HomePage = () => {
                     <Center>Name:</Center>
                   </Flex>
                   <Flex>
-                    <Input 
-                      varient='outline'
-                      errorBorderColor='red.300'
-                      focusBorderColor={nameInvalid ? 'red.300' : 'teal.300'}
-                      value={userName}
-                      isInvalid={nameInvalid}
-                      onChange={(e) => nameChange(e)}
-                    />
+                    <InputGroup>
+                      <Input 
+                        varient='outline'
+                        errorBorderColor='red.300'
+                        focusBorderColor={nameInvalid ? 'red.300' : 'teal.300'}
+                        value={userName}
+                        isInvalid={nameInvalid}
+                        onChange={(e) => nameChange(e)}
+                      />
+                    </InputGroup>
                   </Flex>
                   <Flex>
                     <Center>Level:</Center>
@@ -479,6 +483,10 @@ const HomePage = () => {
               <Download 
                 img={transformedImage} 
                 nameInvalid={nameInvalid}
+                userName={userName}
+                userDesign={userDesign}
+                usedCape={usedCape}
+                level={level}
               />
             </Center>
           </Box>
