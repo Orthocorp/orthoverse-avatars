@@ -89,6 +89,8 @@ const HomePage = () => {
   const [accessories, setAccessories] = useState([])
 
   const [usedCape, setUsedCape] = useState('cape_invisible.png')
+  const [nameInvalid, setNameInvalid] = useState(false)
+  const [userName, setUserName] = useState('')
 
   function flipN(N) {
     const tmp = [...accessories]
@@ -163,6 +165,11 @@ const HomePage = () => {
 
     // populate accessories
     setAccessories(new Array(accsObj.length).fill(0))
+
+    // set userName on login
+    if (isAuthenticated && currentUser !== null) {
+      setUserName(currentUser.name)
+    }
   }, [])
 
   const applyChanges = async () => {
@@ -270,6 +277,25 @@ const HomePage = () => {
     accessories,
   ])
 
+  function onlyValidCharacters(str) {
+    return /^[A-Za-z0-9_]*$/.test(str);
+  }
+
+  useEffect(() => {
+    // check that the name is valid
+    if ((userName.length < 3 || onlyValidCharacters(userName) === false)
+        && nameInvalid === false) {
+      setNameInvalid(true)
+    }
+    if (userName.length >=3 && nameInvalid === true && onlyValidCharacters(userName) === true) {
+      setNameInvalid(false)
+    }
+  }, [
+    nameInvalid,
+    usedCape,
+    userName,
+  ])
+
   // eye size set
   const setEyeSize = (value) => {
     if (value == true) {
@@ -286,6 +312,10 @@ const HomePage = () => {
     onClose: onDesignClose,
   } = useDisclosure()
   const btnRef = React.useRef()
+
+  const nameChange = (edit) => {
+    setUserName(edit.target.value)
+  }
 
   return (
     <>
@@ -304,7 +334,14 @@ const HomePage = () => {
                     <Center>Name:</Center>
                   </Flex>
                   <Flex>
-                    <Input value={currentUser.name} readOnly />
+                    <Input 
+                      varient='outline'
+                      errorBorderColor='red.300'
+                      focusBorderColor={nameInvalid ? 'red.300' : 'teal.300'}
+                      value={userName}
+                      isInvalid={nameInvalid}
+                      onChange={(e) => nameChange(e)}
+                    />
                   </Flex>
                   <Flex>
                     <Center>Level:</Center>
@@ -319,13 +356,15 @@ const HomePage = () => {
                     setLevel = {setLevel}
                     usedCape = {usedCape}
                     setUsedCape = {setUsedCape}
+                    setUserName = {setUserName}
                     />
                   </Flex>
                 </Stack>
               ) : (
                 ''
               )}
-              <LoginButton />
+              <LoginButton 
+              />
             </Stack>
           </Flex>
         </Flex>

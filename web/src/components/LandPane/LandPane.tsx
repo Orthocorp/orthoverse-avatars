@@ -27,7 +27,7 @@ import axios from 'axios'
 import { useAuth } from '@redwoodjs/auth'
 import { Spinner } from '@chakra-ui/react'
 
-const LandPane = ({setLevel, usedCape, setUsedCape}) => {
+const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [paneItem, setPaneItem] = useState(-1)
@@ -55,6 +55,8 @@ const LandPane = ({setLevel, usedCape, setUsedCape}) => {
         land.x,
         land.y,
         land.description,
+        // stupidly we have nnnn.png for capes on orthoverse.io and nnnn-cape.png on
+        // orthoverse-avatars, or perhaps the orthoverse database is storing it wrong
         land.crest.replace('.png', '-cape.png')
       ]
       if (land.level % 8 > highest) {
@@ -74,6 +76,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape}) => {
   useEffect(() => {
     if (currentUser !== 'undefined') {
       console.log("Current user: ", currentUser)
+      setUserName(currentUser.name)
       // if the user owns no lands, currentUser.lands should be {}
       // otherwise it should be a standard owners.json entry
       // for testing the display I will initially use test1 or test2
@@ -142,8 +145,6 @@ const LandPane = ({setLevel, usedCape, setUsedCape}) => {
   }
 
   function setCape() {
-    // stupidly we have nnnn.png for capes on orthoverse.io and nnnn-cape.png on
-    // orthoverse-avatars, or perhaps the orthoverse database is storing it wrong
     test1.cape = test1.lands[paneItem][6]
     setUsedCape(test1.cape)
   }

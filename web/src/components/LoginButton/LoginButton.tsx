@@ -25,7 +25,6 @@ const LoginButton = () => {
       await logIn()
     } catch (e) {
       console.log('Error is ' + e)
-
       if (
         e ===
         'Error @oneclickdapp/ethereum-auth login(): Error: No Web3 wallet present in the browser. See above error for more details.'
