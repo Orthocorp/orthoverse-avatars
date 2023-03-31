@@ -282,6 +282,14 @@ const HomePage = () => {
     accessories,
   ])
 
+  // when username changes we need to check it's still valid
+  useEffect(() => {
+    nameValidator(userName)
+  }, [userName])
+
+  // empty useEffect to propagate changes to other state variables used in the body of the page
+  useEffect(() => {}, [nameInvalid,usedCape,])
+
   function onlyValidCharacters(str) {
     return /^[A-Za-z0-9_]*$/.test(str);
   }
@@ -292,30 +300,23 @@ const HomePage = () => {
         await axios.get('http://localhost:8911/nameInDatabase?name=' + name)
         let dbResult = response.name
         // we don't mind if the name is one we are currently using in the database
-        if (currentUser.name === name) dbResult = false
-        console.log("Name in use: " + response.name)
+        if (currentUser.name === name) { 
+          dbResult = false
+        }
         if ((dbResult === true || userName.length < 3 || onlyValidCharacters(userName) === false)
             && nameInvalid === false) {
           setNameInvalid(true)
         }
         if (userName.length >=3 && 
-            nameInvalid === true &&
             onlyValidCharacters(userName) === true &&
-            dbResult === false) {
+            dbResult === false &&
+            nameInvalid === true) {
           setNameInvalid(false)
         }
     } catch (error) {
       console.log(error.message)
     }
   }
-
-  // when username changes we need to check it's still valid
-  useEffect(() => {
-    nameValidator(userName)
-  }, [userName])
-
-  // empty useEffect to propagate changes to other state variables used in the body of the page
-  useEffect(() => {}, [nameInvalid,usedCape,])
 
   // eye size set
   const setEyeSize = (value) => {

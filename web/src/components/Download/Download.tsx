@@ -20,7 +20,8 @@ const Download = ({ img, nameInvalid, userName, userDesign, usedCape, level }) =
   // initial state variable setup
   useEffect(() => {
     // these variables are needed to save the current state of the avatar
-    // to the database, along with downloadImg from saveOrth()
+    // to the database, along with downloadImg from saveOrth(), which is where
+    // the functionality for saving to database should go
     console.log("name: ", userName)
     console.log("design: ", userDesign)
     console.log("cape: ", usedCape)
@@ -95,6 +96,8 @@ const Download = ({ img, nameInvalid, userName, userDesign, usedCape, level }) =
     // This is the final database update piece for the image field
     console.log(downloadImg)
     
+    // put a hidden form populated by the values here, and automatically call
+    // submit?
 
   }
 
