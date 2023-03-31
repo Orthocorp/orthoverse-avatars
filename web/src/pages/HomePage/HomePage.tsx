@@ -40,7 +40,7 @@ import {
   bootsColorPalette,
 } from 'src/values/palettes'
 
-import UserCell from 'src/components/User/UserCell'
+import axios from 'axios'
 
 const HomePage = () => {
 
@@ -283,25 +283,33 @@ const HomePage = () => {
     return /^[A-Za-z0-9_]*$/.test(str);
   }
 
+  const nameValidator = async (name) => {
+    try {
+      const { data: response} =
+        await axios.get('http://localhost:8911/nameInDatabase?name=' + name)
+        console.log("Name in use: " + response.name)
+        if ((response.name === true || userName.length < 3 || onlyValidCharacters(userName) === false)
+            && nameInvalid === false) {
+          setNameInvalid(true)
+        }
+        if (userName.length >=3 && 
+            nameInvalid === true &&
+            onlyValidCharacters(userName) === true &&
+            response.name === false) {
+          setNameInvalid(false)
+        }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   // when username changes we need to check it's still valid
   useEffect(() => {
-    if ((userName.length < 3 || onlyValidCharacters(userName) === false)
-        && nameInvalid === false) {
-      setNameInvalid(true)
-    }
-    if (userName.length >=3 && nameInvalid === true && onlyValidCharacters(userName) === true) {
-      setNameInvalid(false)
-    }
-  }, [
-    userName
-  ])
+    nameValidator(userName)
+  }, [userName])
 
   // empty useEffect to propagate changes to other state variables used in the body of the page
-  useEffect(() => {
-  }, [
-    nameInvalid,
-    usedCape,
-  ]
+  useEffect(() => {}, [nameInvalid,usedCape,])
 
   // eye size set
   const setEyeSize = (value) => {
