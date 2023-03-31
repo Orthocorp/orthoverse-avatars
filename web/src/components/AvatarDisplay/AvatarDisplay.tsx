@@ -9,7 +9,7 @@ import {
   SkinViewer,
 } from 'skinview3d'
 
-const AvatarDisplay = ({ skinUrl, animation }) => {
+const AvatarDisplay = ({ skinUrl, animation, capeUrl }) => {
   const viewerRef = useRef<SkinViewer>()
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const AvatarDisplay = ({ skinUrl, animation }) => {
       <ReactSkinview3d
         className="viewer"
         skinUrl={skinUrl}
+        capeUrl={capeUrl}
         height="500"
         width="500"
         onReady={({ viewer }) => {

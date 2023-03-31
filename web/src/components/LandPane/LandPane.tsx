@@ -27,11 +27,10 @@ import axios from 'axios'
 import { useAuth } from '@redwoodjs/auth'
 import { Spinner } from '@chakra-ui/react'
 
-const LandPane = ({setLevel}) => {
+const LandPane = ({setLevel, usedCape, setUsedCape}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [paneItem, setPaneItem] = useState(-1)
-  const [usedCape, setUsedCape] = useState('cape_invisible.png')
 
   const { currentUser, isAuthenticated } = useAuth()
 
@@ -56,7 +55,7 @@ const LandPane = ({setLevel}) => {
         land.x,
         land.y,
         land.description,
-        land.crest
+        land.crest.replace('.png', '-cape.png')
       ]
       if (land.level % 8 > highest) {
         highest = land.level
@@ -112,7 +111,7 @@ const LandPane = ({setLevel}) => {
     console.log("usedCape status: ", usedCape)
     console.log("test1 status: ", test1)
     console.log("paneItem status: ", paneItem)
-  }, [paneItem, usedCape, test1, loading, setLevel])
+  }, [paneItem, usedCape, test1, loading, setLevel, usedCape, setUsedCape])
 
   function goLeft() {
     console.log('Clicked left')
@@ -143,6 +142,8 @@ const LandPane = ({setLevel}) => {
   }
 
   function setCape() {
+    // stupidly we have nnnn.png for capes on orthoverse.io and nnnn-cape.png on
+    // orthoverse-avatars, or perhaps the orthoverse database is storing it wrong
     test1.cape = test1.lands[paneItem][6]
     setUsedCape(test1.cape)
   }

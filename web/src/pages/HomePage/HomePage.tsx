@@ -88,6 +88,8 @@ const HomePage = () => {
   const [boots, setBoots] = useState('0')
   const [accessories, setAccessories] = useState([])
 
+  const [usedCape, setUsedCape] = useState('cape_invisible.png')
+
   function flipN(N) {
     const tmp = [...accessories]
     if (tmp[N] === 0) {
@@ -315,6 +317,8 @@ const HomePage = () => {
                   <Flex>
                     <LandPane 
                     setLevel = {setLevel}
+                    usedCape = {usedCape}
+                    setUsedCape = {setUsedCape}
                     />
                   </Flex>
                 </Stack>
@@ -393,6 +397,7 @@ const HomePage = () => {
               className="viewer"
               skinUrl={transformedImage}
               animation={animation}
+              capeUrl={"capes/" + usedCape}
             />
           </Center>
         </Box>
