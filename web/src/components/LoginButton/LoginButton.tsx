@@ -13,7 +13,7 @@ import {
 
 import { useAuth } from '@redwoodjs/auth'
 
-const LoginButton = () => {
+const LoginButton = ({setLevel}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
   const [error, setError] = useState(false)
@@ -54,6 +54,7 @@ const LoginButton = () => {
 
   const onLogout = async () => {
     await logOut()
+    setLevel(0)
   }
 
   const truncateAddress = (address) => {

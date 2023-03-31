@@ -287,15 +287,18 @@ const HomePage = () => {
     try {
       const { data: response} =
         await axios.get('http://localhost:8911/nameInDatabase?name=' + name)
+        let dbResult = response.name
+        // we don't mind if the name is one we are currently using in the database
+        if (currentUser.name === name) dbResult = false
         console.log("Name in use: " + response.name)
-        if ((response.name === true || userName.length < 3 || onlyValidCharacters(userName) === false)
+        if ((dbResult === true || userName.length < 3 || onlyValidCharacters(userName) === false)
             && nameInvalid === false) {
           setNameInvalid(true)
         }
         if (userName.length >=3 && 
             nameInvalid === true &&
             onlyValidCharacters(userName) === true &&
-            response.name === false) {
+            dbResult === false) {
           setNameInvalid(false)
         }
     } catch (error) {
@@ -368,10 +371,10 @@ const HomePage = () => {
                   </Flex>
                   <Flex>
                     <LandPane 
-                    setLevel = {setLevel}
-                    usedCape = {usedCape}
-                    setUsedCape = {setUsedCape}
-                    setUserName = {setUserName}
+                    setLevel={setLevel}
+                    usedCape={usedCape}
+                    setUsedCape={setUsedCape}
+                    setUserName={setUserName}
                     />
                   </Flex>
                 </Stack>
@@ -379,6 +382,7 @@ const HomePage = () => {
                 ''
               )}
               <LoginButton 
+                setLevel={setLevel}
               />
             </Stack>
           </Flex>
