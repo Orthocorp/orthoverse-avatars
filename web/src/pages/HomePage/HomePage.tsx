@@ -256,6 +256,8 @@ const HomePage = () => {
     }
   }
 
+  // if any of the features of the avatar model change, we need to apply those
+  // changes to the jimpImage for the 3D skin rendering canvas
   useEffect(() => {
     if (jimpImage) {
       applyChanges()
@@ -281,8 +283,8 @@ const HomePage = () => {
     return /^[A-Za-z0-9_]*$/.test(str);
   }
 
+  // when username changes we need to check it's still valid
   useEffect(() => {
-    // check that the name is valid
     if ((userName.length < 3 || onlyValidCharacters(userName) === false)
         && nameInvalid === false) {
       setNameInvalid(true)
@@ -291,10 +293,15 @@ const HomePage = () => {
       setNameInvalid(false)
     }
   }, [
+    userName
+  ])
+
+  // empty useEffect to propagate changes to other state variables used in the body of the page
+  useEffect(() => {
+  }, [
     nameInvalid,
     usedCape,
-    userName,
-  ])
+  ]
 
   // eye size set
   const setEyeSize = (value) => {
