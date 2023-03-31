@@ -13,7 +13,7 @@ import {
 
 import { useAuth } from '@redwoodjs/auth'
 
-const LoginButton = () => {
+const LoginButton = ({setLevel}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { currentUser, isAuthenticated, logIn, logOut } = useAuth()
   const [error, setError] = useState(false)
@@ -25,7 +25,6 @@ const LoginButton = () => {
       await logIn()
     } catch (e) {
       console.log('Error is ' + e)
-
       if (
         e ===
         'Error @oneclickdapp/ethereum-auth login(): Error: No Web3 wallet present in the browser. See above error for more details.'
@@ -55,6 +54,7 @@ const LoginButton = () => {
 
   const onLogout = async () => {
     await logOut()
+    setLevel(0)
   }
 
   const truncateAddress = (address) => {

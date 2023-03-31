@@ -8,7 +8,7 @@ import { toast } from '@redwoodjs/web/toast'
 import AuthDetailForm from 'src/components/AuthDetail/AuthDetailForm'
 
 export const QUERY = gql`
-  query EditAuthDetailById($id: String!) {
+  query EditAuthDetailById($id: Int!) {
     authDetail: authDetail(id: $id) {
       id
       nonce
@@ -18,7 +18,7 @@ export const QUERY = gql`
 `
 const UPDATE_AUTH_DETAIL_MUTATION = gql`
   mutation UpdateAuthDetailMutation(
-    $id: String!
+    $id: Int!
     $input: UpdateAuthDetailInput!
   ) {
     updateAuthDetail(id: $id, input: $input) {

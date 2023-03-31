@@ -16,8 +16,9 @@ import {
   DrawerBody,
   DrawerHeader,
   DrawerContent,
+  Tooltip
 } from '@chakra-ui/react'
-import { Input, Text } from '@chakra-ui/react'
+import { Input, Text, InputGroup, InputRightAddon } from '@chakra-ui/react'
 import Jimp from 'jimp'
 
 import { useAuth } from '@redwoodjs/auth'
@@ -40,109 +41,9 @@ import {
   bootsColorPalette,
 } from 'src/values/palettes'
 
+import axios from 'axios'
+
 const HomePage = () => {
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
-  const testA = {
-    cape: '0x2830b5a3b5242bc2c64c390594ed971e7ded47d2',
-    highest_level: 7,
-    land_name: 'Pencanlia',
-    lands: [
-      [
-        'Telastala',
-        '0x2ccc96b3690f88f05b1b99319c4ecfce033dddd5',
-        9,
-        -29,
-        31,
-        'The Prefecture of Telastala',
-      ],
-      [
-        'Dundallia',
-        '0x2830b5a3b5242bc2c64c390594ed971e7ded47d2',
-        4,
-        -30,
-        31,
-        'The Croft of Dundallia',
-      ],
-      [
-        'Fangwanina',
-        '0x60515c2da6c76ef0b092534fa5be84b07e4da689',
-        1,
-        0,
-        -1,
-        'The County of Fangwania',
-      ],
-      [
-        'Hathforsmia',
-        '0x766c94a76f3652b85358da0d5c039635e20c27d7',
-        5,
-        -31,
-        -1,
-        'The Duchy of Hathforsmia',
-      ],
-      [
-        'Unarbsia',
-        '0x72d0474ea276e628072624116caea7f05e2b33f9',
-        0,
-        2,
-        -34,
-        'The Croft of Unarbsia',
-      ],
-      [
-        'Pencanlia',
-        '0x4747477222244233277233244222277474740000',
-        7,
-        0,
-        31,
-        'The Kingdom of Pencanlia',
-      ],
-      [
-        'Pendasdor',
-        '0xcd2081c2e433120cdaa70f4af01fe0b8c53a791c',
-        0,
-        5,
-        -4,
-        'The Croft of Pensador',
-      ],
-      [
-        'Clandiburium',
-        '0x2c36dd7bb3e95e7a0219e70737ee8041f22d2081',
-        0,
-        -35,
-        -33,
-        'The Croft of Clandiburium',
-      ],
-      [
-        'Urvoefia',
-        '0x98fa77ec842acd58298e719dd50fefcab9caad1a',
-        0,
-        23,
-        -6,
-        'The Croft of Urvoefia',
-      ],
-    ],
-  }
-
-  const testB = {}
-
-  const testC = {
-    highest_level: 4,
-    land_name: 'Pencanlia',
-    cape: '0x2830b5a3b5242bc2c64c390594ed971e7ded47d2',
-    lands: [
-      [
-        'Telastala',
-        '0x2ccc96b3690f88f05b1b99319c4ecfce033dddd5',
-        9,
-        -29,
-        31,
-        'The Prefecture of Telastala',
-      ],
-    ],
-  }
-
-  const test1 = testA
-
-  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test values
 
   const { currentUser, isAuthenticated } = useAuth()
 
@@ -187,6 +88,11 @@ const HomePage = () => {
   const [pants, setPants] = useState('0')
   const [boots, setBoots] = useState('0')
   const [accessories, setAccessories] = useState([])
+
+  const [usedCape, setUsedCape] = useState('cape_invisible.png')
+  const [nameInvalid, setNameInvalid] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [userDesign, setUserDesign] = useState('')
 
   function flipN(N) {
     const tmp = [...accessories]
@@ -259,11 +165,14 @@ const HomePage = () => {
 
     loadImage()
 
-    // set player level from database
-    setLevel(test1.highest_level)
-
     // populate accessories
     setAccessories(new Array(accsObj.length).fill(0))
+
+    // set userName on login
+    if (isAuthenticated && currentUser !== null) {
+      setUserName(currentUser.name)
+      setNameInvalid(false)
+    }
   }, [])
 
   const applyChanges = async () => {
@@ -350,6 +259,8 @@ const HomePage = () => {
     }
   }
 
+  // if any of the features of the avatar model change, we need to apply those
+  // changes to the jimpImage for the 3D skin rendering canvas
   useEffect(() => {
     if (jimpImage) {
       applyChanges()
@@ -371,6 +282,42 @@ const HomePage = () => {
     accessories,
   ])
 
+  // when username changes we need to check it's still valid
+  useEffect(() => {
+    nameValidator(userName)
+  }, [userName])
+
+  // empty useEffect to propagate changes to other state variables used in the body of the page
+  useEffect(() => {}, [nameInvalid,usedCape,])
+
+  function onlyValidCharacters(str) {
+    return /^[A-Za-z0-9_]*$/.test(str);
+  }
+
+  const nameValidator = async (name) => {
+    try {
+      const { data: response} =
+        await axios.get('http://localhost:8911/nameInDatabase?name=' + name)
+        let dbResult = response.name
+        // we don't mind if the name is one we are currently using in the database
+        if (currentUser.name === name) { 
+          dbResult = false
+        }
+        if ((dbResult === true || userName.length < 3 || onlyValidCharacters(userName) === false)
+            && nameInvalid === false) {
+          setNameInvalid(true)
+        }
+        if (userName.length >=3 && 
+            onlyValidCharacters(userName) === true &&
+            dbResult === false &&
+            nameInvalid === true) {
+          setNameInvalid(false)
+        }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   // eye size set
   const setEyeSize = (value) => {
     if (value == true) {
@@ -387,6 +334,10 @@ const HomePage = () => {
     onClose: onDesignClose,
   } = useDisclosure()
   const btnRef = React.useRef()
+
+  const nameChange = (edit) => {
+    setUserName(edit.target.value)
+  }
 
   return (
     <>
@@ -405,7 +356,16 @@ const HomePage = () => {
                     <Center>Name:</Center>
                   </Flex>
                   <Flex>
-                    <Input value={currentUser.name} readOnly />
+                    <InputGroup>
+                      <Input 
+                        varient='outline'
+                        errorBorderColor='red.300'
+                        focusBorderColor={nameInvalid ? 'red.300' : 'teal.300'}
+                        value={userName}
+                        isInvalid={nameInvalid}
+                        onChange={(e) => nameChange(e)}
+                      />
+                    </InputGroup>
                   </Flex>
                   <Flex>
                     <Center>Level:</Center>
@@ -416,13 +376,20 @@ const HomePage = () => {
                     </Center>
                   </Flex>
                   <Flex>
-                    <LandPane />
+                    <LandPane 
+                    setLevel={setLevel}
+                    usedCape={usedCape}
+                    setUsedCape={setUsedCape}
+                    setUserName={setUserName}
+                    />
                   </Flex>
                 </Stack>
               ) : (
                 ''
               )}
-              <LoginButton />
+              <LoginButton 
+                setLevel={setLevel}
+              />
             </Stack>
           </Flex>
         </Flex>
@@ -494,6 +461,7 @@ const HomePage = () => {
               className="viewer"
               skinUrl={transformedImage}
               animation={animation}
+              capeUrl={"capes/" + usedCape}
             />
           </Center>
         </Box>
@@ -513,7 +481,14 @@ const HomePage = () => {
           </Box>
           <Box>
             <Center>
-              <Download img={transformedImage} />
+              <Download 
+                img={transformedImage} 
+                nameInvalid={nameInvalid}
+                userName={userName}
+                userDesign={userDesign}
+                usedCape={usedCape}
+                level={level}
+              />
             </Center>
           </Box>
         </Box>

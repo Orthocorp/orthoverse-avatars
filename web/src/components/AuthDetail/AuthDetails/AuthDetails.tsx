@@ -11,7 +11,7 @@ import { QUERY } from 'src/components/AuthDetail/AuthDetailsCell'
 import { timeTag, truncate } from 'src/lib/formatters'
 
 const DELETE_AUTH_DETAIL_MUTATION = gql`
-  mutation DeleteAuthDetailMutation($id: String!) {
+  mutation DeleteAuthDetailMutation($id: Int!) {
     deleteAuthDetail(id: $id) {
       id
     }

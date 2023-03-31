@@ -1,7 +1,7 @@
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { bufferToHex } from 'ethereumjs-util'
 import jwt from 'jsonwebtoken'
-import { getName } from './generateNames.js'
+import { getName } from '../../values/generateNames.js'
 
 import { AuthenticationError } from '@redwoodjs/api'
 
@@ -59,7 +59,7 @@ export const authChallenge = async ({
         },
         // default image
         image: '',
-        name: getName(),
+        name: getName(address, tries),
       },
     })
     .then(result => { tries = 0 })

@@ -7,8 +7,8 @@ import { toast } from '@redwoodjs/web/toast'
 import { QUERY } from 'src/components/User/UsersCell'
 import { truncate } from 'src/lib/formatters'
 
-const DELETE_USER_MUTATION = gql`
-  mutation DeleteUserMutation($id: String!) {
+const DELETE_USERS_MUTATION = gql`
+  mutation DeleteUsersMutation($id: Int!) {
     deleteUser(id: $id) {
       id
     }
@@ -16,7 +16,7 @@ const DELETE_USER_MUTATION = gql`
 `
 
 const UsersList = ({ users }: FindUsers) => {
-  const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
+  const [deleteUser] = useMutation(DELETE_USERS_MUTATION, {
     onCompleted: () => {
       toast.success('User deleted')
     },
@@ -30,7 +30,7 @@ const UsersList = ({ users }: FindUsers) => {
     awaitRefetchQueries: true,
   })
 
-  const onDeleteClick = (id: DeleteUserMutationVariables['id']) => {
+  const onDeleteClick = (id: DeleteUsersMutationVariables['id']) => {
     if (confirm('Are you sure you want to delete user ' + id + '?')) {
       deleteUser({ variables: { id } })
     }

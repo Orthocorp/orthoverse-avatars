@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { Box, Stack, Button } from '@chakra-ui/react'
 import {
   Modal,
@@ -13,7 +15,26 @@ import fileDownload from 'js-file-download'
 
 import { useAuth } from '@redwoodjs/auth'
 
-const Download = ({ img }) => {
+const Download = ({ img, nameInvalid, userName, userDesign, usedCape, level }) => {
+
+  // initial state variable setup
+  useEffect(() => {
+    // these variables are needed to save the current state of the avatar
+    // to the database, along with downloadImg from saveOrth(), which is where
+    // the functionality for saving to database should go
+    console.log("name: ", userName)
+    console.log("design: ", userDesign)
+    console.log("cape: ", usedCape)
+    console.log("level: ", level)
+
+    // for finding the right record to write to the currentUser object is useful
+    // the Save To Orthoverse button is only active when that record exists
+    // currentUser.name is the name of the user as stored in the database
+    // currentUser.id is the record ID
+    // currentUser.address is the address
+    // these should all be unique for the record, as is currentUser.name (barring bugs on that last one)
+  }, [])
+
   const { currentUser, isAuthenticated } = useAuth()
 
   const saveMC = async (downloadImg) => {
@@ -72,30 +93,57 @@ const Download = ({ img }) => {
     //  fileDownload(buffer, 'orthoverse-avatar.png')
     //})
 
+    // This is the final database update piece for the image field
     console.log(downloadImg)
-    console.log(jimpImage.getBase64Async(Jimp.MIME_PNG))
+    
+    // put a hidden form populated by the values here, and automatically call
+    // submit?
+
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const openModal = () => {
+  const openModal = async (message) => {
     onOpen()
   }
 
   if (isAuthenticated && typeof currentUser !== 'undefined') {
     return (
+      <>
       <Box>
         <Box p="2">
           <Stack direction="row">
-            <Button colorScheme="teal" onClick={(e) => saveOrth(img)}>
-              Write to Orthoverse
-            </Button>
+              <Button
+                  colorScheme={ nameInvalid ? "gray" : "teal" }
+                  onClick={(e) => nameInvalid ? openModal() : saveOrth(img)}
+              >
+                Save to Orthoverse
+              </Button>
+            )}
             <Button colorScheme="teal" onClick={(e) => saveMC(img)}>
               Download Minecraft Skin
             </Button>
           </Stack>
         </Box>
+        <Box>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Save button is disabled</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Your name must satisfy the following:
+                <ul>
+                  <li>More than two characters long</li>
+                  <li>Only alphanumeric characters and underscore allowed</li>
+                  <li>Not already in use by another player</li>
+                </ul>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </Box>
       </Box>
+      </>
     )
   } else {
     return (
@@ -103,7 +151,7 @@ const Download = ({ img }) => {
         <Box p="2">
           <Stack direction="row">
             <Button colorScheme="gray" onClick={(e) => openModal()}>
-              Write to Orthoverse
+              Save to Orthoverse
             </Button>
             <Button colorScheme="teal" onClick={(e) => saveMC(img)}>
               Download Minecraft Skin
@@ -114,11 +162,10 @@ const Download = ({ img }) => {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Log in for Orthoverse functionality</ModalHeader>
+              <ModalHeader>Save button is disabled</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                To save your avatar to the Orthoverse, you must first log in
-                using the button in the top right corner.
+                You must log in to save your avatar changes to the Orthoverse.
               </ModalBody>
             </ModalContent>
           </Modal>

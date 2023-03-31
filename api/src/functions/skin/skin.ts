@@ -2,6 +2,9 @@ import type { APIGatewayEvent } from 'aws-lambda'
 
 import { logger } from 'src/lib/logger'
 import { serfSkins } from 'src/values/serfSkins'
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 /**
  * The handler function is your code that processes http request events.
@@ -28,28 +31,51 @@ export const handler = async (event: APIGatewayEvent) => {
 
   try {
     const { eth } = event.queryStringParameters
-    if (eth === undefined) {
+    // if no account is provided, or zero address, serve random serf skin
+    if (eth === undefined ||
+        eth === '0x0000000000000000000000000000000000000000') {
+      const dummyB64 = serfSkins[Math.floor((Math.random()*serfSkins.length))]
+      const img = Buffer.from(dummyB64.split(',')[1], 'base64')
       return {
-        statusCode: 400,
+        statusCode: 200,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'image/png',
           'Access-Control-Allow-Origin': '*',
         },
-        body: { message: 'No ethereum address provided' },
+        body: img,
+        isBase64Encoded: true
       }
     }
 
-    const dummyB64 = serfSkins[eth.toLowerCase()]
-
-    const img = Buffer.from(dummyB64.split(',')[1], 'base64')
+    // otherwise look for a saved skin in the database
+    logger.info('Trying to serve cape for user ' + eth)
+    // get cape ID from database
+    await prisma.$connect()
+    const record = await prisma.User.findFirst({
+      where: {
+        address: eth.toLowerCase()
+        }
+    })
+    await prisma.$disconnect();
+    // extract skin
+    let img
+    if (record && record.image !== '') {
+        logger.info('Skin is ' + record.image)
+        img = Buffer.from(record.image.split(',')[1], 'base64')
+    } else {
+      logger.info('Did not find a skin for ' + eth)
+      const dummyB64 = serfSkins[Number(eth.slice(0,16)) % serfSkins.length]
+      img = Buffer.from(dummyB64.split(',')[1], 'base64')
+    }
 
     return {
       statusCode: 200,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'image/png',
         'Access-Control-Allow-Origin': '*',
       },
       body: img,
+      isBase64Encoded: true
     }
   } catch (error) {
     return {
