@@ -94,7 +94,7 @@ const HomePage = () => {
   const [usedCape, setUsedCape] = useState('cape_invisible.png')
   const [nameInvalid, setNameInvalid] = useState(false)
   const [userName, setUserName] = useState('')
-  const [userDesign, setUserDesign] = useState(testDesign)
+  const [userDesign, setUserDesign] = useState(JSON.parse(testDesign))
 
   function flipN(N) {
     const tmp = [...accessories]
@@ -148,8 +148,17 @@ const HomePage = () => {
 
   // this is the onload effect
   useEffect(() => {
+    // set userName on login and set components equal to design object fields
+    if (isAuthenticated && currentUser !== null) {
+      setUserName(currentUser.name)
+      setNameInvalid(false)
+      loadDesignFromUserDesign()
+      // populate accessories if there weren't any loaded
+      if (accessories.length === 0) setAccessories(new Array(accsObj.length).fill(0))
+    }
+
     const loadImage = async () => {
-      await loadDesignFromUserDesign()
+
       // Creates Jimp image objects for blending together on initial loading of page
       const jimpImage = await Jimp.read('./img/base.png')
       setJimpImage(jimpImage)
@@ -207,15 +216,6 @@ const HomePage = () => {
     }
 
     loadImage()
-
-    // populate accessories
-    setAccessories(new Array(accsObj.length).fill(0))
-
-    // set userName on login
-    if (isAuthenticated && currentUser !== null) {
-      setUserName(currentUser.name)
-      setNameInvalid(false)
-    }
   }, [])
 
   const applyChanges = async () => {
@@ -330,6 +330,15 @@ const HomePage = () => {
   useEffect(() => {
     nameValidator(userName)
   }, [userName])
+
+  // check that a login has happened and load design object if it has
+  useEffect(() => {
+    console.log("Authentication change: ", isAuthenticated)
+    if (isAuthenticated) { // we just logged in
+      // trigger copying of design object to design components
+      loadDesignFromUserDesign()
+    }
+  }, [isAuthenticated])
 
   // empty useEffect to propagate changes to other state variables used in the body of the page
   useEffect(() => {}, [nameInvalid,usedCape,userDesign])
