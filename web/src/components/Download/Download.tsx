@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { Box, Stack, Button } from '@chakra-ui/react'
 import {
   Modal,
@@ -13,7 +15,18 @@ import fileDownload from 'js-file-download'
 
 import { useAuth } from '@redwoodjs/auth'
 
-const Download = ({ img }) => {
+const Download = ({ img, nameInvalid }) => {
+  /* const [message, setMessage] = useState('')
+
+  /* initial state variable setup
+  useEffect(() => {
+  }, [])
+
+  // refresh message
+  useEffect(() => {
+  }, [message])
+  */
+
   const { currentUser, isAuthenticated } = useAuth()
 
   const saveMC = async (downloadImg) => {
@@ -80,24 +93,47 @@ const Download = ({ img }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const openModal = () => {
+  const openModal = async (message) => {
     onOpen()
   }
 
   if (isAuthenticated && typeof currentUser !== 'undefined') {
     return (
+      <>
       <Box>
         <Box p="2">
           <Stack direction="row">
-            <Button colorScheme="teal" onClick={(e) => saveOrth(img)}>
-              Write to Orthoverse
-            </Button>
+              <Button
+                  colorScheme={ nameInvalid ? "gray" : "teal" }
+                  onClick={(e) => nameInvalid ? openModal() : saveOrth(img)}
+              >
+                Save to Orthoverse
+              </Button>
+            )}
             <Button colorScheme="teal" onClick={(e) => saveMC(img)}>
               Download Minecraft Skin
             </Button>
           </Stack>
         </Box>
+        <Box>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Save button is disabled</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                Your name must satisfy the following:
+                <ul>
+                  <li>More than two characters long</li>
+                  <li>Only alphanumeric characters and underscore allowed</li>
+                  <li>Not already in use by another player</li>
+                </ul>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </Box>
       </Box>
+      </>
     )
   } else {
     return (
@@ -105,7 +141,7 @@ const Download = ({ img }) => {
         <Box p="2">
           <Stack direction="row">
             <Button colorScheme="gray" onClick={(e) => openModal()}>
-              Write to Orthoverse
+              Save to Orthoverse
             </Button>
             <Button colorScheme="teal" onClick={(e) => saveMC(img)}>
               Download Minecraft Skin
@@ -116,11 +152,10 @@ const Download = ({ img }) => {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Log in for Orthoverse functionality</ModalHeader>
+              <ModalHeader>Save button is disabled</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                To save your avatar to the Orthoverse, you must first log in
-                using the button in the top right corner.
+                You must log in to save your avatar changes to the Orthoverse.
               </ModalBody>
             </ModalContent>
           </Modal>

@@ -169,6 +169,7 @@ const HomePage = () => {
     // set userName on login
     if (isAuthenticated && currentUser !== null) {
       setUserName(currentUser.name)
+      setNameInvalid(false)
     }
   }, [])
 
@@ -475,7 +476,10 @@ const HomePage = () => {
           </Box>
           <Box>
             <Center>
-              <Download img={transformedImage} />
+              <Download 
+                img={transformedImage} 
+                nameInvalid={nameInvalid}
+              />
             </Center>
           </Box>
         </Box>
