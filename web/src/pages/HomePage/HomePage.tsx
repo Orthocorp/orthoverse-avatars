@@ -45,8 +45,6 @@ import axios from 'axios'
 
 const HomePage = () => {
 
-  const testDesign='{"skintone":{"hsl":{"h":21.93548387096774,"s":0.5776397515527951,"l":0.3156862745098039,"a":1},"hex":"#7f4422","rgb":{"r":127,"g":68,"b":34,"a":1},"hsv":{"h":21.93548387096774,"s":0.7322834645669292,"v":0.4980392156862745,"a":1},"oldHue":21.93548387096774,"source":"hex"},"eyes":"large","eyecolor":{"hsl":{"h":102.76595744680851,"s":0.513660788617271,"l":0.28632570999999996,"a":1},"hex":"#396f24","rgb":{"r":57,"g":111,"b":36,"a":1},"hsv":{"h":102.76595744680851,"s":0.6787000000000001,"v":0.4334,"a":1},"oldHue":102.76595744680851,"source":"hsv"},"beard":"0","beardcolor":{"hex":"#343434"},"top":"4","topcolor":{"hsl":{"h":0,"s":0.2718600953895072,"l":0.39108075,"a":1},"hex":"#7f4949","rgb":{"r":127,"g":73,"b":73,"a":1},"hsv":{"h":0,"s":0.4275,"v":0.4974,"a":1},"oldHue":0,"source":"hsv"},"hair":"1","haircolor":{"hsl":{"h":217.77777777777777,"s":0.5735641227380016,"l":0.3102511,"a":1},"hex":"#22437c","rgb":{"r":34,"g":67,"b":124,"a":1},"hsv":{"h":217.77777777777777,"s":0.7290000000000001,"v":0.4882,"a":1},"oldHue":217.77777777777777,"source":"hsv"},"pants":"4","pantscolor":{"hsl":{"h":0,"s":0.3138014845956776,"l":0.37859601,"a":1},"hex":"#7f4242","rgb":{"r":127,"g":66,"b":66,"a":1},"hsv":{"h":0,"s":0.47769999999999996,"v":0.4974,"a":1},"oldHue":0,"source":"hsv"},"boots":"2","bootscolor":{"hsl":{"h":0,"s":0.020668537892319497,"l":0.13814474999999998,"a":1},"hex":"#242222","rgb":{"r":36,"g":34,"b":34,"a":1},"hsv":{"h":0,"s":0.04050000000000006,"v":0.141,"a":1},"oldHue":0,"source":"hsv"},"accessories":[0,0,0,1,0,0,0,1,0,0,0,0,0,0]}'
-
   const { currentUser, isAuthenticated } = useAuth()
 
   const [level, setLevel] = useState('0')
@@ -94,7 +92,7 @@ const HomePage = () => {
   const [usedCape, setUsedCape] = useState('cape_invisible.png')
   const [nameInvalid, setNameInvalid] = useState(false)
   const [userName, setUserName] = useState('')
-  const [userDesign, setUserDesign] = useState(JSON.parse(testDesign))
+  const [userDesign, setUserDesign] = useState('')
 
   function flipN(N) {
     const tmp = [...accessories]
@@ -107,7 +105,7 @@ const HomePage = () => {
     setAccessories(tmp)
   }
 
-  function storeDesignIntoUserDesign () {
+  function modelToDesign () {
     setUserDesign(
       {
         "skintone": skintone,
@@ -128,38 +126,26 @@ const HomePage = () => {
     )
   }
 
-  function loadDesignFromUserDesign() {
+  function designToModel(design) {
     // there's probably a clever way to do this with a loop
-    setSkintone(userDesign["skintone"])
-    setEyes(userDesign["eyes"])
-    setEyecolor(userDesign["eyecolor"])
-    setBeard(userDesign["beard"])
-    setBeardcolor(userDesign["beardcolor"])
-    setTop(userDesign["top"])
-    setTopcolor(userDesign["topcolor"])
-    setHair(userDesign["hair"])
-    setHaircolor(userDesign["haircolor"])
-    setPants(userDesign["pants"])
-    setPantscolor(userDesign["pantscolor"])
-    setBoots(userDesign["boots"])
-    setBootscolor(userDesign["bootscolor"])
-    setAccessories(userDesign["accessories"])
+    setSkintone(design["skintone"])
+    setEyes(design["eyes"])
+    setEyecolor(design["eyecolor"])
+    setBeard(design["beard"])
+    setBeardcolor(design["beardcolor"])
+    setTop(design["top"])
+    setTopcolor(design["topcolor"])
+    setHair(design["hair"])
+    setHaircolor(design["haircolor"])
+    setPants(design["pants"])
+    setPantscolor(design["pantscolor"])
+    setBoots(design["boots"])
+    setBootscolor(design["bootscolor"])
+    setAccessories(design["accessories"])
   }
 
   // this is the onload effect
   useEffect(() => {
-    // set userName on login and set components equal to design object fields
-    if (isAuthenticated && typeof currentUser !== 'undefined') {
-      if (currentUser !== null && 'name' in currentUser) {
-        setUserName(currentUser.name)
-        setNameInvalid(false)
-        loadDesignFromUserDesign()
-        applyChanges()
-        // populate accessories if there weren't any loaded
-        if (accessories.length === 0) setAccessories(new Array(accsObj.length).fill(0))
-      }
-    }
-
     const loadImage = async () => {
 
       // Creates Jimp image objects for blending together on initial loading of page
@@ -216,6 +202,18 @@ const HomePage = () => {
 
       const transformedImage = await overlay.getBase64Async(Jimp.MIME_PNG)
       setTransformedImage(transformedImage)
+    }
+
+    // set userName on login and set components equal to design object fields
+    if (isAuthenticated && typeof currentUser !== 'undefined') {
+      if (currentUser !== null && 'name' in currentUser) {
+        setUserName(currentUser.name)
+        setNameInvalid(false)
+        designToModel()
+        applyChanges()
+        // populate accessories if there weren't any loaded
+        if (accessories.length === 0) setAccessories(new Array(accsObj.length).fill(0))
+      }
     }
 
     loadImage()
@@ -301,9 +299,6 @@ const HomePage = () => {
 
       const transformedImage = await overlay.getBase64Async(Jimp.MIME_PNG)
       setTransformedImage(transformedImage)
-      // save design changes to design object
-      storeDesignIntoUserDesign()
-      console.log("User design object: ", JSON.stringify(userDesign))
     }
   }
 
@@ -338,13 +333,16 @@ const HomePage = () => {
     console.log("Authentication change: ", isAuthenticated)
     if (isAuthenticated) { // we just logged in
       // trigger copying of design object to design components
-      loadDesignFromUserDesign()
-      applyChanges()
+      const tmpDesign = JSON.parse(currentUser.design)
+      designToModel(tmpDesign)
     }
   }, [isAuthenticated])
 
   // empty useEffect to propagate changes to other state variables used in the body of the page
-  useEffect(() => {}, [nameInvalid,usedCape,userDesign])
+  useEffect(() => {}, [userDesign])
+
+  // empty useEffect to propagate changes to other state variables used in the body of the page
+  useEffect(() => {}, [nameInvalid,usedCape])
 
   function onlyValidCharacters(str) {
     return /^[A-Za-z0-9_]*$/.test(str);
