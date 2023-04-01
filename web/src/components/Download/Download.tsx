@@ -112,15 +112,18 @@ const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }
     console.log("cape: ", usedCape)
     console.log("level: ", level)
 
+    const mydesign = modelToDesign()
+
     const input = {
       image: downloadImg,
       name: userName,
-      design: modelToDesign,
+      design: mydesign,
       cape: usedCape,
       level: level
     }
     const id = currentUser.id
-    console.log("About to try to updateUser")
+    console.log("About to try to updateUser with ", input)
+    console.log("This is for user ", id)
     try {
       updateUser({ variables: { id, input } })
     } catch (error) {
