@@ -89,7 +89,7 @@ const HomePage = () => {
   const [hair, setHair] = useState('0')
   const [pants, setPants] = useState('0')
   const [boots, setBoots] = useState('0')
-  const [accessories, setAccessories] = useState([])
+  const [accessories, setAccessories] = useState([new Array(accsObj.length).fill(0)])
 
   const [usedCape, setUsedCape] = useState('cape_invisible.png')
   const [nameInvalid, setNameInvalid] = useState(false)
