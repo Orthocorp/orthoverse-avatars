@@ -119,7 +119,7 @@ const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }
       name: userName,
       design: mydesign,
       cape: usedCape,
-      level: level
+      level: Number(level)
     }
     const id = currentUser.id
     console.log("About to try to updateUser with ", input)
