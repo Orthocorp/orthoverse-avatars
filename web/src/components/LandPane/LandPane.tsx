@@ -27,7 +27,7 @@ import axios from 'axios'
 import { useAuth } from '@redwoodjs/auth'
 import { Spinner } from '@chakra-ui/react'
 
-const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
+const LandPane = ({setLevel, usedCape, setUsedCape}) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [paneItem, setPaneItem] = useState(-1)
@@ -37,7 +37,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
   const [loading, setLoading] = useState('loading');
   const [data, setData] = useState([])
 
-  const [test1, setTest1] = useState({})
+  const [ownedLands, setownedLands] = useState({})
 
   function parseLandReturn (data) {
     console.log("Axios data: ", data)
@@ -75,11 +75,11 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
 
   useEffect(() => {
     if (currentUser !== 'undefined') {
-      console.log("Current user: ", currentUser)
-      setUserName(currentUser.name)
+      // console.log("Current user: ", currentUser)
+      // setUserName(currentUser.name)
       // if the user owns no lands, currentUser.lands should be {}
       // otherwise it should be a standard owners.json entry
-      // for testing the display I will initially use test1 or test2
+      // for testing the display I will initially use ownedLands or test2
       //if (currentUser.lands === {}) {
 
       const fetchData = async () => {
@@ -87,8 +87,8 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
         try {
           const { data: response} =
             await axios.get('https://orthoverse.io/api/land/owned?owner=' + currentUser.address)
-          setTest1(parseLandReturn(response))
-          console.log("Test1: ", test1)
+          setownedLands(parseLandReturn(response))
+          console.log("ownedLands: ", ownedLands)
         } catch (error) {
           console.log(error.message)
           setLoading('error')
@@ -97,30 +97,30 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
       }
 
       fetchData().then(result => {
-        if (Object.keys(test1).length !== 0) {
+        if (Object.keys(ownedLands).length !== 0) {
           setPaneItem(0)
-          // setUsedCape(test1.cape)
+          // setUsedCape(ownedLands.cape)
         }
       })
     }
   }, [])
 
   useEffect(() => {
-    if ((Object.keys(test1).length !== 0) && (paneItem === -1)) {
+    if ((Object.keys(ownedLands).length !== 0) && (paneItem === -1)) {
        setPaneItem(0)
-       // setUsedCape(test1.cape)
+       // setUsedCape(ownedLands.cape)
     }
     console.log("Loading status: ", loading)
     console.log("usedCape status: ", usedCape)
-    console.log("test1 status: ", test1)
+    console.log("ownedLands status: ", ownedLands)
     console.log("paneItem status: ", paneItem)
-  }, [paneItem, usedCape, test1, loading, setLevel, usedCape, setUsedCape])
+  }, [paneItem, usedCape, ownedLands, loading, setLevel, usedCape, setUsedCape])
 
   function goLeft() {
     console.log('Clicked left')
     let pos = paneItem
     if (pos === 0) {
-      pos = test1.lands.length - 1
+      pos = ownedLands.lands.length - 1
     } else {
       pos = pos - 1
     }
@@ -130,7 +130,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
 
   function goRight() {
     let pos = paneItem
-    if (pos === test1.lands.length - 1) {
+    if (pos === ownedLands.lands.length - 1) {
       pos = 0
     } else {
       pos = pos + 1
@@ -140,13 +140,13 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
   }
 
   function blankCape() {
-    test1.cape = 'cape_invisible.png'
-    setUsedCape(test1.cape)
+    ownedLands.cape = 'cape_invisible.png'
+    setUsedCape(ownedLands.cape)
   }
 
   function setCape() {
-    test1.cape = test1.lands[paneItem][6]
-    setUsedCape(test1.cape)
+    ownedLands.cape = ownedLands.lands[paneItem][6]
+    setUsedCape(ownedLands.cape)
   }
 
   // currentUser.address is the ethereum address of the current user
@@ -265,7 +265,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                 <Box>
                   <Center>
                     <Text as="b" color="teal.300">
-                      {test1.lands[paneItem][5]}
+                      {ownedLands.lands[paneItem][5]}
                     </Text>
                   </Center>
                 </Box>
@@ -277,12 +277,12 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                     <Image
                       src={
                         'https://orthoverse.io/api/img/' +
-                        test1.lands[paneItem][1].split('x')[1] +
+                        ownedLands.lands[paneItem][1].split('x')[1] +
                         '-' +
-                        test1.lands[paneItem][2] +
+                        ownedLands.lands[paneItem][2] +
                         '.png'
                       }
-                      alt={test1.lands[paneItem][0]}
+                      alt={ownedLands.lands[paneItem][0]}
                     />
                   </Center>
                 </Box>
@@ -293,8 +293,8 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                         <Text as="b" fontSize="sm" color="teal.300">
                           Level
                         </Text>
-                        {test1.lands[paneItem][2] % 8 !== 0 &&
-                        usedCape !== test1.lands[paneItem][6] ? (
+                        {ownedLands.lands[paneItem][2] % 8 !== 0 &&
+                        usedCape !== ownedLands.lands[paneItem][6] ? (
                           <Box>
                             <IconButton
                               size="xs"
@@ -306,8 +306,8 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                         ) : (
                           ''
                         )}
-                        {test1.lands[paneItem][2] % 8 !== 0 &&
-                        usedCape === test1.lands[paneItem][6] ? (
+                        {ownedLands.lands[paneItem][2] % 8 !== 0 &&
+                        usedCape === ownedLands.lands[paneItem][6] ? (
                           <Box>
                             <IconButton
                               size="xs"
@@ -322,7 +322,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                       </Stack>
                     </Box>
                     <Box>
-                      <Text as="em">{test1.lands[paneItem][2] % 8} </Text>
+                      <Text as="em">{ownedLands.lands[paneItem][2] % 8} </Text>
                     </Box>
                   </GridItem>
                   <GridItem w="100%" h="16" bg="gray.600" p="1">
@@ -332,7 +332,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                       </Text>
                     </Box>
                     <Box>
-                      <Text as="em">{test1.lands[paneItem][3]}</Text>
+                      <Text as="em">{ownedLands.lands[paneItem][3]}</Text>
                     </Box>
                   </GridItem>
                   <GridItem w="100%" h="16" bg="gray.600" p="1">
@@ -342,7 +342,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                       </Text>
                     </Box>
                     <Box>
-                      <Text as="em">{test1.lands[paneItem][4]}</Text>
+                      <Text as="em">{ownedLands.lands[paneItem][4]}</Text>
                     </Box>
                   </GridItem>
                   <GridItem w="100%" h="16" bg="gray.600" p="1">
@@ -353,7 +353,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                     </Box>
                     <Box>
                       <Text as="em">
-                        {test1.lands[paneItem][2] > 7
+                        {ownedLands.lands[paneItem][2] > 7
                           ? 'Futuristic'
                           : 'Fantasy'}
                       </Text>
@@ -368,7 +368,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                         size="md"
                         colorScheme="pink"
                         onClick={(e) => {
-                          levelUpTx(test1.lands[paneItem][1])
+                          levelUpTx(ownedLands.lands[paneItem][1])
                         }}
                       >
                           Level Up &nbsp; <Icon as={BsFillShieldLockFill} />
@@ -381,7 +381,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                         size="md"
                         colorScheme="pink"
                         onClick={(e) => {
-                          flipTx(test1.lands[paneItem][1])
+                          flipTx(ownedLands.lands[paneItem][1])
                         }}
                       >
                         Flip Realm &nbsp; <Icon as={BsArrowCounterclockwise} />
@@ -394,7 +394,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                         size="md"
                         colorScheme="pink"
                         onClick={(e) => {
-                          transferTx(test1.lands[paneItem][1])
+                          transferTx(ownedLands.lands[paneItem][1])
                         }}
                       >
                         Send &nbsp; <Icon as={BsArrowUpRightSquareFill} />
@@ -403,7 +403,7 @@ const LandPane = ({setLevel, usedCape, setUsedCape, setUserName}) => {
                   </GridItem>
                 </Grid>
 
-                {test1.lands.length > 1 && (
+                {ownedLands.lands.length > 1 && (
                   <Box>
                     <Center>
                       <Box p="2">
