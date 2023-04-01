@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "design" TEXT NOT NULL DEFAULT '',
+ALTER COLUMN "image" SET DEFAULT '';

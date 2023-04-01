@@ -21,12 +21,6 @@ const Routes = () => {
         <Route path="/auth-details/{id}" page={AuthDetailAuthDetailPage} name="authDetail" />
         <Route path="/auth-details" page={AuthDetailAuthDetailsPage} name="authDetails" />
       </Set>
-      <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
-        <Route path="/users/new" page={UserNewUserPage} name="newUser" />
-        <Route path="/users/{id}/edit" page={UserEditUserPage} name="editUser" />
-        <Route path="/users/{id}" page={UserUserPage} name="user" />
-        <Route path="/users" page={UserUsersPage} name="users" />
-      </Set>
       <Set wrap={DefaultLayout}>
         <Route path="/" page={HomePage} name="home" />
       </Set>

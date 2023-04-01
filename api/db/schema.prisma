@@ -37,7 +37,8 @@ model User {
   address      String     @unique
   authDetail   AuthDetail @relation(fields: [authDetailId], references: [id])
   authDetailId Int @unique
-  image String
+  image String @default("")
+  design String @default("")
   name String @unique
   level Int @default(0)
   cape String @default("cape_invisible.png")

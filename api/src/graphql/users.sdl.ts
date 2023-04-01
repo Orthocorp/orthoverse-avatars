@@ -4,6 +4,13 @@ export const schema = gql`
     address: String!
     authDetail: AuthDetail!
     authDetailId: Int!
+    image: String!
+    design: String!
+    name: String!
+    level: Int!
+    cape: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   type Query {
@@ -14,11 +21,21 @@ export const schema = gql`
   input CreateUserInput {
     address: String!
     authDetailId: Int!
+    image: String!
+    design: String!
+    name: String!
+    level: Int!
+    cape: String!
   }
 
   input UpdateUserInput {
     address: String
     authDetailId: Int
+    image: String
+    design: String
+    name: String
+    level: Int
+    cape: String
   }
 
   type Mutation {

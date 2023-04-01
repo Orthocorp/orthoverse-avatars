@@ -15,7 +15,33 @@ import fileDownload from 'js-file-download'
 
 import { useAuth } from '@redwoodjs/auth'
 
+import { useMutation } from '@redwoodjs/web'
+import type { UpdateUserInput } from 'types/graphql'
+
+const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUserMutation($id: Int!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+      address
+      cape
+      design
+      image
+      level
+      name
+    }
+  }
+`
+
 const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }) => {
+
+  const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
+    onCompleted: () => {
+      console.log('User updated')
+    },
+    onError: (error) => {
+      console.log(error.message)
+    },
+  })
 
   // initial state variable setup
   useEffect(() => {
@@ -85,6 +111,22 @@ const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }
     console.log("design: ", modelToDesign())
     console.log("cape: ", usedCape)
     console.log("level: ", level)
+
+    const input = {
+      image: downloadImg,
+      name: userName,
+      design: modelToDesign,
+      cape: usedCape,
+      level: level
+    }
+    const id = currentUser.id
+    console.log("About to try to updateUser")
+    try {
+      updateUser({ variables: { id, input } })
+    } catch (error) {
+      console.log(error)
+    }
+
 
   }
 
