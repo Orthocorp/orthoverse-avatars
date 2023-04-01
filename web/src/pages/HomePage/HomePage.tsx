@@ -89,7 +89,7 @@ const HomePage = () => {
   const [hair, setHair] = useState('0')
   const [pants, setPants] = useState('0')
   const [boots, setBoots] = useState('0')
-  const [accessories, setAccessories] = useState([])
+  const [accessories, setAccessories] = useState([new Array(accsObj.length).fill(0)])
 
   const [usedCape, setUsedCape] = useState('cape_invisible.png')
   const [nameInvalid, setNameInvalid] = useState(false)
@@ -149,12 +149,15 @@ const HomePage = () => {
   // this is the onload effect
   useEffect(() => {
     // set userName on login and set components equal to design object fields
-    if (isAuthenticated && currentUser !== null) {
-      setUserName(currentUser.name)
-      setNameInvalid(false)
-      loadDesignFromUserDesign()
-      // populate accessories if there weren't any loaded
-      if (accessories.length === 0) setAccessories(new Array(accsObj.length).fill(0))
+    if (isAuthenticated && typeof currentUser !== 'undefined') {
+      if (currentUser !== null && 'name' in currentUser) {
+        setUserName(currentUser.name)
+        setNameInvalid(false)
+        loadDesignFromUserDesign()
+        applyChanges()
+        // populate accessories if there weren't any loaded
+        if (accessories.length === 0) setAccessories(new Array(accsObj.length).fill(0))
+      }
     }
 
     const loadImage = async () => {
@@ -298,6 +301,7 @@ const HomePage = () => {
 
       const transformedImage = await overlay.getBase64Async(Jimp.MIME_PNG)
       setTransformedImage(transformedImage)
+      // save design changes to design object
       storeDesignIntoUserDesign()
       console.log("User design object: ", JSON.stringify(userDesign))
     }
@@ -306,9 +310,7 @@ const HomePage = () => {
   // if any of the features of the avatar model change, we need to apply those
   // changes to the jimpImage for the 3D skin rendering canvas
   useEffect(() => {
-    if (jimpImage) {
-      applyChanges()
-    }
+    applyChanges()
   }, [
     skintone,
     eyecolor,
@@ -337,6 +339,7 @@ const HomePage = () => {
     if (isAuthenticated) { // we just logged in
       // trigger copying of design object to design components
       loadDesignFromUserDesign()
+      applyChanges()
     }
   }, [isAuthenticated])
 
@@ -348,26 +351,34 @@ const HomePage = () => {
   }
 
   const nameValidator = async (name) => {
-    try {
-      const { data: response} =
-        await axios.get('http://localhost:8911/nameInDatabase?name=' + name)
-        let dbResult = response.name
-        // we don't mind if the name is one we are currently using in the database
-        if (currentUser.name === name) { 
-          dbResult = false
+    if (isAuthenticated && typeof currentUser !== 'undefined') {
+      if (currentUser !== null && 'name' in currentUser) {
+        try {
+          const { data: response} =
+            await axios.get('http://localhost:8911/nameInDatabase?name=' + name)
+            let dbResult = response.name
+            // we don't mind if the name is one we are currently using in the database
+            if (currentUser.name === name) { 
+              dbResult = false
+            }
+            if ((dbResult === true || userName.length < 3 || onlyValidCharacters(userName) === false)
+                && nameInvalid === false) {
+              setNameInvalid(true)
+            }
+            if (userName.length >=3 && 
+                onlyValidCharacters(userName) === true &&
+                dbResult === false &&
+                nameInvalid === true) {
+              setNameInvalid(false)
+            }
+        } catch (error) {
+          console.log(error.message)
         }
-        if ((dbResult === true || userName.length < 3 || onlyValidCharacters(userName) === false)
-            && nameInvalid === false) {
-          setNameInvalid(true)
-        }
-        if (userName.length >=3 && 
-            onlyValidCharacters(userName) === true &&
-            dbResult === false &&
-            nameInvalid === true) {
-          setNameInvalid(false)
-        }
-    } catch (error) {
-      console.log(error.message)
+      } else {
+        if (nameInvalid === true) setNameInvalid(false)
+      }
+    } else {
+      if (nameInvalid === true) setNameInvalid(false)
     }
   }
 
