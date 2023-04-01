@@ -15,24 +15,10 @@ import fileDownload from 'js-file-download'
 
 import { useAuth } from '@redwoodjs/auth'
 
-const Download = ({ img, nameInvalid, userName, userDesign, usedCape, level }) => {
+const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }) => {
 
   // initial state variable setup
   useEffect(() => {
-    // these variables are needed to save the current state of the avatar
-    // to the database, along with downloadImg from saveOrth(), which is where
-    // the functionality for saving to database should go
-    console.log("name: ", userName)
-    console.log("design: ", userDesign)
-    console.log("cape: ", usedCape)
-    console.log("level: ", level)
-
-    // for finding the right record to write to the currentUser object is useful
-    // the Save To Orthoverse button is only active when that record exists
-    // currentUser.name is the name of the user as stored in the database
-    // currentUser.id is the record ID
-    // currentUser.address is the address
-    // these should all be unique for the record, as is currentUser.name (barring bugs on that last one)
   }, [])
 
   const { currentUser, isAuthenticated } = useAuth()
@@ -94,10 +80,11 @@ const Download = ({ img, nameInvalid, userName, userDesign, usedCape, level }) =
     //})
 
     // This is the final database update piece for the image field
-    console.log(downloadImg)
-    
-    // put a hidden form populated by the values here, and automatically call
-    // submit?
+    console.log("image: ", downloadImg)
+    console.log("name: ", userName)
+    console.log("design: ", modelToDesign())
+    console.log("cape: ", usedCape)
+    console.log("level: ", level)
 
   }
 

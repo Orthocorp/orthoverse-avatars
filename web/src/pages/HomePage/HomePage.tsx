@@ -45,7 +45,7 @@ import axios from 'axios'
 
 const HomePage = () => {
 
-  const { currentUser, isAuthenticated } = useAuth()
+  const { currentUser, isAuthenticated, logOut } = useAuth()
 
   const [level, setLevel] = useState('0')
 
@@ -92,7 +92,6 @@ const HomePage = () => {
   const [usedCape, setUsedCape] = useState('cape_invisible.png')
   const [nameInvalid, setNameInvalid] = useState(false)
   const [userName, setUserName] = useState('')
-  const [userDesign, setUserDesign] = useState('')
 
   function flipN(N) {
     const tmp = [...accessories]
@@ -106,8 +105,7 @@ const HomePage = () => {
   }
 
   function modelToDesign () {
-    setUserDesign(
-      {
+    return JSON.stringify({
         "skintone": skintone,
         "eyes": eyes,
         "eyecolor": eyecolor,
@@ -122,8 +120,7 @@ const HomePage = () => {
         "boots": boots,
         "bootscolor": bootscolor,
         "accessories": accessories
-      }
-    )
+    })
   }
 
   function designToModel(design) {
@@ -147,7 +144,6 @@ const HomePage = () => {
   // this is the onload effect
   useEffect(() => {
     const loadImage = async () => {
-
       // Creates Jimp image objects for blending together on initial loading of page
       const jimpImage = await Jimp.read('./img/base.png')
       setJimpImage(jimpImage)
@@ -202,18 +198,6 @@ const HomePage = () => {
 
       const transformedImage = await overlay.getBase64Async(Jimp.MIME_PNG)
       setTransformedImage(transformedImage)
-    }
-
-    // set userName on login and set components equal to design object fields
-    if (isAuthenticated && typeof currentUser !== 'undefined') {
-      if (currentUser !== null && 'name' in currentUser) {
-        setUserName(currentUser.name)
-        setNameInvalid(false)
-        designToModel()
-        applyChanges()
-        // populate accessories if there weren't any loaded
-        if (accessories.length === 0) setAccessories(new Array(accsObj.length).fill(0))
-      }
     }
 
     loadImage()
@@ -332,14 +316,17 @@ const HomePage = () => {
   useEffect(() => {
     console.log("Authentication change: ", isAuthenticated)
     if (isAuthenticated) { // we just logged in
+      if ('name' in currentUser) {
+        console.log("Current user: ", currentUser)
+        setUserName(currentUser.name)
+      }
       // trigger copying of design object to design components
-      const tmpDesign = JSON.parse(currentUser.design)
-      designToModel(tmpDesign)
+      if (currentUser.design !== '') {
+        const tmpDesign = JSON.parse(currentUser.design)
+        designToModel(tmpDesign)
+      }
     }
   }, [isAuthenticated])
-
-  // empty useEffect to propagate changes to other state variables used in the body of the page
-  useEffect(() => {}, [userDesign])
 
   // empty useEffect to propagate changes to other state variables used in the body of the page
   useEffect(() => {}, [nameInvalid,usedCape])
@@ -547,9 +534,9 @@ const HomePage = () => {
                 img={transformedImage} 
                 nameInvalid={nameInvalid}
                 userName={userName}
-                userDesign={userDesign}
                 usedCape={usedCape}
                 level={level}
+                modelToDesign={modelToDesign}
               />
             </Center>
           </Box>
