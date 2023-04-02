@@ -49,6 +49,10 @@ Finally, perform the first migration to make sure the database has the right tab
 yarn rw prisma migrate dev
 ```
 
+## Note
+
+The file .env.defaults contains a JWT secret which should be changed in production
+
 
 
 
