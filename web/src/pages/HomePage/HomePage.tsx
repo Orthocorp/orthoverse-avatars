@@ -340,7 +340,7 @@ const HomePage = () => {
       if (currentUser !== null && 'name' in currentUser) {
         try {
           const { data: response} =
-            await axios.get('http://localhost:8910/.redwood/functions/nameInDatabase?name=' + name)
+            await axios.get('http://orthoverse.me/.redwood/functions/nameInDatabase?name=' + name)
             let dbResult = response.name
             // we don't mind if the name is one we are currently using in the database
             if (currentUser.name === name) {
