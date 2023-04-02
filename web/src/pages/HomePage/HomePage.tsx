@@ -343,14 +343,14 @@ const HomePage = () => {
             await axios.get('http://localhost:8910/.redwood/functions/nameInDatabase?name=' + name)
             let dbResult = response.name
             // we don't mind if the name is one we are currently using in the database
-            if (currentUser.name === name) { 
+            if (currentUser.name === name) {
               dbResult = false
             }
             if ((dbResult === true || userName.length < 3 || onlyValidCharacters(userName) === false)
                 && nameInvalid === false) {
               setNameInvalid(true)
             }
-            if (userName.length >=3 && 
+            if (userName.length >=3 &&
                 onlyValidCharacters(userName) === true &&
                 dbResult === false &&
                 nameInvalid === true) {
@@ -406,8 +406,8 @@ const HomePage = () => {
                   </Flex>
                   <Flex>
                     <InputGroup>
-                      <Input 
-                        varient='outline'
+                      <Input
+                        variant='outline'
                         errorBorderColor='red.300'
                         focusBorderColor={nameInvalid ? 'red.300' : 'teal.300'}
                         value={userName}
@@ -425,7 +425,7 @@ const HomePage = () => {
                     </Center>
                   </Flex>
                   <Flex>
-                    <LandPane 
+                    <LandPane
                     setLevel={setLevel}
                     usedCape={usedCape}
                     setUsedCape={setUsedCape}
@@ -436,7 +436,7 @@ const HomePage = () => {
               ) : (
                 ''
               )}
-              <LoginButton 
+              <LoginButton
                 setLevel={setLevel}
               />
             </Stack>
@@ -530,8 +530,8 @@ const HomePage = () => {
           </Box>
           <Box>
             <Center>
-              <Download 
-                img={transformedImage} 
+              <Download
+                img={transformedImage}
                 nameInvalid={nameInvalid}
                 userName={userName}
                 usedCape={usedCape}
