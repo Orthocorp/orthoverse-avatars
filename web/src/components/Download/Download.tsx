@@ -147,50 +147,10 @@ const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }
       .blit(obb4, 4, 36)   
       .blit(obb3, 12, 36) 
 
-/* 
-    const ila1 = await jimpImage.clone().crop(0, 20, 4, 12)
-    const ila2 = await jimpImage.clone().crop(8, 20, 4, 12)
-    const ira1 = await jimpImage.clone().crop(40, 20, 4, 12)
-    const ira2 = await jimpImage.clone().crop(48, 20, 4, 12)
-    const ola1 = await jimpImage.clone().crop(0, 36, 4, 12)
-    const ola2 = await jimpImage.clone().crop(8, 36, 4, 12)
-    const ora1 = await jimpImage.clone().crop(40, 36, 4, 12)
-    const ora2 = await jimpImage.clone().crop(48, 36, 4, 12)
-
-    const ill1 = await jimpImage.clone().crop(16, 52, 4, 12)
-    const ill2 = await jimpImage.clone().crop(24, 52, 4, 12)
-    const irl1 = await jimpImage.clone().crop(32, 52, 4, 12)
-    const irl2 = await jimpImage.clone().crop(40, 52, 4, 12)
-    const oll1 = await jimpImage.clone().crop(0, 52, 4, 12)
-    const oll2 = await jimpImage.clone().crop(8, 52, 4, 12)
-    const orl1 = await jimpImage.clone().crop(48, 52, 4, 12)
-    const orl2 = await jimpImage.clone().crop(56, 52, 4, 12)
-
-    const overlay = await jimpImage
-      .clone()
-      .composite(ila1, 8, 20, {mode: Jimp.BLEND_SOURCE_OVER})   
-      .composite(ila2, 0, 20, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(ira1, 48, 20, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(ira2, 40, 20, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(ola1, 8, 36, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(ola2, 0, 36, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(ora1, 48, 36, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(ora2, 40, 36, {mode: Jimp.BLEND_SOURCE_OVER})  
-
-      .composite(ill1, 24, 52, {mode: Jimp.BLEND_SOURCE_OVER})   
-      .composite(ill2, 16, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(irl1, 40, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(irl2, 32, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(oll1, 8, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(oll2, 0, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(orl1, 56, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-      .composite(orl2, 48, 52, {mode: Jimp.BLEND_SOURCE_OVER})  
-
-*/
     const adjustedImg = await overlay.getBase64Async(Jimp.MIME_PNG) 
-    overlay.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
-      fileDownload(buffer, 'orthoverse-flip.png')
-    })
+    // overlay.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
+    //   fileDownload(buffer, 'orthoverse-flip.png')
+    // })
 
     // This is the final database update piece for the image field
     console.log("image: ", adjustedImg)
