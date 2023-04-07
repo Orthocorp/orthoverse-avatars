@@ -15,6 +15,7 @@ import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 const Routes = () => {
   return (
     <Router>
+      <Route path="/delegate" page={DelegatePage} name="delegate" />
       <Set wrap={ScaffoldLayout} title="AuthDetails" titleTo="authDetails" buttonLabel="New AuthDetail" buttonTo="newAuthDetail">
         <Route path="/auth-details/new" page={AuthDetailNewAuthDetailPage} name="newAuthDetail" />
         <Route path="/auth-details/{id}/edit" page={AuthDetailEditAuthDetailPage} name="editAuthDetail" />

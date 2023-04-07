@@ -10,6 +10,8 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
+import { toast } from '@redwoodjs/web/toast'
+
 import Jimp from 'jimp'
 import fileDownload from 'js-file-download'
 
@@ -36,10 +38,20 @@ const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }
 
   const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
-      console.log('User updated')
+      toast('Model saved to the Orthoverse', {
+        style: {
+            backgroundColor: '#81e68e',
+            fontWeight: 'bold'
+        }
+      })
     },
     onError: (error) => {
-      console.log(error.message)
+      toast.error(error.message, {
+        style: {
+            backgroundColor: '#e68e81',
+            fontweight: 'bold'
+        }
+      })
     },
   })
 
@@ -174,11 +186,10 @@ const Download = ({ img, nameInvalid, userName, usedCape, level, modelToDesign }
     console.log("This is for user ", id)
     try {
       updateUser({ variables: { id, input } })
+     
     } catch (error) {
       console.log(error)
     }
-
-
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure()

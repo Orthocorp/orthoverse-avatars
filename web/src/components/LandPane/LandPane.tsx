@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-
+import { routes, navigate } from '@redwoodjs/router'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { ArrowRightIcon, ArrowLeftIcon } from '@chakra-ui/icons'
 import { Box, Center, Button, Link, Image, Text, Stack } from '@chakra-ui/react'
@@ -19,7 +19,8 @@ import {
   BsFillShieldSlashFill,
   BsArrowUpRightSquareFill,
   BsFillShieldLockFill,
-  BsArrowCounterclockwise
+  BsArrowCounterclockwise,
+  BsPersonFill
 } from 'react-icons/bs'
 
 import axios from 'axios'
@@ -284,6 +285,19 @@ const LandPane = ({setLevel, usedCape, setUsedCape}) => {
                       }
                       alt={ownedLands.lands[paneItem][0]}
                     />
+                  </Center>
+                  <Center>
+                    <Box p="2px">
+                      <Button
+                        size="md"
+                        colorScheme="teal"
+                        onClick={(e) => {
+                          navigate(routes.delegate())
+                        }}
+                      >
+                        Edit Delegates &nbsp; <Icon as={BsPersonFill} /> 
+                      </Button>
+                    </Box>
                   </Center>
                 </Box>
                 <Grid p="4px" templateColumns="repeat(4, 1fr)" gap="4px">
