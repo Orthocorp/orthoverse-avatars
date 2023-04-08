@@ -316,14 +316,19 @@ const HomePage = () => {
   useEffect(() => {
     console.log("Authentication change: ", isAuthenticated)
     if (isAuthenticated) { // we just logged in
-      if ('name' in currentUser) {
-        console.log("Current user: ", currentUser)
-        setUserName(currentUser.name)
-      }
+      if (typeof currentUser !== 'undefined') {
+        if ('name' in currentUser) {
+          console.log("Current user: ", currentUser)
+          setUserName(currentUser.name)
+        }
       // trigger copying of design object to design components
-      if (currentUser.design !== '') {
-        const tmpDesign = JSON.parse(currentUser.design)
-        designToModel(tmpDesign)
+        if (currentUser.design !== '') {
+          const tmpDesign = JSON.parse(currentUser.design)
+          designToModel(tmpDesign)
+        }
+      } else {
+        // jwt token probably expired
+        logOut()
       }
     }
   }, [isAuthenticated])

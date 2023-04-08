@@ -75,7 +75,8 @@ const LandPane = ({setLevel, usedCape, setUsedCape}) => {
   }
 
   useEffect(() => {
-    if (currentUser !== 'undefined') {
+    if (isAuthenticated && typeof currentUser !== 'undefined') {
+
       // console.log("Current user: ", currentUser)
       // setUserName(currentUser.name)
       // if the user owns no lands, currentUser.lands should be {}
@@ -287,12 +288,12 @@ const LandPane = ({setLevel, usedCape, setUsedCape}) => {
                     />
                   </Center>
                   <Center>
-                    <Box p="2px">
+                    <Box mt="6px">
                       <Button
                         size="md"
                         colorScheme="teal"
                         onClick={(e) => {
-                          navigate(routes.delegate())
+                          navigate(routes.delegate({land: ownedLands.lands[paneItem][0]}))
                         }}
                       >
                         Edit Delegates &nbsp; <Icon as={BsPersonFill} /> 
