@@ -28,28 +28,57 @@ const DelegatePage = ({land}) => {
   const { currentUser, isAuthenticated, logOut } = useAuth()
 
   const [landOwned, setLandOwned] = useState(false)
+  const [delegates, setDelegates] = useState({})
+
+
+  const nameFromAddress = async (address) => {
+    // https://orthoverse.me/.redwood/functions/nameFromAddress?id=0x1171fcf25d94Ef1796BE0b78912d502e9823298B
+    try {
+      const { data: response } =
+        await axios.get('https://orthoverse.me/.redwood/functions/nameFromAddress?id=' + address)
+        return response
+    } catch (error) {
+      console.log(error.message)
+      return({error: error.message})
+    }
+  }
+
+  const fetchOwner = async () => {
+    try {
+      const { data: response } =
+        await axios.get('https://orthoverse.io/api/land/search/byName?name=' + land)
+        return response
+    } catch (error) {
+      console.log(error.message)
+      return({error: error.message})
+    }
+  }
+
+  async function addressFromName(name) {
+  // https://orthoverse.me/.redwood/functions/addressFromName?name=Cuducdin
+  }
 
    useEffect(() => {
     console.log(land)
     console.log(isAuthenticated)
     console.log(currentUser)
     if (isAuthenticated && typeof currentUser !== 'undefined' && land !== '') {
-      const fetchData = async () => {
-        try {
-          const { data: response } =
-            await axios.get('https://orthoverse.io/api/land/search/byName?name=' + land)
-            return response
-        } catch (error) {
-          console.log(error.message)
-          return({error: error.message})
-        }
-      }
-
-      fetchData().then(result => {
-        console.log(result)
+      // check that page caller actually owns the land to be edited
+      fetchOwner().then(result => {
         if ('owner' in result) {
-          if (currentUser.address === JSON.parse(result.owner)[0]) {
+          const retrievedOwner = JSON.parse(result.owner)
+          if (currentUser.address.toString() === retrievedOwner[0].toString()) {
             setLandOwned(true)
+            let tmpDelegates = {}
+            tmpDelegates['0'] = {address: currentUser.address, name: currentUser.name}
+            for (let i = 1; i < JSON.parse(result.owner).length; i++) {
+              nameFromAddress(landOwned[i]).then(result => {
+                if ('name' in result) {
+                  tmpDelegates[i.toString()] = {address: landOwned[i], name: result.name}
+                }
+              })
+            }
+            setDelegates(tmpDelegates)
           }
         }
       })
@@ -79,7 +108,7 @@ const DelegatePage = ({land}) => {
           </Flex>
         </Box>
 
-        {isAuthenticated && typeof currentUser !== 'undefined' && landOwned === true ? (
+        {isAuthenticated && typeof currentUser !== 'undefined' && landOwned !== false ? (
           <Box>
             <Flex>
               <Center>Delegates List</Center>
