@@ -23,6 +23,8 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 
+import DelegateTable from 'src/components/DelegateTable'
+
 const DelegatePage = ({land}) => {
 
   const { currentUser, isAuthenticated, logOut } = useAuth()
@@ -108,15 +110,14 @@ const DelegatePage = ({land}) => {
           </Flex>
         </Box>
 
+      <Container>
         {isAuthenticated && typeof currentUser !== 'undefined' && landOwned !== false ? (
-          <Box>
+          <Box maxW="640px">
             <Flex>
               <Center>Delegates List</Center>
             </Flex>
             <Flex>
-              Look out for a future feature here - you can delegate building to other players (up to seven).
-              By adding delegates to your land, they can enter it and dig/place blocks too. It is going to be a
-              great tool to allow friends, family, or skilled voxel builders to enhance your land on your behalf.
+              <DelegateTable  delegates={delegates} />
             </Flex>
           </Box>    
         ) : (
@@ -124,7 +125,7 @@ const DelegatePage = ({land}) => {
         )}
 
         {isAuthenticated && typeof currentUser !== 'undefined' && landOwned === false ? (
-          <Box>
+          <Box maxW="640px">
             <Flex>
               <Center>Delegates List</Center>
             </Flex>
@@ -137,12 +138,13 @@ const DelegatePage = ({land}) => {
         )}
 
         {!(isAuthenticated && typeof currentUser !== 'undefined') ? (
-          <Box>
+          <Box maxW="640px">
           You need to be logged in to edit delegates
           </Box>
         ) : (
           ''
         )} 
+      </Container>
     </>
   )
 }
